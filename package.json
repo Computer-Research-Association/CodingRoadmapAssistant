@@ -12,6 +12,24 @@
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "CRAContainer",
+          "title": "CRA",
+          "icon": "assets/icon-container.png"
+        }
+      ]
+    },
+    "views": {
+      "CRAContainer": [
+        {
+          "type": "webview",
+          "id": "CRAView",
+          "name": "Chat"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "coding-roadmap-assistant.helloWorld",
@@ -45,5 +63,8 @@
     "typescript": "^5.7.2",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1"
+  },
+  "dependencies": {
+    "openai": "^4.77.0"
   }
 }
