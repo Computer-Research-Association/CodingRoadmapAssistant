@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import OpenAI from 'openai';
 const openai = new OpenAI();
+const gptModel = "gpt-4o-mini";
 
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
@@ -12,6 +13,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 export class CRAViewProvider implements vscode.WebviewViewProvider {
 	constructor(private context: vscode.ExtensionContext) {}
+
+	validateMessage(message: string) {
+		// validation logic
+		return true;
+		// return false;
+	}
 
 	// required method by inheritance
 	// called when the webview is first visible
@@ -36,27 +43,45 @@ export class CRAViewProvider implements vscode.WebviewViewProvider {
 				switch (message.command) {
 					case "textMessage":
 						// vscode.window.showInformationMessage(message.text)
-
-						const gptCompletion = await openai.chat.completions.create({
-							model: "gpt-4o-mini",
-							messages: [
-								{
-									role: "developer",
-									content: message.text,
-								},
-							],
-						});
-
-						const gptGeneratedMessage = gptCompletion.choices[0].message.content;
-						if (gptGeneratedMessage !== null) {
-							vscode.window.showInformationMessage(gptGeneratedMessage);
+						if (this.validateMessage(message.text)) {
+							const gptGeneratedMessage = this.getGPTGeneratedMessage(message.text);
+							// display message
+							this.displayInfoMessage(gptGeneratedMessage);
 						}
+						break;
 
+					default:
 					return;
 				}
 			},
 			undefined
 		)
+	}
+
+	async getGPTGeneratedMessage(inputContent: string) {
+		const gptCompletion = await openai.chat.completions.create({
+			model: gptModel,
+			messages: [
+				{
+					role: "developer",
+					content: inputContent,
+				},
+			],
+		});
+
+		const generatedMessage = gptCompletion.choices[0].message.content;
+		if (generatedMessage !== null) {
+			return generatedMessage;
+		}
+	}
+
+	async displayInfoMessage(message: Promise<string | undefined>): Promise<void> {
+		const result = await message;
+		if (result) {
+			vscode.window.showInformationMessage(result);
+		} else {
+			console.log("displayInfoMessage(): no message to display");
+		}
 	}
 
 	// `acquireVsCodeApi()` is used to access the VS Code API object from the webview
