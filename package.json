@@ -12,10 +12,32 @@
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
+    "views": {
+      "craActivity": [
+        {
+          "id": "webview",
+          "name": "Webview",
+          "title": "My Webview"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "craActivity",
+          "title": "Coding Roadmap Assistant",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "coding-roadmap-assistant.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "coding-roadmap-assistant.openWebView",
+        "title": "Open Webview"
       }
     ]
   },
