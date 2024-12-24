@@ -147,10 +147,11 @@ export class InputPanel {
 
       <body>
         <h1>Find the path of your coding logic!</h1>
-        <h4>문제 정의</h4>
+        <h3>문제 정의</h3>
         <input class="def-btn"></input>
-        <h4>steps</h4>
+        <h3>steps</h3>
         <input class="step-btn"></input>
+        <button class="submit-btn" width="500">submit</button>
         <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
       </body>
       <script arc=${scriptUri} nonce="${nonce}">

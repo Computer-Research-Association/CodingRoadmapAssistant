@@ -18,7 +18,28 @@
         "category": "Show input panel",
         "title": "Shows input panel to get leading questions"
       }
-    ]
+    ], 
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "cra-activitybar",
+          "title": "Show Activity bar",
+          "icon": "resources/package-explorer.svg"
+        }
+      ]
+    },
+    "views": {
+      "package-explorer": [
+        {
+          "id": "package-dependencies",
+          "name": "Dependencies"
+        },
+        {
+          "id": "package-outline",
+          "name": "Outline"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

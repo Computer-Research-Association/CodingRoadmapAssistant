@@ -11,7 +11,9 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(disposable);
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("coding-roadmap-assistant.inputPanel", InputPanel.createOrShow)
+    vscode.commands.registerCommand("coding-roadmap-assistant.inputPanel", () => {
+      InputPanel.createOrShow(context.extensionUri);
+    })
   );
 }
 
