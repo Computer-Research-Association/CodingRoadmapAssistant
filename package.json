@@ -9,7 +9,10 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onCommand:coding-roadmap-assistant.helloWorld",
+    "onCommand:coding-roadmap-assistant.openWebView"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "views": {
