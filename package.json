@@ -23,19 +23,19 @@
       "activitybar": [
         {
           "id": "cra-activitybar",
-          "title": "Show Activity bar",
-          "icon": "resources/package-explorer.svg"
+          "title": "Cra Activitybar",
+          "icon": "resources/meditation.svg"
         }
       ]
     },
     "views": {
-      "package-explorer": [
+      "cra-activitybar": [
         {
-          "id": "package-dependencies",
+          "id": "cra-activitybar-dependencies",
           "name": "Dependencies"
         },
         {
-          "id": "package-outline",
+          "id": "cra-activitybar-outline",
           "name": "Outline"
         }
       ]
