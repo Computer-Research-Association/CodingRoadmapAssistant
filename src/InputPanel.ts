@@ -131,30 +131,54 @@ export class InputPanel {
     const nonce = getNonce();
 
     return `<!DOCTYPE html>
-			<html lang="en">
-			<head> 
-				<meta charset="UTF-8">
-        <meta http-equiv="Content-Security-Policy" content="img-src https: data:; style-src 'unsafe-inline' ${
-          webview.cspSource
-        }; script-src 'nonce-${nonce}';">
-				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Input of the user steps</title>
-				<link href="${stylesResetUri}" rel="stylesheet">
-				<link href="${stylesMainUri}" rel="stylesheet">
-        <script nonce="${nonce}">
-        </script>
-		</head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="img-src https: data:; style-src 'unsafe-inline' ${
+    webview.cspSource
+  }; script-src 'nonce-${nonce}';">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input of the user steps</title>
+  <link href="${stylesResetUri}" rel="stylesheet">
+  <link href="${stylesMainUri}" rel="stylesheet">
+</head>
 
-      <body>
-        <h1>Find the path of your coding logic!</h1>
-        <h3>문제 정의</h3>
-        <input class="def-btn"></input>
-        <h3>steps</h3>
-        <input class="step-btn"></input>
-        <button class="submit-btn" width="500">submit</button>
-        <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
-      </body>
-      <script arc=${scriptUri} nonce="${nonce}">
-	</html>`;
+<body>
+  <h1>Coding Roadmap Assistant</h1>
+  <h2>Find the path of your coding logic!</h2>
+  <div></div>
+  <div id="input-container">
+    <h2>문제 정의</h2>
+    <input type="text" placeholder="definition" class="def-btn" />
+    <div></div>
+
+    <h2>Step by Step</h2>
+    <input type="text" placeholder="Step 1" id="step-0">
+  </div>
+  <button class="submit-btn">Submit</button>
+  <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
+
+  <script nonce="${nonce}">
+    (function() { //보안이슈로 익명함수 사용.
+      const inputContainer = document.getElementById('input-container');
+/* step 입력할 때, 한글을 입력하는 경우 자동으로 띄어쓰기가 됨 (방향키로 정렬 필요) */
+      function handleKeyDown(event, index) {
+        if (event.key === 'Enter' && event.target.value.trim() !== '') {
+          const newInput = document.createElement('input');
+          newInput.type = 'text';
+          newInput.placeholder = \`Step \${index + 2}\`;
+          newInput.id = \`step-\${index + 1}\`;
+          newInput.addEventListener('keydown', (e) => handleKeyDown(e, index + 1));
+          inputContainer.appendChild(newInput);
+          newInput.focus();
+        }
+      }
+
+      const firstInput = document.getElementById('step-0');
+      firstInput.addEventListener('keydown', (event) => handleKeyDown(event, 0));
+    })();
+  </script>
+</body>
+</html>`;
   }
 }
