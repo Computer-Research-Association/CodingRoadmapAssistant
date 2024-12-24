@@ -159,26 +159,51 @@ export class InputPanel {
   <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
 
   <script nonce="${nonce}">
-    (function() { //보안이슈로 익명함수 사용.
-      const inputContainer = document.getElementById('input-container');
-/* step 입력할 때, 한글을 입력하는 경우 자동으로 띄어쓰기가 됨 (방향키로 정렬 필요) */
-      function handleKeyDown(event, index) {
-        if (event.key === 'Enter' && event.target.value.trim() !== '') {
-          const newInput = document.createElement('input');
-          newInput.type = 'text';
-          newInput.placeholder = \`Step \${index + 2}\`;
-          newInput.id = \`step-\${index + 1}\`;
-          newInput.addEventListener('keydown', (e) => handleKeyDown(e, index + 1));
-          inputContainer.appendChild(newInput);
-          newInput.focus();
-        }
-      }
+  (function() {
+    const inputContainer = document.getElementById('input-container');
+    let isComposing = false; // IME 활성화 상태 확인 변수
 
-      const firstInput = document.getElementById('step-0');
-      firstInput.addEventListener('keydown', (event) => handleKeyDown(event, 0));
-    })();
+    // IME가 시작될 때 호출
+    function handleCompositionStart() {
+      isComposing = true;
+    }
+
+    // IME가 종료될 때 호출
+    function handleCompositionEnd() {
+      isComposing = false;
+    }
+
+    // 키다운 이벤트 처리
+    function handleKeyDown(event, index) {
+      if (isComposing) return; // IME 활성화 상태에서는 무시
+      if (event.key === 'Enter' && event.target.value.trim() !== '') {
+        event.preventDefault(); // 기본 Enter 동작 방지
+        addNewInput(index);
+      }
+    }
+
+    // 새로운 입력 필드 추가
+    function addNewInput(index) {
+      const newInput = document.createElement('input');
+      newInput.type = 'text';
+      newInput.placeholder = `Step ${index + 2}`;
+      newInput.id = `step-${index + 1}`;
+      newInput.addEventListener('keydown', (e) => handleKeyDown(e, index + 1));
+      newInput.addEventListener('compositionstart', handleCompositionStart);
+      newInput.addEventListener('compositionend', handleCompositionEnd);
+      inputContainer.appendChild(newInput);
+      newInput.focus();
+    }
+
+    // 초기 입력 필드에 이벤트 추가
+    const firstInput = document.getElementById('step-0');
+    firstInput.addEventListener('keydown', (event) => handleKeyDown(event, 0));
+    firstInput.addEventListener('compositionstart', handleCompositionStart);
+    firstInput.addEventListener('compositionend', handleCompositionEnd);
+  })();
   </script>
 </body>
-</html>`;
+</html>
+`;
   }
 }
