@@ -16,6 +16,16 @@
       {
         "command": "coding-roadmap-assistant.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "openAI.setAPIKey",
+        "category": "Coding Roadmap Assistant",
+        "title": "Set Open AI API Key"
+      },
+      {
+        "command": "openAI.setModel",
+        "category": "Extension Test",
+        "title": "Set Open AI GPT Model"
       }
     ]
   },
