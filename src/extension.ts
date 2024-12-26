@@ -6,13 +6,6 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Webview 등록
   registerWebviewViewProvider(context);
-
-  // 명령어 등록
-  const disposable = vscode.commands.registerCommand("print helloworld", () => {
-    vscode.window.showInformationMessage("Hello Print");
-  });
-
-  context.subscriptions.push(disposable);
 }
 
 export function deactivate() {}
