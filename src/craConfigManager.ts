@@ -1,7 +1,5 @@
 import * as vscode from "vscode";
 
-export async function setCRAConfig(context: vscode.ExtensionContext) {}
-
 export class ModelItem implements vscode.QuickPickItem {
   label: string;
   description?: string | undefined;
@@ -27,4 +25,11 @@ async function showApiKeyInputBox() {
   }
 }
 
-export async function openMultipleQuickPick() {}
+async function showModelSelectionQuickPick() {
+  await vscode.window.showQuickPick(["gpt-4o", "gpt-4o-mini", "o1"], {
+    placeHolder: "Select GPT Model",
+    async onDidSelectItem(item) {
+      await vscode.workspace.getConfiguration().update("openAI.modelSelected", item, vscode.ConfigurationTarget.Global);
+    },
+  });
+}
