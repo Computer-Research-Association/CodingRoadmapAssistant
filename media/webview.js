@@ -1,12 +1,19 @@
 const vscode = acquireVsCodeApi();
 
 window.onload = function () {
-  function updateList(data) {
+  function updateList(data, isUserMessage) {
     const list = document.getElementById("list");
-    list.innerHTML = ""; // 기존 리스트를 비우고
     const li = document.createElement("li");
     li.textContent = data;
+
+    if (isUserMessage) {
+      li.style.fontWeight = "bold"; // 사용자 메시지 굵게 표시
+    }
+
     list.appendChild(li);
+
+    // 대화 내용이 추가된 후 가장 최신 메시지로 스크롤
+    list.scrollTop = list.scrollHeight;
   }
 
   window.addEventListener("message", (event) => {
@@ -21,8 +28,14 @@ window.onload = function () {
     const inputValue = inputElement.value.trim();
 
     if (inputValue) {
+      updateList(inputValue, true); // 사용자의 메시지
       vscode.postMessage({ command: "process", value: inputValue });
-      inputElement.value = "";
+      inputElement.value = ""; // 입력 필드 비우기
     }
+  });
+
+  document.getElementById("reset").addEventListener("click", () => {
+    const list = document.getElementById("list");
+    list.innerHTML = ""; // 모든 대화 내용 지우기
   });
 };

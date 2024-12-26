@@ -3,13 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <title>Webview</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>저장된 값이 여기에 표시됩니다</h1>
-    <div>
-      <input type="text" placeholder="여기에 입력하세요" id="input" />
-      <button id="send">Send</button>
+    <div id="chat-container">
       <ul id="list"></ul>
+      <!-- 대화 내용이 올라가는 영역 -->
+      <div id="input-area">
+        <input type="text" placeholder="여기에 입력하세요" id="input" />
+        <button id="send">Send</button>
+        <button id="reset">Reset</button>
+      </div>
     </div>
     <script src="webview.js"></script>
   </body>

@@ -40,12 +40,20 @@ export function registerWebviewViewProvider(context: vscode.ExtensionContext) {
       };
 
       // HTML 파일 읽기
+      const styleUri = webviewView.webview.asWebviewUri(
+        vscode.Uri.joinPath(context.extensionUri, "media", "styles.css")
+      );
       const htmlPath = path.join(
         context.extensionPath,
         "media",
         "webview.html"
       );
       let htmlContent = fs.readFileSync(htmlPath, "utf-8");
+
+      htmlContent = htmlContent.replace(
+        "</head>",
+        `<link rel="stylesheet" href="${styleUri}"></head>`
+      );
 
       // 웹뷰 HTML 내에서 자바스크립트 파일 경로를 로컬 URI로 변환하여 사용
       const scriptUri = webviewView.webview.asWebviewUri(
