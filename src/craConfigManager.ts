@@ -10,7 +10,7 @@ export class ModelItem implements vscode.QuickPickItem {
   }
 }
 
-async function showApiKeyInputBox() {
+export async function showApiKeyInputBox() {
   const apiKey = await vscode.window.showInputBox({
     prompt: "Enter your OpenAI API key.",
     placeHolder: "Open API Key",
@@ -25,7 +25,7 @@ async function showApiKeyInputBox() {
   }
 }
 
-async function showModelSelectionQuickPick() {
+export async function showModelSelectionQuickPick() {
   await vscode.window.showQuickPick(["gpt-4o", "gpt-4o-mini", "o1"], {
     placeHolder: "Select GPT Model",
     async onDidSelectItem(item) {
