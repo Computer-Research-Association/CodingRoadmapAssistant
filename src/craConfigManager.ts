@@ -1,5 +1,7 @@
 import * as vscode from "vscode";
 
+export async function setCRAConfig(context: vscode.ExtensionContext) {}
+
 export class ModelItem implements vscode.QuickPickItem {
   label: string;
   description?: string | undefined;
