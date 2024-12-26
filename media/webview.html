@@ -8,48 +8,9 @@
     <h1>저장된 값이 여기에 표시됩니다</h1>
     <div>
       <input type="text" placeholder="여기에 입력하세요" id="input" />
-      <button id="send">send</button>
+      <button id="send">Send</button>
       <ul id="list"></ul>
     </div>
-
-    <script>
-      const vscode = acquireVsCodeApi();
-
-      // 페이지가 로드될 때 데이터를 업데이트하는 함수
-      function updateList(data) {
-        const list = document.getElementById("list");
-        list.innerHTML = ""; // 기존 리스트를 비우고
-        data.forEach((item) => {
-          const li = document.createElement("li");
-          li.textContent = item;
-          list.appendChild(li);
-        });
-      }
-
-      window.onload = function () {
-        // Extension에서 데이터를 받을 준비
-        window.addEventListener("message", (event) => {
-          const message = event.data; // data를 받아옴
-          if (message.command === "setData") {
-            updateList(message.data);
-          }
-        });
-
-        // 버튼 클릭 이벤트 처리
-        document.getElementById("send").addEventListener("click", () => {
-          const inputElement = document.getElementById("input");
-          const inputValue = inputElement.value.trim();
-
-          if (inputValue) {
-            // Extension에 데이터 저장 요청
-            vscode.postMessage({ command: "save", value: inputValue });
-
-            // 입력 필드 초기화
-            inputElement.value = "";
-          }
-        });
-      };
-    </script>
     <script src="webview.js"></script>
   </body>
 </html>

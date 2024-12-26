@@ -1,15 +1,12 @@
-window.onload = function () {
-  const vscode = acquireVsCodeApi();
+const vscode = acquireVsCodeApi();
 
-  // 페이지가 로드될 때 데이터를 업데이트하는 함수
+window.onload = function () {
   function updateList(data) {
     const list = document.getElementById("list");
     list.innerHTML = ""; // 기존 리스트를 비우고
-    data.forEach((item) => {
-      const li = document.createElement("li");
-      li.textContent = item;
-      list.appendChild(li);
-    });
+    const li = document.createElement("li");
+    li.textContent = data;
+    list.appendChild(li);
   }
 
   window.addEventListener("message", (event) => {
@@ -19,16 +16,12 @@ window.onload = function () {
     }
   });
 
-  // 버튼 클릭 이벤트 처리
   document.getElementById("send").addEventListener("click", () => {
     const inputElement = document.getElementById("input");
     const inputValue = inputElement.value.trim();
 
     if (inputValue) {
-      // Extension에 데이터 저장 요청
-      vscode.postMessage({ command: "save", value: inputValue });
-
-      // 입력 필드 초기화
+      vscode.postMessage({ command: "process", value: inputValue });
       inputElement.value = "";
     }
   });
