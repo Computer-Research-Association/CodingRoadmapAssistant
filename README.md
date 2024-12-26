@@ -1,6 +1,6 @@
-# coding-roadmap-assistant README
+# practice README
 
-This is the README for your extension "coding-roadmap-assistant". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "practice". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 
