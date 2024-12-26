@@ -1,5 +1,15 @@
 import * as vscode from "vscode";
 
+export class ModelItem implements vscode.QuickPickItem {
+  label: string;
+  description?: string | undefined;
+
+  constructor(label: string, description?: string) {
+    this.label = label;
+    this.description = description;
+  }
+}
+
 async function showApiKeyInputBox() {
   const apiKey = await vscode.window.showInputBox({
     prompt: "Enter your OpenAI API key.",
