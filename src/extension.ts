@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { registerWebviewViewProvider } from "./webview";
 import { showModelSelectionQuickPick, showApiKeyInputBox } from "./craConfigManager";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -12,7 +13,9 @@ export function activate(context: vscode.ExtensionContext) {
   const showModelSelection = vscode.commands.registerCommand("openAI.setModel", showModelSelectionQuickPick);
 
   context.subscriptions.push(disposable, showModelSelection, showAPIKeyInput);
+
+  registerWebviewViewProvider(context);// Webview 등록
+
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() {}
