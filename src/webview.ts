@@ -5,9 +5,7 @@ import OpenAI from "openai";
 
 // VSCode의 settings.json에서 API 키를 가져옵니다.
 const openai = new OpenAI({
-  apiKey: vscode.workspace
-    .getConfiguration("codingRoadmapAssistant")
-    .get<string>("openaiApiKey"),
+  apiKey: vscode.workspace.getConfiguration("codingRoadmapAssistant").get<string>("openaiApiKey"),
 });
 
 // GPT API 호출 함수
@@ -19,9 +17,7 @@ async function main(prompt: string) {
       max_tokens: 150,
       temperature: 0.7,
     });
-    return (
-      completion.choices[0]?.message?.content.trim() || "No response from GPT."
-    );
+    return completion.choices[0]?.message?.content.trim() || "No response from GPT.";
   } catch (error: any) {
     console.error("GPT API Error:", error); // 콘솔에 상세 에러 출력
     return `Error: ${error.message || "Unknown error occurred."}`; // 사용자에게 반환
@@ -43,26 +39,19 @@ export function registerWebviewViewProvider(context: vscode.ExtensionContext) {
       const styleUri = webviewView.webview.asWebviewUri(
         vscode.Uri.joinPath(context.extensionUri, "media", "styles.css")
       );
-      const htmlPath = path.join(
-        context.extensionPath,
-        "media",
-        "webview.html"
-      );
+      const htmlPath = path.join(context.extensionPath, "media", "webview.html");
       let htmlContent = fs.readFileSync(htmlPath, "utf-8");
 
-      htmlContent = htmlContent.replace(
-        "</head>",
-        `<link rel="stylesheet" href="${styleUri}"></head>`
-      );
+      htmlContent = htmlContent.replace("</head>", `<link rel="stylesheet" href="${styleUri}"></head>`);
 
       // 웹뷰 HTML 내에서 자바스크립트 파일 경로를 로컬 URI로 변환하여 사용
       const scriptUri = webviewView.webview.asWebviewUri(
-        vscode.Uri.joinPath(context.extensionUri, "media", "webview.js")
+        vscode.Uri.joinPath(context.extensionUri, "media", "webviewscript.js")
       );
 
       // HTML 내용에서 script 태그를 삽입할 부분
       htmlContent = htmlContent.replace(
-        /<script src="webview.js"><\/script>/,
+        /<script src="webviewscript.js"><\/script>/,
         `<script src="${scriptUri}"></script>`
       );
 

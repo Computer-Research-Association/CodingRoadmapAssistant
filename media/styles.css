@@ -26,13 +26,14 @@ html {
 #input-area {
   display: flex;
   justify-content: space-between;
-  position: sticky;
+  position: relative; /* sticky 대신 relative로 고정 */
   bottom: 0;
   background-color: #fff;
   padding: 10px;
   width: 100%;
   box-sizing: border-box;
   border-top: 1px solid #ccc;
+  z-index: 1; /* input-area가 다른 요소 위에 올라오도록 */
 }
 
 #input {
