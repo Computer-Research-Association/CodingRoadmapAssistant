@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { showModelSelectionQuickPick } from "./craConfigManager";
+import { showModelSelectionQuickPick, showApiKeyInputBox } from "./craConfigManager";
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "coding-roadmap-assistant" is now active!');
@@ -8,9 +8,10 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage("Hello World from Coding Roadmap Assistant!");
   });
 
+  const showAPIKeyInput = vscode.commands.registerCommand("openAI.setAPIKey", showApiKeyInputBox);
   const showModelSelection = vscode.commands.registerCommand("openAI.setModel", showModelSelectionQuickPick);
 
-  context.subscriptions.push(disposable, showModelSelection);
+  context.subscriptions.push(disposable, showModelSelection, showAPIKeyInput);
 }
 
 // This method is called when your extension is deactivated
