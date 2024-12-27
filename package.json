@@ -34,8 +34,37 @@
     },
     "commands": [
       {
-        "command": "print helloworld",
-        "title": "Hello World"
+        "command": "openAI.setAPIKey",
+        "category": "Coding Roadmap Assistant",
+        "title": "Set Open AI API Key"
+      },
+      {
+        "command": "openAI.setModel",
+        "category": "Coding Roadmap Assistant",
+        "title": "Set Open AI GPT Model"
+      }
+    ],
+    "configuration": [
+      {
+        "title": "Extension Challenge",
+        "properties": {
+          "openAI.apiKey": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null,
+            "description": "Open AI API Key"
+          },
+          "openAI.modelSelected": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null,
+            "description": "Open AI GPT Model Selected"
+          }
+        }
       }
     ]
   },
