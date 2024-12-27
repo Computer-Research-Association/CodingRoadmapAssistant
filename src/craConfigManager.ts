@@ -16,7 +16,7 @@ export async function showApiKeyInputBox() {
 }
 
 export async function showModelSelectionQuickPick() {
-  await vscode.window.showQuickPick(["gpt-4o", "gpt-4o-mini", "o1"], {
+  await vscode.window.showQuickPick(["gpt-4o", "gpt-4o-mini", "o1", "gpt-3.5-turbo"], {
     placeHolder: "Select GPT Model",
     async onDidSelectItem(item) {
       await vscode.workspace.getConfiguration().update("openAI.modelSelected", item, vscode.ConfigurationTarget.Global);
