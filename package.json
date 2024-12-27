@@ -1,7 +1,7 @@
 {
   "name": "coding-roadmap-assistant",
-  "displayName": "Coding Roadmap Assistnat",
-  "description": "",
+  "displayName": "Coding Roadmap Assistant",
+  "description": "CRAAAAAANG",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.96.0"
@@ -9,64 +9,37 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onView:craView"
-  ],
+  "activationEvents": ["onCommand:coding-roadmap-assistant.inputPanel"],
   "main": "./dist/extension.js",
   "contributes": {
+    "commands": [
+      {
+        "command": "coding-roadmap-assistant.inputPanel",
+        "category": "Show input panel",
+        "title": "Shows input panel to get leading questions"
+      }
+    ], 
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "craActivitybar",
-          "title": "CRA activitybar",
-          "icon": "media/icons.svg"
+          "id": "cra-activitybar",
+          "title": "Cra Activitybar",
+          "icon": "resources/meditation.svg"
         }
       ]
     },
     "views": {
-      "craActivitybar": [
+      "cra-activitybar": [
         {
-          "id": "craView",
-          "name": "CRA View",
-          "type": "webview"
+          "id": "cra-activitybar-dependencies",
+          "name": "Dependencies"
+        },
+        {
+          "id": "cra-activitybar-outline",
+          "name": "Outline"
         }
       ]
-    },
-    "commands": [
-      {
-        "command": "openAI.setAPIKey",
-        "category": "Coding Roadmap Assistant",
-        "title": "Set Open AI API Key"
-      },
-      {
-        "command": "openAI.setModel",
-        "category": "Coding Roadmap Assistant",
-        "title": "Set Open AI GPT Model"
-      }
-    ],
-    "configuration": [
-      {
-        "title": "Extension Challenge",
-        "properties": {
-          "openAI.apiKey": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "default": null,
-            "description": "Open AI API Key"
-          },
-          "openAI.modelSelected": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "default": null,
-            "description": "Open AI GPT Model Selected"
-          }
-        }
-      }
-    ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
@@ -97,8 +70,5 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^3.4.2",
     "typescript": "^5.7.2"
-  },
-  "dependencies": {
-    "openai": "^4.77.0"
   }
 }
