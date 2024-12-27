@@ -118,8 +118,7 @@ export class InputPanel {
   }
 
   private _getHtmlForWebview(webview: vscode.Webview) {
-    // // And the uri we use to load this script in the webview
-    const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "main.js"));
+    const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "inputPage.js"));
     //웹뷰에 로드할 js파일의 uri 생성
 
     // Uri to load styles into webview
@@ -153,55 +152,13 @@ export class InputPanel {
     <div></div>
 
     <h2>Step by Step</h2>
-    <input type="text" placeholder="Step 1" id="step-0">
+    <input type="text" class="step-btn" id="step-0" placeholder="Step 1" >
   </div>
-  <button class="submit-btn">Submit</button>
+  <button id="add-step-btn" style=" width: 30%;" >Add step button</button>
+  <button id="submit-btn" style=" width: 70%;" >Submit</button>
   <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
 
-  <script nonce="${nonce}">
-  (function() {
-    const inputContainer = document.getElementById('input-container');
-    let isComposing = false; // IME 활성화 상태 확인 변수
-
-    // IME가 시작될 때 호출
-    function handleCompositionStart() {
-      isComposing = true;
-    }
-
-    // IME가 종료될 때 호출
-    function handleCompositionEnd() {
-      isComposing = false;
-    }
-
-    // 키다운 이벤트 처리
-    function handleKeyDown(event, index) {
-      if (isComposing) return; // IME 활성화 상태에서는 무시
-      if (event.key === 'Enter' && event.target.value.trim() !== '') {
-        event.preventDefault(); // 기본 Enter 동작 방지
-        addNewInput(index);
-      }
-    }
-
-    // 새로운 입력 필드 추가
-    function addNewInput(index) {
-      const newInput = document.createElement('input');
-      newInput.type = 'text';
-      newInput.placeholder = `Step ${index + 2}`;
-      newInput.id = `step-${index + 1}`;
-      newInput.addEventListener('keydown', (e) => handleKeyDown(e, index + 1));
-      newInput.addEventListener('compositionstart', handleCompositionStart);
-      newInput.addEventListener('compositionend', handleCompositionEnd);
-      inputContainer.appendChild(newInput);
-      newInput.focus();
-    }
-
-    // 초기 입력 필드에 이벤트 추가
-    const firstInput = document.getElementById('step-0');
-    firstInput.addEventListener('keydown', (event) => handleKeyDown(event, 0));
-    firstInput.addEventListener('compositionstart', handleCompositionStart);
-    firstInput.addEventListener('compositionend', handleCompositionEnd);
-  })();
-  </script>
+  <script nonce="${nonce}" src="${scriptUri}"></script>
 </body>
 </html>
 `;
