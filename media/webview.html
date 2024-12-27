@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <title>CRA</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div id="chat-container">
-      <ul id="list"></ul>
-      <!-- 대화 내용이 올라가는 영역 -->
-      <div id="input-area">
-        <input type="text" placeholder="여기에 입력하세요" id="input" />
-        <button id="send">Send</button>
-        <button id="reset">Reset</button>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <title>CRA</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Reset 버튼: 화면 왼쪽 상단 -->
+  <img id="reset" src="reset-icon.png" alt="Reset" />
+
+  <!-- 채팅 컨테이너 -->
+  <div id="chat-container">
+    <!-- 대화 내용이 표시되는 영역 -->
+    <div id="list"></div>
+
+    <!-- 입력 영역: 화면 하단에 고정 -->
+    <div id="input-area">
+      <input type="text" placeholder="여기에 입력하세요" id="input" />
+      <img id="send" src="send-icon.png" alt="Send" />
     </div>
-    <script src="webviewscript.js"></script>
-  </body>
+  </div>
+
+  <script src="webviewscript.js"></script>
+</body>
 </html>
