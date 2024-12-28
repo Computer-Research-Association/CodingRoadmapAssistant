@@ -15,7 +15,9 @@ export async function setAPIKey(context: vscode.ExtensionContext) {
     return "";
   }
 
-  await context.secrets.store("OPENAI_API_KEY", apiKey);
+  // await context.secrets.store("OPENAI_API_KEY", apiKey);
+  // context에서 제공하는 secretStorage를 사용하여 api key 를 저장하는 방법 (차후 리팩토링 필요)
+
   await vscode.workspace.getConfiguration().update("openAI.apiKey", apiKey, vscode.ConfigurationTarget.Global);
   vscode.window.showInformationMessage("Open AI API key saved successfully.");
   return apiKey;
