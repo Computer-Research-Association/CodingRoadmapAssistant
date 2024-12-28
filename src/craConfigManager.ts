@@ -3,6 +3,7 @@ import * as vscode from "vscode";
 export async function showApiKeyInputBox() {
   const apiKey = await vscode.window.showInputBox({
     prompt: "Enter your OpenAI API key.",
+    ignoreFocusOut: true,
     placeHolder: "Open API Key",
     password: true,
   });
