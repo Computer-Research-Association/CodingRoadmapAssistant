@@ -17,7 +17,11 @@ async function main(prompt: string) {
       max_tokens: 150,
       temperature: 0.7,
     });
-    return completion.choices[0]?.message?.content.trim() || "No response from GPT.";
+
+    if (completion.choices[0]?.message?.content === null) {
+      return "No response from GPT.";
+    }
+    return completion.choices[0]?.message?.content.trim();
   } catch (error: any) {
     console.error("GPT API Error:", error); // 콘솔에 상세 에러 출력
     return `Error: ${error.message || "Unknown error occurred."}`; // 사용자에게 반환
