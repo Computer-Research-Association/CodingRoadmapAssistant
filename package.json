@@ -9,9 +9,7 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onView:craView"
-  ],
+  "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
     "viewsContainers": {
@@ -46,14 +44,13 @@
     ],
     "configuration": [
       {
-        "title": "Coding Roadmap Assistant",
+        "title": "CodingRoadmapAssistant",
         "properties": {
           "openAI.apiKey": {
             "type": [
-              "string",
-              "null"
+              "string"
             ],
-            "default": null,
+            "default": "",
             "description": "Open AI API Key"
           },
           "openAI.modelSelected": {
