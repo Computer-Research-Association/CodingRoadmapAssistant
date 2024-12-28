@@ -36,12 +36,12 @@
       {
         "command": "openAI.setAPIKey",
         "category": "Coding Roadmap Assistant",
-        "title": "Set Open AI API Key"
+        "title": "Set OpenAI API Key"
       },
       {
         "command": "openAI.setModel",
         "category": "Coding Roadmap Assistant",
-        "title": "Set Open AI GPT Model"
+        "title": "Set OpenAI GPT Model"
       }
     ],
     "configuration": [
