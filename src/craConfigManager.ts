@@ -10,12 +10,14 @@ export async function showApiKeyInputBox() {
 
   const apiKey = await vscode.window.showInputBox(inputBoxOptions);
 
-  if (apiKey) {
-    await vscode.workspace.getConfiguration().update("openAI.apiKey", apiKey, vscode.ConfigurationTarget.Global);
-    vscode.window.showInformationMessage("Open AI API key saved successfully.");
-  } else {
-    vscode.window.showInformationMessage("No API key entered.");
+  if (!apiKey) {
+    vscode.window.showWarningMessage("No API key entered.");
+    return "";
   }
+
+  await vscode.workspace.getConfiguration().update("openAI.apiKey", apiKey, vscode.ConfigurationTarget.Global);
+  vscode.window.showInformationMessage("Open AI API key saved successfully.");
+  return apiKey;
 }
 
 export async function showModelSelectionQuickPick() {
