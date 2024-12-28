@@ -58,10 +58,9 @@
           },
           "openAI.modelSelected": {
             "type": [
-              "string",
-              "null"
+              "string"
             ],
-            "default": null,
+            "default": "gpt-4o-mini",
             "description": "Open AI GPT Model Selected"
           }
         }
