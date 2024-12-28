@@ -46,7 +46,7 @@
     ],
     "configuration": [
       {
-        "title": "Extension Challenge",
+        "title": "Coding Roadmap Assistant",
         "properties": {
           "openAI.apiKey": {
             "type": [
