@@ -1,12 +1,14 @@
 import * as vscode from "vscode";
 
 export async function showApiKeyInputBox() {
-  const apiKey = await vscode.window.showInputBox({
+  const inputBoxOptions: vscode.InputBoxOptions = {
     prompt: "Enter your OpenAI API key.",
     ignoreFocusOut: true,
     placeHolder: "Open API Key",
     password: true,
-  });
+  };
+
+  const apiKey = await vscode.window.showInputBox(inputBoxOptions);
 
   if (apiKey) {
     await vscode.workspace.getConfiguration().update("openAI.apiKey", apiKey, vscode.ConfigurationTarget.Global);
