@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-#navbar {
+#navigation-bar {
   width: 100%;
   background-color: var(--vscode-editor-background);
 }
@@ -14,17 +14,17 @@
   font-size: 1rem;
 }
 
-.form-control {
+.input-field {
   margin-bottom: 15px;
 }
 
-.btn {
+.action-btn {
   border-radius: 5px;
   font-size: 1rem;
   padding: 10px;
 }
 
-.d-flex {
+.button-container {
   gap: 10px;
 }
 
@@ -34,7 +34,7 @@ img {
   margin-top: 20px;
 }
 
-.navbar-collapse {
+.sidebar-container {
   background-color: var(--vscode-editor-background);
 }
 

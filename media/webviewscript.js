@@ -1,20 +1,34 @@
-const addStepBtn = document.getElementById("add-step-btn");
-const submitBtn = document.getElementById('submit-btn');
+const addStepButton = document.getElementById("add-step-btn");
+const submitButton = document.getElementById('submit-btn');
 
-let stepCount = 1;
+let stepCounter = 1;
 
 function addNewStep() {
-  console.log("함수 실행"); 
+  console.log("Adding new step"); 
   const newInput = document.createElement("input");
   newInput.type = "text";
-  newInput.placeholder = `Step ${stepCount + 1}`;
-  newInput.id = `step-${stepCount + 1}`;
-  newInput.className = "step-btn";
+  newInput.placeholder = `Step ${stepCounter + 1}`;
+  newInput.id = `step-${stepCounter + 1}`;
+  newInput.className = "input-field step-input";
   
-  const newInputContainer = document.getElementById("input-container");
-  newInputContainer.appendChild(newInput); 
+  const inputContainer = document.getElementById("input-container");
+  inputContainer.appendChild(newInput); 
   newInput.focus();
-  stepCount++;
+  stepCounter++;
 }
 
-addStepBtn.addEventListener('click', addNewStep);
+function saveData(){
+  const definition = document.querySelector(".definition-input").value;
+  const steps = [];
+
+  const stepInputs = document.querySelectorAll('.step-input');
+  stepInputs.forEach(input => {
+    steps.push(input.value);
+  });
+
+  console.log("Definition:", definition);
+  console.log("Steps:", steps);
+}
+
+addStepButton.addEventListener('click', addNewStep);
+submitButton.addEventListener('click', saveData);

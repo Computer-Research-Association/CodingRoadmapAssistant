@@ -14,7 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(disposable, showModelSelection, showAPIKeyInput);
 
-  registerWebviewViewProvider(context);// Webview 등록
+  registerWebviewViewProvider(context);
 
 }
 
