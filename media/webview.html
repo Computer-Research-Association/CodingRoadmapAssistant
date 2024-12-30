@@ -19,24 +19,28 @@
       <span class="navbar-brand text-white">Coding Roadmap Assistant</span>
     </div>
 
-    <div class="collapse navbar-collapse" id="navbar-collapse">
-      <div class="sidebar-container p-4">
+    <div class="navbar-collapse show" id="navbar-collapse">
+      <div class="sidebar-container p-4" id="navbar-content">
         <h5 class="text-white">Problem Definition</h5>
         <input type="text" placeholder="Enter problem definition" class="input-field definition-input mb-3" id="definition"/>
-
+    
         <h5 class="text-white">Steps</h5>
         <input type="text" class="input-field step-input mb-3" id="step-0" placeholder="Step 1">
         <div id="input-container"></div> 
-
+    
         <div class="button-container d-flex flex-column align-items-start">
           <button id="add-step-btn" class="action-btn add-step-btn mb-2">Add Step</button>
           <button id="submit-btn" class="action-btn submit-btn">Submit</button>
         </div>
-        
+    
         <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
       </div>
     </div>
   </nav>
+
+  <button id="reset-btn" class="action-btn reset-btn">Reset</button>
+
+  <div id="test-output" class="p-4"></div>
 
   <script src="webviewscript.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>

@@ -42,3 +42,30 @@ body {
   background-color: var(--vscode-editor-background);
   color: var(--vscode-editor-foreground);
 }
+
+#navbar-content {
+  max-height: 500px;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+#navbar-content.hidden {
+  max-height: 0;
+  padding: 0;
+}
+
+.reset-btn {
+  background-color: red;
+  color: white;
+  font-size: 1rem;
+  padding: 10px;
+  border-radius: 5px;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+}
+
+.navbar-collapse {
+  padding-top: 60px;
+}
