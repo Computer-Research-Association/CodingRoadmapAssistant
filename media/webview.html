@@ -1,20 +1,44 @@
 <!DOCTYPE html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <title>CRA</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div id="chat-container">
-      <ul id="list"></ul>
-      <!-- 대화 내용이 올라가는 영역 -->
-      <div id="input-area">
-        <input type="text" placeholder="여기에 입력하세요" id="input" />
-        <button id="send">Send</button>
-        <button id="reset">Reset</button>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' https://media.giphy.com; style-src 'unsafe-inline' vscode-resource: https://cdn.jsdelivr.net; script-src 'self' vscode-resource: https://cdn.jsdelivr.net;">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input of the user steps</title>
+  <link href="${stylesResetUri}" rel="stylesheet">
+  <link href="${stylesMainUri}" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <nav class="navbar navbar-dark navbar-expand-lg" id="navbar">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <span class="navbar-brand text-white">Coding Roadmap Assistant</span>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbarToggleExternalContent">
+      <div class="bg-dark p-4">
+        <h5 class="text-white">문제 정의</h5>
+        <input type="text" placeholder="definition" class="form-control mb-3 def-btn" />
+
+        <h5 class="text-white">Step by Step</h5>
+        <input type="text" class="form-control mb-3 step-btn" id="step-0" placeholder="Step 1">
+
+        <div class="d-flex flex-column align-items-start">
+          <button id="add-step-btn" class="btn btn-primary mb-2" style="width: 100%;">Add step button</button>
+          <button id="submit-btn" class="btn btn-success" style="width: 100%;">Submit</button>
+        </div>
+        
+        <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
       </div>
     </div>
-    <script src="webviewscript.js"></script>
-  </body>
+  </nav>
+
+  <script src="webviewscript.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js"></script>
+</body>
 </html>
