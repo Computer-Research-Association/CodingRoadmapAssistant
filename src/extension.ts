@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { registerWebviewViewProvider } from "./webview";
-import { showModelSelectionQuickPick, showApiKeyInputBox } from "./craConfigManager";
+import { showModelSelectionQuickPick, setAPIKey } from "./craConfigManager";
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "coding-roadmap-assistant" is now active!');
@@ -9,13 +9,12 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage("Hello World from Coding Roadmap Assistant!");
   });
 
-  const showAPIKeyInput = vscode.commands.registerCommand("openAI.setAPIKey", showApiKeyInputBox);
+  const showAPIKeyInput = vscode.commands.registerCommand("openAI.setAPIKey", setAPIKey);
   const showModelSelection = vscode.commands.registerCommand("openAI.setModel", showModelSelectionQuickPick);
 
   context.subscriptions.push(disposable, showModelSelection, showAPIKeyInput);
 
-  registerWebviewViewProvider(context);// Webview 등록
-
+  registerWebviewViewProvider(context); // Webview 등록
 }
 
 export function deactivate() {}

@@ -3,21 +3,36 @@ import * as path from "path";
 import * as fs from "fs";
 import OpenAI from "openai";
 
+const apiKey = vscode.workspace.getConfiguration().get<string>("openAI.apiKey");
+
+if (!apiKey) {
+  vscode.window.showErrorMessage("Open API Key is missing.");
+}
+
 // VSCode의 settings.json에서 API 키를 가져옵니다.
 const openai = new OpenAI({
-  apiKey: vscode.workspace.getConfiguration("codingRoadmapAssistant").get<string>("openaiApiKey"),
+  apiKey,
 });
 
 // GPT API 호출 함수
 async function main(prompt: string) {
+  const model = await vscode.workspace.getConfiguration().get<string>("openAI.modelSelected");
+  if (!model) {
+    return "No model selected. Please configure the OpenAI model.";
+  }
+
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo", // 최신 모델로 변경
+      model, // 최신 모델로 변경
       messages: [{ role: "user", content: prompt }],
       max_tokens: 150,
       temperature: 0.7,
     });
-    return completion.choices[0]?.message?.content.trim() || "No response from GPT.";
+
+    if (completion.choices[0]?.message?.content === null) {
+      return "No response from GPT.";
+    }
+    return completion.choices[0]?.message?.content.trim();
   } catch (error: any) {
     console.error("GPT API Error:", error); // 콘솔에 상세 에러 출력
     return `Error: ${error.message || "Unknown error occurred."}`; // 사용자에게 반환
