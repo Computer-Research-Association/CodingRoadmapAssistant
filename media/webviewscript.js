@@ -4,13 +4,13 @@ const resetButton = document.getElementById("reset-btn");
 
 let stepCounter = 1;
 
-function resetBtn(){
-  document.querySelector('.definition-input').value = '';  // 문제 정의 입력 필드 초기화
+function resetBtn() {
+  document.querySelector(".definition-input").value = "";
   const stepInputs = document.querySelectorAll(".step-input");
-  stepInputs.forEach(input => input.remove());  // 모든 step 입력 필드 삭제
+  stepInputs.forEach((input) => input.remove());
   const testOutput = document.getElementById("test-output");
-  testOutput.innerHTML = '';  // 출력 영역 초기화
-  toggleNavbarShowHide();  // 네비게이션 바 접기/펼치기 상태로 초기화
+  testOutput.innerHTML = "";
+  toggleNavbarShowHide();
 }
 
 function createNewStepInput() {
@@ -44,7 +44,7 @@ function addData() {
   const steps = [];
 
   const stepInputs = document.querySelectorAll(".step-input");
-  stepInputs.forEach(input => {
+  stepInputs.forEach((input) => {
     steps.push(input.value);
   });
 
@@ -59,7 +59,7 @@ function newOutput(definition, steps) {
   testOutput.innerHTML = `
     <h3>Result:</h3>
     <p><strong>Problem Definition:</strong> ${definition}</p>
-    <ul>${steps.map(step => `<li>${step}</li>`).join("")}</ul>
+    <ul>${steps.map((step) => `<li>${step}</li>`).join("")}</ul>
   `;
 
   testOutput.style.color = "green";
@@ -73,4 +73,4 @@ submitButton.addEventListener("click", function () {
   addData();
   toggleNavbarShowHide();
 });
-resetButton.addEventListener("click", resetBtn);  // 함수 자체를 전달
+resetButton.addEventListener("click", resetBtn); // 함수 자체를 전달

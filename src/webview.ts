@@ -27,9 +27,7 @@ export function registerWebviewViewProvider(context: vscode.ExtensionContext) {
     resolveWebviewView: async (webviewView) => {
       webviewView.webview.options = {
         enableScripts: true,
-        localResourceRoots: [
-          vscode.Uri.joinPath(context.extensionUri, "media"),
-        ],
+        localResourceRoots: [vscode.Uri.joinPath(context.extensionUri, "media")],
       };
 
       const styleUri = webviewView.webview.asWebviewUri(
