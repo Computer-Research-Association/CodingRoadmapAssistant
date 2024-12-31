@@ -37,6 +37,15 @@ function submitData() {
   const stepInputs = document.querySelectorAll(".stepInput");
   const steps = [];
 
+  if (problemInput.trim() === "") {
+    const alertDiv = document.getElementById("alertMessage");
+    alertDiv.style.display = "block";
+    setTimeout(() => {
+      alertDiv.style.display = "none";
+    }, 1000);
+    return;
+  }
+
   stepInputs.forEach((input) => {
     steps.push(input.value);
   });
