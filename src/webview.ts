@@ -18,7 +18,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     _context: vscode.WebviewViewResolveContext,
     _token: vscode.CancellationToken
   ) {
-    webviewView = webviewView;
     // 웹뷰의 옵션에 localResourceRoots를 설정
     webviewView.webview.options = {
       enableScripts: true, // 자바스크립트 활성화
@@ -99,10 +98,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     this.openai = new OpenAI({
       apiKey: this.apiKey,
     });
-  }
-
-  private _getOpenai() {
-    return this.openai;
   }
 
   // 사용자 API 키 가져오기
