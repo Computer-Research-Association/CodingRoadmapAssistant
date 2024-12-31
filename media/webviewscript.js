@@ -10,16 +10,23 @@ function resetBtn() {
 
   const inputContainer = document.getElementById("input-container");
   inputContainer.innerHTML = "";
+
   const firstStepInput = document.getElementById("step-0");
-  firstStepInput.value = "";
+  if (firstStepInput) {
+    firstStepInput.value = "";
+  }
+
   stepCounter = 1;
 
   const testOutput = document.getElementById("test-output");
   testOutput.innerHTML = "";
 
   const navbarContent = document.getElementById("navbar-content");
-  navbarContent.style.display = "block";
-  navbarContent.style.maxHeight = navbarContent.scrollHeight + "px";
+  if (navbarContent) {
+    navbarContent.style.display = "block";
+    navbarContent.style.maxHeight = navbarContent.scrollHeight + "px";
+  }
+
   isNavbarHidden = false;
 }
 
@@ -39,10 +46,12 @@ function createNewStepInput() {
 
 function toggleNavbarShowHide() {
   const navbarContent = document.getElementById("navbar-content");
+  console.log("isNavbarHidden before toggle:", isNavbarHidden);
   if (isNavbarHidden) {
     navbarContent.style.display = "block";
     requestAnimationFrame(() => {
       navbarContent.style.maxHeight = navbarContent.scrollHeight + "px";
+      console.log("Navbar opened, maxHeight set to:", navbarContent.style.maxHeight);
     });
   } else {
     navbarContent.style.maxHeight = "0";
@@ -50,11 +59,14 @@ function toggleNavbarShowHide() {
       "transitionend",
       () => {
         if (isNavbarHidden) navbarContent.style.display = "none";
+        console.log("Navbar hidden after transition end");
       },
       { once: true }
     );
+    console.log("Navbar closing, maxHeight set to 0");
   }
   isNavbarHidden = !isNavbarHidden;
+  console.log("isNavbarHidden after toggle:", isNavbarHidden);
 }
 
 function submitData() {
@@ -63,7 +75,10 @@ function submitData() {
 
   newOutput(problemDefinition, steps);
 
+  console.log("Submitting data, navbar should close");
+  console.log("isNavbarHidden before submit:", isNavbarHidden);
   toggleNavbarShowHide();
+  console.log("isNavbarHidden after submit:", isNavbarHidden);
 }
 
 function newOutput(definition, steps) {
