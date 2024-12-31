@@ -1,97 +1,73 @@
-const addStepButton = document.getElementById("add-step-btn");
-const submitButton = document.getElementById("submit-btn");
-const resetButton = document.getElementById("reset-btn");
+document.getElementById("toggleNav").addEventListener("click", toggleNav);
+document.getElementById("addStep").addEventListener("click", addStep);
+document.getElementById("submitButton").addEventListener("click", submitData);
+document.getElementById("resetButton").addEventListener("click", resetForm);
 
-let stepCounter = 1;
-let isNavbarHidden = false;
+function toggleNav() {
+  const inputSection = document.getElementById("inputSection");
+  const outputSection = document.getElementById("outputSection");
+  const toggleNavButton = document.getElementById("toggleNav");
 
-function resetBtn() {
-  document.querySelector(".definition-input").value = "";
-
-  const inputContainer = document.getElementById("input-container");
-  inputContainer.innerHTML = "";
-
-  const firstStepInput = document.getElementById("step-0");
-  if (firstStepInput) {
-    firstStepInput.value = "";
-  }
-
-  stepCounter = 1;
-
-  const testOutput = document.getElementById("test-output");
-  testOutput.innerHTML = "";
-
-  const navbarContent = document.getElementById("navbar-content");
-  if (navbarContent) {
-    navbarContent.style.display = "block";
-    navbarContent.style.maxHeight = navbarContent.scrollHeight + "px";
-  }
-
-  isNavbarHidden = false;
-}
-
-function createNewStepInput() {
-  console.log("Adding new step");
-  const newInput = document.createElement("input");
-  newInput.type = "text";
-  newInput.placeholder = `Step ${stepCounter + 1}`;
-  newInput.id = `step-${stepCounter + 1}`;
-  newInput.className = "input-field step-input mb-3";
-
-  const inputContainer = document.getElementById("input-container");
-  inputContainer.appendChild(newInput);
-  newInput.focus();
-  stepCounter++;
-}
-
-function toggleNavbarShowHide() {
-  const navbarContent = document.getElementById("navbar-content");
-  console.log("isNavbarHidden before toggle:", isNavbarHidden);
-  if (isNavbarHidden) {
-    navbarContent.style.display = "block";
-    requestAnimationFrame(() => {
-      navbarContent.style.maxHeight = navbarContent.scrollHeight + "px";
-      console.log("Navbar opened, maxHeight set to:", navbarContent.style.maxHeight);
-    });
+  if (inputSection.style.maxHeight === "0px") {
+    inputSection.style.maxHeight = "100vh";
+    inputSection.style.opacity = "1";
+    outputSection.style.height = "0";
+    outputSection.style.opacity = "0";
+    toggleNavButton.textContent = "▼";
   } else {
-    navbarContent.style.maxHeight = "0";
-    navbarContent.addEventListener(
-      "transitionend",
-      () => {
-        if (isNavbarHidden) navbarContent.style.display = "none";
-        console.log("Navbar hidden after transition end");
-      },
-      { once: true }
-    );
-    console.log("Navbar closing, maxHeight set to 0");
+    inputSection.style.maxHeight = "0";
+    inputSection.style.opacity = "0";
+    outputSection.style.height = "100%";
+    outputSection.style.opacity = "1";
+    toggleNavButton.textContent = "▲";
   }
-  isNavbarHidden = !isNavbarHidden;
-  console.log("isNavbarHidden after toggle:", isNavbarHidden);
+}
+
+function addStep() {
+  const stepContainer = document.getElementById("steps");
+  const stepCount = stepContainer.querySelectorAll(".step").length + 1;
+  const newStep = document.createElement("div");
+  newStep.classList.add("step", "mb-2");
+  newStep.innerHTML = `<input type="text" class="form-control stepInput" placeholder="Step ${stepCount}">`;
+  stepContainer.appendChild(newStep);
 }
 
 function submitData() {
-  const problemDefinition = document.querySelector(".definition-input").value;
-  const steps = Array.from(document.querySelectorAll(".step-input")).map((input) => input.value);
+  const problemInput = document.getElementById("problemInput").value;
+  const stepInputs = document.querySelectorAll(".stepInput");
+  const steps = [];
 
-  newOutput(problemDefinition, steps);
+  stepInputs.forEach((input) => {
+    steps.push(input.value);
+  });
 
-  console.log("Submitting data, navbar should close");
-  console.log("isNavbarHidden before submit:", isNavbarHidden);
-  toggleNavbarShowHide();
-  console.log("isNavbarHidden after submit:", isNavbarHidden);
+  const outputContent = document.getElementById("outputContent");
+  outputContent.innerHTML = `<h3>Problem Definition:</h3><p>${problemInput}</p><h3>Steps:</h3><ul>`;
+
+  steps.forEach((step) => {
+    outputContent.innerHTML += `<li>${step}</li>`;
+  });
+
+  outputContent.innerHTML += `</ul>`;
+  toggleNav();
 }
 
-function newOutput(definition, steps) {
-  const testOutput = document.getElementById("test-output");
-  testOutput.innerHTML = `
-    <h3>Result:</h3>
-    <p><strong>Problem Definition:</strong> ${definition}</p>
-    <ul>${steps.map((step) => `<li>${step}</li>`).join("")}</ul>
-  `;
+function resetForm() {
+  const inputSection = document.getElementById("inputSection");
+  if (inputSection.style.maxHeight === "0px") {
+    toggleNav(); // 펼쳐진 상태로 만듦
+  }
+
+  document.getElementById("problemInput").value = "";
+  const stepInputs = document.querySelectorAll(".stepInput");
+  stepInputs.forEach((input, index) => {
+    if (index === 0) {
+      input.value = ""; // 첫 번째 Step은 남김
+    } else {
+      input.parentElement.remove(); // 나머지 Step 삭제
+    }
+  });
+
+  const outputContent = document.getElementById("outputContent");
+  outputContent.innerHTML = "";
 }
-
-addStepButton.addEventListener("click", createNewStepInput);
-submitButton.addEventListener("click", submitData);
-resetButton.addEventListener("click", resetBtn);
-
-document.querySelector(".navbar-toggler").addEventListener("click", toggleNavbarShowHide);

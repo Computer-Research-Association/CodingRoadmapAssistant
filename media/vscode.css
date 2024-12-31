@@ -1,71 +1,58 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-#navigation-bar {
-  width: 100%;
-  background-color: var(--vscode-editor-background);
-}
-
-.navbar-brand {
-  margin-bottom: 10px;
-  font-size: 1rem;
-}
-
-.input-field {
-  margin-bottom: 15px;
-}
-
-.action-btn {
-  border-radius: 5px;
-  font-size: 1rem;
-  padding: 10px;
-}
-
-.button-container {
-  gap: 10px;
-}
-
-img {
+/* Main Container */
+#mainContainer {
   max-width: 100%;
-  height: auto;
-  margin-top: 20px;
-}
-
-.sidebar-container {
-  background-color: var(--vscode-editor-background);
-}
-
-body {
-  background-color: var(--vscode-editor-background);
-  color: var(--vscode-editor-foreground);
-}
-
-#navbar-content {
-  max-height: 500px;
   overflow: hidden;
-  transition: max-height 0.3s ease-in-out;
+  position: relative;
 }
 
-#navbar-content.hidden {
-  max-height: 0;
-  padding: 0;
+/* Input Section Animation */
+#inputSection {
+  transition:
+    max-height 0.5s ease-in-out,
+    opacity 0.5s ease-in-out;
+  max-height: 100vh;
+  opacity: 1;
+  overflow: hidden;
 }
 
-.reset-btn {
-  background-color: red;
-  color: white;
-  font-size: 1rem;
-  padding: 10px;
-  border-radius: 5px;
+/* Output Section Animation */
+#outputSection {
+  transition:
+    height 0.5s ease-in-out,
+    opacity 0.5s ease-in-out;
+}
+
+/* Reset Button */
+#resetButton {
   position: fixed;
   top: 10px;
   right: 10px;
   z-index: 1000;
+  width: 100px;
+  height: 40px;
 }
 
-.navbar-collapse {
-  padding-top: 60px;
+/* Toggle Navigation Button */
+#toggleNav {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  width: 100px;
+  height: 40px;
+}
+
+/* General Styles */
+button {
+  height: 40px;
+  font-size: 14px;
+}
+
+label {
+  font-size: 16px;
+}
+
+textarea,
+input {
+  font-size: 14px;
 }
