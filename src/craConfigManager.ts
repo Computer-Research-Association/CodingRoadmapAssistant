@@ -1,18 +1,26 @@
 import * as vscode from "vscode";
 
-export async function showApiKeyInputBox() {
-  const apiKey = await vscode.window.showInputBox({
+export async function setAPIKey(context: vscode.ExtensionContext) {
+  const inputBoxOptions: vscode.InputBoxOptions = {
     prompt: "Enter your OpenAI API key.",
+    ignoreFocusOut: true,
     placeHolder: "Open API Key",
     password: true,
-  });
+  };
 
-  if (apiKey) {
-    await vscode.workspace.getConfiguration().update("openAI.apiKey", apiKey, vscode.ConfigurationTarget.Global);
-    vscode.window.showInformationMessage("Open AI API key saved successfully.");
-  } else {
-    vscode.window.showInformationMessage("No API key entered.");
+  const apiKey = await vscode.window.showInputBox(inputBoxOptions);
+
+  if (!apiKey) {
+    vscode.window.showWarningMessage("No API key entered.");
+    return "";
   }
+
+  await context.secrets.store("OPENAI_API_KEY", apiKey);
+  // context에서 제공하는 secretStorage를 사용하여 api key 를 저장하는 방법
+
+  await vscode.workspace.getConfiguration().update("openAI.apiKey", apiKey, vscode.ConfigurationTarget.Global);
+  vscode.window.showInformationMessage("Open AI API key saved successfully.");
+  return apiKey;
 }
 
 export async function showModelSelectionQuickPick() {
