@@ -1,20 +1,43 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>CRA</title>
-    <link rel="stylesheet" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coding Roadmap Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="vscode.css" />
   </head>
   <body>
-    <div id="chat-container">
-      <ul id="list"></ul>
-      <!-- 대화 내용이 올라가는 영역 -->
-      <div id="input-area">
-        <input type="text" placeholder="여기에 입력하세요" id="input" />
-        <button id="send">Send</button>
-        <button id="reset">Reset</button>
+    <button id="resetButton" class="btn btn-danger">Reset</button>
+    <div id="mainContainer" class="d-flex flex-column">
+      <button id="toggleNav" class="btn btn-primary">up/down</button>
+      <div id="inputSection" class="p-4">
+        <div id="content" class="mt-4">
+          <div id="problemDefinition">
+            <label for="problemInput" class="form-label">Problem Definition</label>
+            <textarea id="problemInput" class="form-control mb-3" placeholder="Enter problem definition"></textarea>
+          </div>
+          <div id="stepsSection">
+            <label class="form-label">Step</label>
+            <div id="steps">
+              <div class="step mb-2">
+                <input type="text" class="form-control stepInput" placeholder="Step 1" />
+              </div>
+            </div>
+            <button id="addStep" class="btn btn-secondary mt-2 w-100">Add Step</button>
+          </div>
+          <button id="submitButton" class="btn btn-success mt-3 w-100">Submit</button>
+        </div>
+      </div>
+
+      <div id="outputSection" class="p-3" style="flex-grow: 1; overflow-y: auto; height: 0; opacity: 0">
+        <h2>Output</h2>
+        <div id="outputContent"></div>
       </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
     <script src="webviewscript.js"></script>
   </body>
 </html>

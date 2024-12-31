@@ -1,41 +1,73 @@
-const vscode = acquireVsCodeApi();
+document.getElementById("toggleNav").addEventListener("click", toggleNav);
+document.getElementById("addStep").addEventListener("click", addStep);
+document.getElementById("submitButton").addEventListener("click", submitData);
+document.getElementById("resetButton").addEventListener("click", resetForm);
 
-window.onload = function () {
-  function updateList(data, isUserMessage) {
-    const list = document.getElementById("list");
-    const li = document.createElement("li");
-    li.textContent = data;
+function toggleNav() {
+  const inputSection = document.getElementById("inputSection");
+  const outputSection = document.getElementById("outputSection");
+  const toggleNavButton = document.getElementById("toggleNav");
 
-    if (isUserMessage) {
-      li.style.fontWeight = "bold"; // 사용자 메시지 굵게 표시
-    }
+  if (inputSection.style.maxHeight === "0px") {
+    inputSection.style.maxHeight = "100vh";
+    inputSection.style.opacity = "1";
+    outputSection.style.height = "0";
+    outputSection.style.opacity = "0";
+    toggleNavButton.textContent = "Up";
+  } else {
+    inputSection.style.maxHeight = "0";
+    inputSection.style.opacity = "0";
+    outputSection.style.height = "100%";
+    outputSection.style.opacity = "1";
+    toggleNavButton.textContent = "Down";
+  }
+}
 
-    list.appendChild(li);
+function addStep() {
+  const stepContainer = document.getElementById("steps");
+  const stepCount = stepContainer.querySelectorAll(".step").length + 1;
+  const newStep = document.createElement("div");
+  newStep.classList.add("step", "mb-2");
+  newStep.innerHTML = `<input type="text" class="form-control stepInput" placeholder="Step ${stepCount}">`;
+  stepContainer.appendChild(newStep);
+}
 
-    // 대화 내용이 추가된 후 가장 최신 메시지로 스크롤
-    list.scrollTop = list.scrollHeight;
+function submitData() {
+  const problemInput = document.getElementById("problemInput").value;
+  const stepInputs = document.querySelectorAll(".stepInput");
+  const steps = [];
+
+  stepInputs.forEach((input) => {
+    steps.push(input.value);
+  });
+
+  const outputContent = document.getElementById("outputContent");
+  outputContent.innerHTML = `<h3>Problem Definition:</h3><p>${problemInput}</p><h3>Steps:</h3><ul>`;
+
+  steps.forEach((step) => {
+    outputContent.innerHTML += `<li>${step}</li>`;
+  });
+
+  outputContent.innerHTML += `</ul>`;
+  toggleNav();
+}
+
+function resetForm() {
+  const inputSection = document.getElementById("inputSection");
+  if (inputSection.style.maxHeight === "0px") {
+    toggleNav();
   }
 
-  window.addEventListener("message", (event) => {
-    const message = event.data;
-    if (message.command === "setData") {
-      updateList(message.data);
+  document.getElementById("problemInput").value = "";
+  const stepInputs = document.querySelectorAll(".stepInput");
+  stepInputs.forEach((input, index) => {
+    if (index === 0) {
+      input.value = "";
+    } else {
+      input.parentElement.remove();
     }
   });
 
-  document.getElementById("send").addEventListener("click", () => {
-    const inputElement = document.getElementById("input");
-    const inputValue = inputElement.value.trim();
-
-    if (inputValue) {
-      updateList(inputValue, true); // 사용자의 메시지
-      vscode.postMessage({ command: "process", value: inputValue });
-      inputElement.value = ""; // 입력 필드 비우기
-    }
-  });
-
-  document.getElementById("reset").addEventListener("click", () => {
-    const list = document.getElementById("list");
-    list.innerHTML = ""; // 모든 대화 내용 지우기
-  });
-};
+  const outputContent = document.getElementById("outputContent");
+  outputContent.innerHTML = "";
+}
