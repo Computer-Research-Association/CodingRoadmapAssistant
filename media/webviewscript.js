@@ -13,13 +13,13 @@ function toggleNav() {
     inputSection.style.opacity = "1";
     outputSection.style.height = "0";
     outputSection.style.opacity = "0";
-    toggleNavButton.textContent = "▼";
+    toggleNavButton.textContent = "Up";
   } else {
     inputSection.style.maxHeight = "0";
     inputSection.style.opacity = "0";
     outputSection.style.height = "100%";
     outputSection.style.opacity = "1";
-    toggleNavButton.textContent = "▲";
+    toggleNavButton.textContent = "Down";
   }
 }
 
@@ -55,16 +55,16 @@ function submitData() {
 function resetForm() {
   const inputSection = document.getElementById("inputSection");
   if (inputSection.style.maxHeight === "0px") {
-    toggleNav(); // 펼쳐진 상태로 만듦
+    toggleNav();
   }
 
   document.getElementById("problemInput").value = "";
   const stepInputs = document.querySelectorAll(".stepInput");
   stepInputs.forEach((input, index) => {
     if (index === 0) {
-      input.value = ""; // 첫 번째 Step은 남김
+      input.value = "";
     } else {
-      input.parentElement.remove(); // 나머지 Step 삭제
+      input.parentElement.remove();
     }
   });
 
