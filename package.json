@@ -9,9 +9,7 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onView:craView"
-  ],
+  "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
     "viewsContainers": {
@@ -36,32 +34,30 @@
       {
         "command": "openAI.setAPIKey",
         "category": "Coding Roadmap Assistant",
-        "title": "Set Open AI API Key"
+        "title": "Set OpenAI API Key"
       },
       {
         "command": "openAI.setModel",
         "category": "Coding Roadmap Assistant",
-        "title": "Set Open AI GPT Model"
+        "title": "Set OpenAI GPT Model"
       }
     ],
     "configuration": [
       {
-        "title": "Extension Challenge",
+        "title": "CodingRoadmapAssistant",
         "properties": {
           "openAI.apiKey": {
             "type": [
-              "string",
-              "null"
+              "string"
             ],
-            "default": null,
+            "default": "",
             "description": "Open AI API Key"
           },
           "openAI.modelSelected": {
             "type": [
-              "string",
-              "null"
+              "string"
             ],
-            "default": null,
+            "default": "gpt-4o-mini",
             "description": "Open AI GPT Model Selected"
           }
         }
