@@ -7,7 +7,6 @@ import { error } from "console";
 export default class CRAWebviewViewProvider implements vscode.WebviewViewProvider {
   private webView?: vscode.WebviewView;
   private apiKey?: string;
-  private message?: any;
   private context: vscode.ExtensionContext;
   private openai?: OpenAI;
 
