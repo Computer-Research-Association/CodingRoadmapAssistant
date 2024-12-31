@@ -2,7 +2,6 @@ import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
 import OpenAI from "openai";
-import { error } from "console";
 
 export default class CRAWebviewViewProvider implements vscode.WebviewViewProvider {
   private webView?: vscode.WebviewView;
@@ -70,14 +69,14 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
   // GPT API 호출 함수
   private async callGptApi(prompt: string) {
-    const model = await vscode.workspace.getConfiguration().get<string>("openAI.modelSelected"); //configuration에 저장되있는 model 정보.
+    const model = vscode.workspace.getConfiguration().get<string>("openAI.modelSelected"); //configuration에 저장되있는 model 정보.
     if (!model) {
       return "No model selected. Please configure the OpenAI model.";
     }
 
     try {
       if (!this.openai) {
-        throw error;
+        throw new Error();
       }
       const completion = await this.openai.chat.completions.create({
         //gpt에게 사용자 질문 보낸 결과를 담은 객체.
@@ -97,7 +96,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     }
   }
 
-  private setOpenai(apiKey: string | undefined) {
+  private setOpenaiWithApiKey(apiKey: string | undefined) {
     this.openai = new OpenAI({
       apiKey: this.apiKey,
     });
@@ -116,6 +115,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     }
 
     //OpenAI 객체 생성
-    this.setOpenai(this.apiKey);
+    this.setOpenaiWithApiKey(this.apiKey);
   }
 }
