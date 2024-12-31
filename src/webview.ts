@@ -2,13 +2,14 @@ import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
 import OpenAI from "openai";
+import { error } from "console";
 
 export default class CRAWebviewViewProvider implements vscode.WebviewViewProvider {
   private webView?: vscode.WebviewView;
   private apiKey?: string;
   private message?: any;
   private context: vscode.ExtensionContext;
-  private openai: OpenAI;
+  private openai?: OpenAI;
 
   constructor(context: vscode.ExtensionContext) {
     this.context = context;
@@ -76,6 +77,9 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     }
 
     try {
+      if (!this.openai) {
+        throw error;
+      }
       const completion = await this.openai.chat.completions.create({
         //gpt에게 사용자 질문 보낸 결과를 담은 객체.
         model, // 최신 모델로 변경
