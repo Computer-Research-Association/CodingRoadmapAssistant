@@ -31,3 +31,25 @@ export async function showModelSelectionQuickPick() {
     },
   });
 }
+
+export async function onFirstActivation(context: vscode.ExtensionContext) {
+  await setAPIKey(context);
+  await showModelSelectionQuickPick();
+}
+
+export async function checkApiKeyValidation(context: vscode.ExtensionContext) {
+  if (!(await context.secrets.get("OPENAI_API_KEY"))) {
+    showApiKeyError(context);
+  }
+}
+
+export async function showApiKeyError(context: vscode.ExtensionContext) {
+  const result = await vscode.window.showErrorMessage(
+    "OpenAI API key is not configured.\nWant to configure?",
+    "YES",
+    "NO"
+  );
+  if (result === "YES") {
+    setAPIKey(context);
+  }
+}

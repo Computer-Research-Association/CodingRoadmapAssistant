@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
 import OpenAI from "openai";
+import { showApiKeyError } from "./craConfigManager";
 
 export default class CRAWebviewViewProvider implements vscode.WebviewViewProvider {
   private apiKey?: string;
@@ -94,7 +95,11 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     }
   }
 
-  private setOpenaiWithApiKey(apiKey: string | undefined) {
+  private async setOpenaiWithApiKey(apiKey: string | undefined) {
+    if (!apiKey) {
+      showApiKeyError(this.context);
+    }
+
     this.openai = new OpenAI({
       apiKey: this.apiKey,
     });
