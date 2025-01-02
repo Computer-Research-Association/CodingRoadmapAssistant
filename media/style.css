@@ -20,7 +20,7 @@ body {
   max-height: 100vh;
   opacity: 1;
   overflow: hidden;
-  background-color: #252526;
+  background-color: #1e1e1e;
   color: #d4d4d4;
 }
 
@@ -28,7 +28,7 @@ body {
   transition:
     height 0.5s ease-in-out,
     opacity 0.5s ease-in-out;
-  background-color: #252526;
+  background-color: #1e1e1e;
   color: #d4d4d4;
 }
 
@@ -84,9 +84,9 @@ label {
 textarea,
 input {
   font-size: 14px;
-  background-color: #2d2d2d;
+  background-color: #1e1e1e;
   color: #d4d4d4;
-  border: 1px solid #3c3c3c;
+  border: 1px solid #1e1e1e;
   border-radius: 4px;
   padding: 8px;
 }
