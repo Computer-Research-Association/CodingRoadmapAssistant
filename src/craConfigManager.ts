@@ -53,3 +53,12 @@ export async function showApiKeyError(context: vscode.ExtensionContext) {
     setAPIKey(context);
   }
 }
+
+// global state 저장소에 올리는 함수. (하나의 value에 communication 정보 한꺼번에 저장)
+export async function saveToGlobalState(context: vscode.ExtensionContext, log: any) {
+  const key = "conversationLogs";
+  const data = context.globalState.get<any[]>(key) || []; //기존 저장되있던 log 가져오기
+  data.push(...log);
+
+  context.globalState.update(key, data);
+}
