@@ -34,6 +34,9 @@ export async function showModelSelectionQuickPick() {
       await vscode.workspace.getConfiguration().update("openAI.modelSelected", item, vscode.ConfigurationTarget.Global);
     },
   });
+
+  // refresh webview to apply openai gpt model
+  vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction");
 }
 
 export async function onFirstActivation(context: vscode.ExtensionContext) {
