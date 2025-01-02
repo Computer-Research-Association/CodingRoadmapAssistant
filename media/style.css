@@ -70,6 +70,18 @@ body {
   cursor: pointer;
 }
 
+#addStep {
+  width: 40px;
+  height: 40px;
+  background-image: url("add.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 10px;
+}
+
 button {
   height: 40px;
   font-size: 14px;
@@ -112,18 +124,17 @@ input {
 }
 
 #alertMessage {
-  display: none;
+  background-color: #dc3545;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
   position: fixed;
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 10px 20px;
-  border: 1px solid #f5c6cb;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: bold;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   z-index: 1000;
+  display: none;
+  font-size: 14px;
+  text-align: center;
+  max-width: 300px;
 }
