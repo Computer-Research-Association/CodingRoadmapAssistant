@@ -42,3 +42,14 @@ export async function checkApiKeyValidation(context: vscode.ExtensionContext) {
     showApiKeyError(context);
   }
 }
+
+export async function showApiKeyError(context: vscode.ExtensionContext) {
+  const result = await vscode.window.showErrorMessage(
+    "OpenAI API key is not configured.\nWant to configure?",
+    "YES",
+    "NO"
+  );
+  if (result === "YES") {
+    setAPIKey(context);
+  }
+}
