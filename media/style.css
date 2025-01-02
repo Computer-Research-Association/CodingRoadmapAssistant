@@ -37,12 +37,13 @@ body {
   top: 10px;
   right: 10px;
   z-index: 1000;
-  width: 100px;
+  width: 40px;
   height: 40px;
-  background-color: #f44747;
-  color: #ffffff;
-  border-radius: 4px;
+  background-image: url("reset.png");
+  background-size: contain;
+  background-repeat: no-repeat;
   border: none;
+  cursor: pointer;
 }
 
 #toggleNav {
@@ -52,14 +53,21 @@ body {
   z-index: 1000;
   width: 40px;
   height: 40px;
-  background-color: #007acc;
-  color: #ffffff;
+  background-image: url("toggle.png");
+  background-size: contain;
+  background-repeat: no-repeat;
   border: none;
-  border-radius: 4px;
-  font-size: 18px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  cursor: pointer;
+}
+
+#submitButton {
+  width: 40px;
+  height: 40px;
+  background-image: url("submit.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
 }
 
 button {
@@ -101,14 +109,4 @@ input {
 
 .step {
   margin-bottom: 10px;
-}
-
-#submitButton {
-  background-color: #006400;
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  width: 100%;
-  padding: 10px;
-  font-size: 14px;
 }
