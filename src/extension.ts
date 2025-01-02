@@ -1,9 +1,10 @@
 import * as vscode from "vscode";
 import CRAWebviewViewProvider from "./webview";
-import { showModelSelectionQuickPick, setAPIKey } from "./craConfigManager";
+import { showModelSelectionQuickPick, setAPIKey, initConversationLogFile } from "./craConfigManager";
 
 export function activate(context: vscode.ExtensionContext) {
   const CRAViewProvider = new CRAWebviewViewProvider(context);
+  initConversationLogFile(context);
 
   context.subscriptions.push(
     vscode.commands.registerCommand("openAI.setAPIKey", setAPIKey),

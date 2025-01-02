@@ -1,4 +1,6 @@
 import * as vscode from "vscode";
+import * as fs from "fs";
+import * as path from "path";
 
 export async function setAPIKey(context: vscode.ExtensionContext) {
   const inputBoxOptions: vscode.InputBoxOptions = {
@@ -30,4 +32,21 @@ export async function showModelSelectionQuickPick() {
       await vscode.workspace.getConfiguration().update("openAI.modelSelected", item, vscode.ConfigurationTarget.Global);
     },
   });
+}
+
+export async function initConversationLogFile(context: vscode.ExtensionContext) {
+  let workspacePath = "";
+
+  const data = [
+    {
+      role: "system",
+      content:
+        "You are my coding assistant to enhance my coding skills. From now on, i’ll give you some coding problem and user’s attempt to solve it. Also you may be given logical steps of the user’s code.",
+    },
+    {
+      role: "system",
+      content:
+        "Generate the output that includes the following points. 1. Never give the answer. Including code. 2. tutor him. must ask questions. make sure the user understands it themselves. 3. for each logical step, provide three questions made in step 2. number each question 1, 2, 3 for each logical step. ",
+    },
+  ];
 }
