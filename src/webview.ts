@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
 import OpenAI from "openai";
-import { setAPIKey } from "./craConfigManager";
+import { showApiKeyError } from "./craConfigManager";
 
 export default class CRAWebviewViewProvider implements vscode.WebviewViewProvider {
   private apiKey?: string;
@@ -97,14 +97,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
   private async setOpenaiWithApiKey(apiKey: string | undefined) {
     if (!apiKey) {
-      const result = await vscode.window.showErrorMessage(
-        "OpenAI API key is not configured.\nWant to configure?",
-        "YES",
-        "NO"
-      );
-      if (result === "YES") {
-        setAPIKey(this.context);
-      }
+      showApiKeyError(this.context);
     }
 
     this.openai = new OpenAI({

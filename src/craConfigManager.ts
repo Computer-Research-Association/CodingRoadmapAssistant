@@ -37,3 +37,8 @@ export async function onFirstActivation(context: vscode.ExtensionContext) {
   await showModelSelectionQuickPick();
 }
 
+export async function checkApiKeyValidation(context: vscode.ExtensionContext) {
+  if (!(await context.secrets.get("OPENAI_API_KEY"))) {
+    showApiKeyError(context);
+  }
+}
