@@ -40,7 +40,7 @@ export async function initConversationLogFile(context: vscode.ExtensionContext) 
   try {
     const workspaceFolders = vscode.workspace.workspaceFolders;
 
-    //workdpace folder check, path 생성
+    //workspace folder check, path 생성
     if (workspaceFolders && workspaceFolders.length > 0) {
       workspacePath = workspaceFolders[0].uri.fsPath; // 한 개의 워크스페이스 경로만 가져옴(추후 여러 개의 경로 구현 필요.)
       console.log("workspace folder exist! " + `workspace path: ${workspacePath}`);
@@ -61,6 +61,12 @@ export async function initConversationLogFile(context: vscode.ExtensionContext) 
           "Generate the output that includes the following points. 1. Never give the answer. Including code. 2. tutor him. must ask questions. make sure the user understands it themselves. 3. for each logical step, provide three questions made in step 2. number each question 1, 2, 3 for each logical step. ",
       },
     ];
+
+    //JSON file 생성
+    fs.writeFile(workspacePath + "/conversationLog.json", JSON.stringify(data), function (err) {
+      if (err === null) console.log("successfully written initial file");
+      else console.log("error at writeFile: " + err);
+    });
   } catch {
     console.log("Error happened at making files : ");
     throw new Error();
