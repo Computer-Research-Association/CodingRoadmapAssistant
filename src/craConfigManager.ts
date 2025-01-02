@@ -31,3 +31,9 @@ export async function showModelSelectionQuickPick() {
     },
   });
 }
+
+export async function onFirstActivation(context: vscode.ExtensionContext) {
+  await setAPIKey(context);
+  await showModelSelectionQuickPick();
+}
+

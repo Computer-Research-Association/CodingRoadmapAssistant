@@ -1,12 +1,11 @@
 import * as vscode from "vscode";
 import CRAWebviewViewProvider from "./webview";
-import { showModelSelectionQuickPick, setAPIKey } from "./craConfigManager";
+import { showModelSelectionQuickPick, setAPIKey, onFirstActivation } from "./craConfigManager";
 
 export async function activate(context: vscode.ExtensionContext) {
   const isInitialized = context.globalState.get<boolean>("isInitialized");
   if (!isInitialized) {
-    await setAPIKey(context);
-    await showModelSelectionQuickPick();
+    await onFirstActivation(context);
 
     context.globalState.update("isInitialized", true);
   }
