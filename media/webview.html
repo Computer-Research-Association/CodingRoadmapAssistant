@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CRA</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="vscode.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <button id="resetButton" class="btn btn-danger">Reset</button>
+    <button id="resetButton" class="btn"></button>
     <div id="mainContainer" class="d-flex flex-column">
-      <button id="toggleNav" class="btn btn-primary">up/down</button>
+      <button id="toggleNav" class="btn"></button>
       <div id="inputSection" class="p-4">
         <div id="content" class="mt-4">
           <div id="problemDefinition">
@@ -24,9 +24,9 @@
                 <input type="text" class="form-control stepInput" placeholder="Step 1" />
               </div>
             </div>
-            <button id="addStep" class="btn btn-secondary mt-2 w-100">Add Step</button>
+            <button id="addStep" class="btn btn-secondary mt-2 w-100"><span>Add Step</span></button>
           </div>
-          <button id="submitButton" class="btn btn-success mt-3 w-100">Submit</button>
+          <button id="submitButton" class="btn"><span>Submit</span></button>
         </div>
       </div>
       <div id="outputSection" class="p-3" style="flex-grow: 1; overflow-y: auto; height: 0; opacity: 0">
@@ -37,7 +37,7 @@
     <div
       id="alertMessage"
       class="alert alert-danger"
-      style="display: none; position: fixed; top: 10px; left: 50%; transform: translateX(-50%)">
+      style="display: none; position: relative; top: 0; left: 50%; transform: translateX(-50%)">
       문제 정의를 입력해주세요!
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

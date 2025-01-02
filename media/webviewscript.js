@@ -8,18 +8,18 @@ function toggleNav() {
   const outputSection = document.getElementById("outputSection");
   const toggleNavButton = document.getElementById("toggleNav");
 
+  toggleNavButton.textContent = "";
+
   if (inputSection.style.maxHeight === "0px") {
     inputSection.style.maxHeight = "100vh";
     inputSection.style.opacity = "1";
     outputSection.style.height = "0";
     outputSection.style.opacity = "0";
-    toggleNavButton.textContent = "Up";
   } else {
     inputSection.style.maxHeight = "0";
     inputSection.style.opacity = "0";
     outputSection.style.height = "100%";
     outputSection.style.opacity = "1";
-    toggleNavButton.textContent = "Down";
   }
 }
 
