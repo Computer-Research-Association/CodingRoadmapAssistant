@@ -20,6 +20,10 @@ export async function setAPIKey(context: vscode.ExtensionContext) {
 
   await vscode.workspace.getConfiguration().update("openAI.apiKey", apiKey, vscode.ConfigurationTarget.Global);
   vscode.window.showInformationMessage("Open AI API key saved successfully.");
+
+  // refresh webview to apply openai api key
+  vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction");
+
   return apiKey;
 }
 
