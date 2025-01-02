@@ -13,7 +13,9 @@ export async function activate(context: vscode.ExtensionContext) {
   const CRAViewProvider = new CRAWebviewViewProvider(context);
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("openAI.setAPIKey", setAPIKey),
+    vscode.commands.registerCommand("openAI.setAPIKey", async () => {
+      await setAPIKey(context);
+    }),
     vscode.commands.registerCommand("openAI.setModel", showModelSelectionQuickPick),
     vscode.window.registerWebviewViewProvider("craView", CRAViewProvider, {
       // Webview 등록
