@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
 import OpenAI from "openai";
-import { showApiKeyError } from "./craConfigManager";
+import { showApiKeyError, saveToGlobalState } from "./craConfigManager";
 
 export default class CRAWebviewViewProvider implements vscode.WebviewViewProvider {
   private apiKey?: string;
@@ -53,8 +53,10 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     console.log("flag1 -- html 불러오기");
     //웹뷰에서 데이터를 받는 핸들러 설정
     webviewView.webview.onDidReceiveMessage(async (message) => {
+      //webviewscript에서 정보 전달받음
       console.log("flag2 -- 웹뷰에서 데이터 받아오기");
 
+      // send request to OpenAI
       switch (message.command) {
         case "process":
           //GPT API 호출
@@ -65,6 +67,16 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             command: "setData",
             data: gptResponse,
           });
+
+          // save it's answer to the conversationLog
+          const gptData = [
+            {
+              role: "system",
+              content: gptResponse,
+            },
+          ];
+          saveToGlobalState(this.context, gptData);
+
           break;
       }
     });
@@ -83,19 +95,22 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
       if (!this.openai) {
         throw new Error();
       }
+
+      const userMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [{ role: "user", content: prompt }];
       const completion = await this.openai.chat.completions.create({
         //gpt에게 사용자 질문 보낸 결과를 담은 객체.
         model, // 최신 모델로 변경
-        messages: [{ role: "user", content: prompt }],
+        messages: userMessages,
         max_tokens: 150,
         temperature: 0.7,
       });
-      console.log("gpt sending success >> prompt: " + prompt);
-
       if (completion.choices[0]?.message?.content === null) {
         return "No response from GPT.";
       }
-      console.log("gpt output >> " + completion.choices[0]);
+
+      // save user's question to the conversationLog
+      saveToGlobalState(this.context, userMessages);
+
       return completion.choices[0]?.message?.content.trim();
     } catch (error: any) {
       console.error("GPT API Error:", error); // 콘솔에 상세 에러 출력

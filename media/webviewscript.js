@@ -1,5 +1,3 @@
-const { commands } = require("vscode");
-
 document.getElementById("toggleNav").addEventListener("click", toggleNav);
 document.getElementById("addStep").addEventListener("click", addStep);
 document.getElementById("submitButton").addEventListener("click", submitData);
