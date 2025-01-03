@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
 import OpenAI from "openai";
-import { showApiKeyError, saveToGlobalState } from "./craConfigManager";
+import { showApiKeyError, saveLogToGlobalState } from "./craConfigManager";
 
 export default class CRAWebviewViewProvider implements vscode.WebviewViewProvider {
   private apiKey?: string;
@@ -50,18 +50,13 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     //웹뷰 HTML 설정
     webviewView.webview.html = htmlContent;
 
-    console.log("flag1 -- html 불러오기");
-    //웹뷰에서 데이터를 받는 핸들러 설정
+    // webviewscript.js 에서 데이터를 받는 핸들러 설정
     webviewView.webview.onDidReceiveMessage(async (message) => {
-      //webviewscript에서 정보 전달받음
-      console.log("flag2 -- 웹뷰에서 데이터 받아오기");
-
       // send request to OpenAI
       switch (message.command) {
         case "process":
           //GPT API 호출
           const gptResponse = await this.callGptApi(message.value);
-          console.log("GPT Response: " + gptResponse);
           //웹뷰로 결과 전달
           webviewView.webview.postMessage({
             command: "setData",
@@ -75,7 +70,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
               content: gptResponse,
             },
           ];
-          saveToGlobalState(this.context, gptData);
+          saveLogToGlobalState(this.context, gptData);
 
           break;
       }
@@ -84,8 +79,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
   // GPT API 호출 함수
   private async callGptApi(prompt: string) {
-    console.log("flag3 -- gpt 호출");
-
     const model = vscode.workspace.getConfiguration().get<string>("openAI.modelSelected"); //configuration에 저장되있는 model 정보.
     if (!model) {
       return "No model selected. Please configure the OpenAI model.";
@@ -97,8 +90,8 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
       }
 
       const userMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [{ role: "user", content: prompt }];
+      //gpt에게 사용자 질문 보낸 결과를 담은 객체.
       const completion = await this.openai.chat.completions.create({
-        //gpt에게 사용자 질문 보낸 결과를 담은 객체.
         model, // 최신 모델로 변경
         messages: userMessages,
         max_tokens: 150,
@@ -109,7 +102,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
       }
 
       // save user's question to the conversationLog
-      saveToGlobalState(this.context, userMessages);
+      saveLogToGlobalState(this.context, userMessages);
 
       return completion.choices[0]?.message?.content.trim();
     } catch (error: any) {

@@ -22,7 +22,6 @@ function toggleNav() {
     outputSection.style.height = "100%";
     outputSection.style.opacity = "1";
   }
-  Webviewscropt.js;
 }
 
 function addStep() {

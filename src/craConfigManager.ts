@@ -61,7 +61,6 @@ export async function showApiKeyError(context: vscode.ExtensionContext) {
 
 //save initial prompting message
 export async function initPromptMessage(context: vscode.ExtensionContext) {
-  const key = "conversationLogs";
   const data = [
     {
       role: "system",
@@ -74,14 +73,13 @@ export async function initPromptMessage(context: vscode.ExtensionContext) {
         "Generate the output that includes the following points. 1. Never give the answer. Including code. 2. tutor him. must ask questions. make sure the user understands it themselves. 3. for each logical step, provide three questions made in step 2. number each question 1, 2, 3 for each logical step. ",
     },
   ];
-  context.globalState.update(key, data);
+  context.globalState.update("conversationLogs", data);
 }
 
 // global state 저장소에 올리는 함수. (하나의 value에 communication 정보 한꺼번에 저장)
-export async function saveToGlobalState(context: vscode.ExtensionContext, log: any) {
-  const key = "conversationLogs";
-  const data = context.globalState.get<any[]>(key) || []; //기존 저장되있던 log 가져오기
+export async function saveLogToGlobalState(context: vscode.ExtensionContext, log: any) {
+  const data = context.globalState.get<any[]>("conversationLogs") || []; //기존 저장되있던 log 가져오기
   data.push(...log);
 
-  context.globalState.update(key, data);
+  context.globalState.update("conversationLogs", data);
 }
