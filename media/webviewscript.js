@@ -22,6 +22,7 @@ function toggleNav() {
     outputSection.style.height = "100%";
     outputSection.style.opacity = "1";
   }
+  Webviewscropt.js;
 }
 
 function addStep() {
@@ -51,28 +52,35 @@ function submitData() {
     steps.push(input.value);
   });
 
-  const outputContent = document.getElementById("outputContent");
-  outputContent.innerHTML = `<h3>Problem Definition:</h3><p>${problemInput}</p><h3>Steps:</h3><ul>`;
+  const userOutputContent = document.getElementById("userOutputContent");
+  userOutputContent.innerHTML = `<h3>Problem Definition:</h3><p>${problemInput}</p><h3>Steps:</h3><ul>`;
   let data = "problem definition: " + problemInput + ", steps: "; // save data to send to Chat-GPT
 
   let index = 1;
   steps.forEach((step) => {
-    outputContent.innerHTML += `<li>${step}</li>`;
+    userOutputContent.innerHTML += `<li>${step}</li>`;
     data += index + ". " + step;
     index++;
   });
   index = 1; //reset index number
-  outputContent.innerHTML += `</ul>`;
+  userOutputContent.innerHTML += `</ul>`;
 
-  // send data into webview.ts
+  sendData(data);
+
+  toggleNav();
+}
+
+// send data into webview.ts
+function sendData(data) {
   vscode.postMessage({
     command: "process",
     value: data,
   });
+}
 
-  //show chat-GPT's result
-
-  toggleNav();
+//show chat-GPT's result
+function showGptResult() {
+  userOutputContent.innerHTML = `<h3>Problem Definition:</h3><p>${problemInput}</p><h3>Steps:</h3><ul>`;
 }
 
 function resetForm() {
@@ -91,6 +99,6 @@ function resetForm() {
     }
   });
 
-  const outputContent = document.getElementById("outputContent");
-  outputContent.innerHTML = "";
+  const userOutputContent = document.getElementById("userOutputContent");
+  userOutputContent.innerHTML = "";
 }
