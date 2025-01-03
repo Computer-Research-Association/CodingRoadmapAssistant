@@ -65,7 +65,9 @@ function submitData() {
   index = 1; //reset index number
   userOutputContent.innerHTML += `</ul>`;
 
-  sendData(data);
+  sendData(data); // send data into webview.ts
+
+  showGptResult(); // get gpt's response and show chat-GPT's result to html.
 
   toggleNav();
 }
@@ -78,9 +80,19 @@ function sendData(data) {
   });
 }
 
-//show chat-GPT's result
+// get gpt's response and show chat-GPT's result to html.
 function showGptResult() {
-  userOutputContent.innerHTML = `<h3>Problem Definition:</h3><p>${problemInput}</p><h3>Steps:</h3><ul>`;
+  window.addEventListener("message", (event) => {
+    const message = event.data; // get gpt's response
+
+    if (message.command === "setData") {
+      const gptOutputContent = document.getElementById("gptOutputContent");
+
+      if (gptOutputContent) {
+        gptOutputContent.innerHTML = `<h3>GPT Response:</h3><p>${message.data}</p>`; // show chat-GPT's result to html.
+      } else alert("No response from Chat-GPT.");
+    }
+  });
 }
 
 function resetForm() {
