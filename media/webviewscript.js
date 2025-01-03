@@ -1,7 +1,10 @@
+const { commands } = require("vscode");
+
 document.getElementById("toggleNav").addEventListener("click", toggleNav);
 document.getElementById("addStep").addEventListener("click", addStep);
 document.getElementById("submitButton").addEventListener("click", submitData);
 document.getElementById("resetButton").addEventListener("click", resetForm);
+const vscode = acquireVsCodeApi(); // webview.ts 와 정보 주고받기
 
 function toggleNav() {
   const inputSection = document.getElementById("inputSection");
@@ -52,12 +55,25 @@ function submitData() {
 
   const outputContent = document.getElementById("outputContent");
   outputContent.innerHTML = `<h3>Problem Definition:</h3><p>${problemInput}</p><h3>Steps:</h3><ul>`;
+  let data = "problem definition: " + problemInput + ", steps: "; // save data to send to Chat-GPT
 
+  let index = 1;
   steps.forEach((step) => {
     outputContent.innerHTML += `<li>${step}</li>`;
+    data += index + ". " + step;
+    index++;
+  });
+  index = 1; //reset index number
+  outputContent.innerHTML += `</ul>`;
+
+  // send data into webview.ts
+  vscode.postMessage({
+    command: "process",
+    value: data,
   });
 
-  outputContent.innerHTML += `</ul>`;
+  //show chat-GPT's result
+
   toggleNav();
 }
 

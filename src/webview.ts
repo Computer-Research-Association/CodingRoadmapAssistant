@@ -23,7 +23,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     webviewView.webview.options = {
       enableScripts: true, // 자바스크립트 활성화
       localResourceRoots: [
-        vscode.Uri.joinPath(this.context.extensionUri, "media"), // media 폴더를 로컬 리소스로 설정 - this를 안붙이면 이상한 녀석으로 인식됨.
+        vscode.Uri.joinPath(this.context.extensionUri, "media"), // media 폴더를 로컬 리소스로 설정
       ],
     };
 
@@ -50,12 +50,16 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     //웹뷰 HTML 설정
     webviewView.webview.html = htmlContent;
 
+    console.log("flag1 -- html 불러오기");
     //웹뷰에서 데이터를 받는 핸들러 설정
     webviewView.webview.onDidReceiveMessage(async (message) => {
+      console.log("flag2 -- 웹뷰에서 데이터 받아오기");
+
       switch (message.command) {
         case "process":
           //GPT API 호출
           const gptResponse = await this.callGptApi(message.value);
+          console.log("GPT Response: " + gptResponse);
           //웹뷰로 결과 전달
           webviewView.webview.postMessage({
             command: "setData",
@@ -68,6 +72,8 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
   // GPT API 호출 함수
   private async callGptApi(prompt: string) {
+    console.log("flag3 -- gpt 호출");
+
     const model = vscode.workspace.getConfiguration().get<string>("openAI.modelSelected"); //configuration에 저장되있는 model 정보.
     if (!model) {
       return "No model selected. Please configure the OpenAI model.";
@@ -84,10 +90,12 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
         max_tokens: 150,
         temperature: 0.7,
       });
+      console.log("gpt sending success >> prompt: " + prompt);
 
       if (completion.choices[0]?.message?.content === null) {
         return "No response from GPT.";
       }
+      console.log("gpt output >> " + completion.choices[0]);
       return completion.choices[0]?.message?.content.trim();
     } catch (error: any) {
       console.error("GPT API Error:", error); // 콘솔에 상세 에러 출력
