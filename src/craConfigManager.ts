@@ -110,6 +110,11 @@ class FileSelectionQuickPickItem implements vscode.QuickPickItem {
 export async function pickOpenedDocument(): Promise<vscode.TextDocument | undefined> {
   const openedDocs = getAllOpenedDocuments();
 
+  if (!openedDocs) {
+    vscode.window.showErrorMessage("There is no opened document!");
+    return undefined;
+  }
+
   const quickPickItems = openedDocs.map((doc) => {
     return new FileSelectionQuickPickItem(doc.fileName.split("/").pop() || doc.fileName, doc.uri.toString(), doc);
   });
