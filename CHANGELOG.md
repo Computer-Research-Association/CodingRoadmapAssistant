@@ -6,4 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [1.0.1] - 2025-01-06
+
+### fix
+
+> typo
+
 ## [1.0.0] - 2025-01-06
