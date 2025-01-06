@@ -1,14 +1,42 @@
 {
   "name": "coding-roadmap-assistant",
   "displayName": "Coding Roadmap Assistnat",
-  "description": "",
-  "version": "0.0.1",
+  "description": "Coding Companion for Coding Beginners, based on OpenAI API.",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.96.0"
   },
   "categories": [
-    "Other"
+    "AI",
+    "Education"
   ],
+  "publisher": "NewCar",
+  "contributors": [
+    {
+      "name": "chachaaa-23",
+      "url": "https://github.com/chachaaa-23"
+    },
+    {
+      "name": "dan05s",
+      "url": "https://github.com/dan05s"
+    },
+    {
+      "name": "Jangmyun",
+      "url": "https://github.com/Jangmyun"
+    },
+    {
+      "name": "young170",
+      "url": "https://github.com/young170"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Computer-Research-Association/CodingRoadmapAssistant"
+  },
+  "bugs": {
+    "url": "https://github.com/Computer-Research-Association/CodingRoadmapAssistant/issues"
+  },
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
