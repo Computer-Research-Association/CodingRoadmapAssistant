@@ -90,6 +90,11 @@ export function getAllOpenedDocuments(): readonly vscode.TextDocument[] {
   return vscode.workspace.textDocuments;
 }
 
+/**
+ * @member label: filename
+ * @member description: for uri string
+ * @member document: selected TextDocument itself
+ */
 class FileSelectionQuickPickItem implements vscode.QuickPickItem {
   label: string;
   description: string | undefined;
