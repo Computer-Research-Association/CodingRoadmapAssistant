@@ -119,7 +119,11 @@ export async function pickOpenedDocument(): Promise<vscode.TextDocument | undefi
     return new FileSelectionQuickPickItem(doc.fileName.split("/").pop() || doc.fileName, doc.uri.toString(), doc);
   });
 
-  const quickPickOptions: vscode.QuickPickOptions = { placeHolder: "Select a document.", matchOnDescription: true };
+  const quickPickOptions: vscode.QuickPickOptions = {
+    placeHolder: "Select a document.",
+    matchOnDescription: true,
+    ignoreFocusOut: true,
+  };
 
   const selectedItem = await vscode.window.showQuickPick(quickPickItems, quickPickOptions);
 
