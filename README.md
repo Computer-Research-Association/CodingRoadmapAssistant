@@ -1,71 +1,40 @@
-# coding-roadmap-assistant README
+<h1 align="center">Welcome to Coding Roadmap Assistant 👋</h1>
+<p>
+  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
+  <img src="https://img.shields.io/badge/vscode-%5E1.96.0-blue.svg" />
+  <a href="https://mit-license.org/" target="_blank">
+    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+  </a>
+</p>
 
-This is the README for your extension "coding-roadmap-assistant". After writing up a brief description, we recommend including the following sections.
+> Coding Companion for Coding Beginners, based on OpenAI API.
 
-## Features
+## Prerequisites
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- vscode ^1.96.0
 
-For example if there is an image subfolder under your extension project workspace:
+## Author
 
-\!\[feature X\]\(images/feature-x.png\)
+👤 **NewCar**
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+- Github: [@chachaaa-23](https://github.com/chachaaa-23)
+- Github: [@dan05s](https://github.com/dan05s)
+- Github: [@Jangmyun](https://github.com/Jangmyun)
+- Github: [@young170](https://github.com/young170)
 
-## Requirements
+## 🤝 Contributing
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Computer-Research-Association/CodingRoadmapAssistant/issues).
 
-## Extension Settings
+## Show your support
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+Give a ⭐️ if this project helped you!
 
-For example:
+## 📝 License
 
-This extension contributes the following settings:
-
-- `myExtension.enable`: Enable/disable this extension.
-- `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+Copyright © 2025 [NewCar](https://github.com/orgs/Computer-Research-Association/teams/24-2-newcar).<br />
+This project is [MIT](https://mit-license.org/) licensed.
 
 ---
 
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-- [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-- Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-- Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-- Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-- [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-- [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_

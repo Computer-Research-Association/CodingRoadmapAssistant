@@ -1,14 +1,42 @@
 {
   "name": "coding-roadmap-assistant",
-  "displayName": "Coding Roadmap Assistnat",
-  "description": "",
-  "version": "0.0.1",
+  "displayName": "Coding Roadmap Assistant",
+  "description": "Coding Companion for Coding Beginners, based on OpenAI API.",
+  "version": "1.0.1",
   "engines": {
     "vscode": "^1.96.0"
   },
   "categories": [
-    "Other"
+    "AI",
+    "Education"
   ],
+  "publisher": "NewCar",
+  "contributors": [
+    {
+      "name": "chachaaa-23",
+      "url": "https://github.com/chachaaa-23"
+    },
+    {
+      "name": "dan05s",
+      "url": "https://github.com/dan05s"
+    },
+    {
+      "name": "Jangmyun",
+      "url": "https://github.com/Jangmyun"
+    },
+    {
+      "name": "young170",
+      "url": "https://github.com/young170"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Computer-Research-Association/CodingRoadmapAssistant"
+  },
+  "bugs": {
+    "url": "https://github.com/Computer-Research-Association/CodingRoadmapAssistant/issues"
+  },
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
@@ -65,6 +93,7 @@
     ]
   },
   "scripts": {
+    "deploy": "vsce publish --yarn",
     "vscode:prepublish": "npm run package",
     "compile": "npm run check-types && npm run lint && node esbuild.js",
     "watch": "npm-run-all -p watch:*",
