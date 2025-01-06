@@ -1,6 +1,6 @@
 {
   "name": "coding-roadmap-assistant",
-  "displayName": "Coding Roadmap Assistnat",
+  "displayName": "Coding Roadmap Assistant",
   "description": "Coding Companion for Coding Beginners, based on OpenAI API.",
   "version": "1.0.0",
   "engines": {

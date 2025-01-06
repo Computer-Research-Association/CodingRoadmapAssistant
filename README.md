@@ -32,7 +32,7 @@ Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
-Copyright © 2025 [NewCar](https://github.com/chachaaa-23).<br />
+Copyright © 2025 [NewCar](https://github.com/orgs/Computer-Research-Association/teams/24-2-newcar).<br />
 This project is [MIT](https://mit-license.org/) licensed.
 
 ---
