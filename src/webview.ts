@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
 import OpenAI from "openai";
-import { showApiKeyError } from "./craConfigManager";
+import { showApiKeyError, saveLogToGlobalState } from "./craConfigManager";
 
 export default class CRAWebviewViewProvider implements vscode.WebviewViewProvider {
   private apiKey?: string;
@@ -23,7 +23,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     webviewView.webview.options = {
       enableScripts: true, // 자바스크립트 활성화
       localResourceRoots: [
-        vscode.Uri.joinPath(this.context.extensionUri, "media"), // media 폴더를 로컬 리소스로 설정 - this를 안붙이면 이상한 녀석으로 인식됨.
+        vscode.Uri.joinPath(this.context.extensionUri, "media"), // media 폴더를 로컬 리소스로 설정
       ],
     };
 
@@ -50,8 +50,9 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     //웹뷰 HTML 설정
     webviewView.webview.html = htmlContent;
 
-    //웹뷰에서 데이터를 받는 핸들러 설정
+    // webviewscript.js 에서 데이터를 받는 핸들러 설정
     webviewView.webview.onDidReceiveMessage(async (message) => {
+      // send request to OpenAI
       switch (message.command) {
         case "process":
           //GPT API 호출
@@ -61,6 +62,16 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             command: "setData",
             data: gptResponse,
           });
+
+          // save it's answer to the conversationLog
+          const gptData = [
+            {
+              role: "system",
+              content: gptResponse,
+            },
+          ];
+          saveLogToGlobalState(this.context, gptData);
+
           break;
       }
     });
@@ -77,17 +88,22 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
       if (!this.openai) {
         throw new Error();
       }
+
+      const userMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [{ role: "user", content: prompt }];
+      //gpt에게 사용자 질문 보낸 결과를 담은 객체.
       const completion = await this.openai.chat.completions.create({
-        //gpt에게 사용자 질문 보낸 결과를 담은 객체.
         model, // 최신 모델로 변경
-        messages: [{ role: "user", content: prompt }],
+        messages: userMessages,
         max_tokens: 150,
         temperature: 0.7,
       });
-
       if (completion.choices[0]?.message?.content === null) {
         return "No response from GPT.";
       }
+
+      // save user's question to the conversationLog
+      saveLogToGlobalState(this.context, userMessages);
+
       return completion.choices[0]?.message?.content.trim();
     } catch (error: any) {
       console.error("GPT API Error:", error); // 콘솔에 상세 에러 출력

@@ -2,6 +2,7 @@ document.getElementById("toggleNav").addEventListener("click", toggleNav);
 document.getElementById("addStep").addEventListener("click", addStep);
 document.getElementById("submitButton").addEventListener("click", submitData);
 document.getElementById("resetButton").addEventListener("click", resetForm);
+const vscode = acquireVsCodeApi(); // webview.ts 와 정보 주고받기
 
 function toggleNav() {
   const inputSection = document.getElementById("inputSection");
@@ -50,15 +51,47 @@ function submitData() {
     steps.push(input.value);
   });
 
-  const outputContent = document.getElementById("outputContent");
-  outputContent.innerHTML = `<h3>Problem Definition:</h3><p>${problemInput}</p><h3>Steps:</h3><ul>`;
+  const userOutputContent = document.getElementById("userOutputContent");
+  userOutputContent.innerHTML = `<h3>Problem Definition:</h3><p>${problemInput}</p><h3>Steps:</h3><ul>`;
+  let dataToSend = "problem definition: " + problemInput + ", steps: "; // save data to send to Chat-GPT
 
-  steps.forEach((step) => {
-    outputContent.innerHTML += `<li>${step}</li>`;
+  let userInputStepIndex = 1;
+  steps.forEach((userInputStep) => {
+    userOutputContent.innerHTML += `<li>${userInputStep}</li>`;
+    dataToSend += userInputStepIndex + ". " + userInputStep;
+    userInputStepIndex++;
   });
+  delete userInputStepIndex; //reset userInputStepIndex number
 
-  outputContent.innerHTML += `</ul>`;
+  sendData(dataToSend); // send data into webview.ts
+  userOutputContent.innerHTML += `</ul>`;
+
+  showGptResult(); // get gpt's response and show chat-GPT's result to html.
+
   toggleNav();
+}
+
+// send data into webview.ts
+function sendData(data) {
+  vscode.postMessage({
+    command: "process",
+    value: data,
+  });
+}
+
+// get gpt's response and show chat-GPT's result to html.
+function showGptResult() {
+  window.addEventListener("message", (event) => {
+    const message = event.data; // get gpt's response
+
+    if (message.command === "setData") {
+      const gptOutputContent = document.getElementById("gptOutputContent");
+
+      if (gptOutputContent) {
+        gptOutputContent.innerHTML = `<h3>GPT Response:</h3><p>${message.data}</p>`; // show chat-GPT's result to html.
+      } else alert("No response from Chat-GPT.");
+    }
+  });
 }
 
 function resetForm() {
@@ -69,14 +102,14 @@ function resetForm() {
 
   document.getElementById("problemInput").value = "";
   const stepInputs = document.querySelectorAll(".stepInput");
-  stepInputs.forEach((input, index) => {
-    if (index === 0) {
+  stepInputs.forEach((input, userInputStepIndex) => {
+    if (userInputStepIndex === 0) {
       input.value = "";
     } else {
       input.parentElement.remove();
     }
   });
 
-  const outputContent = document.getElementById("outputContent");
-  outputContent.innerHTML = "";
+  const userOutputContent = document.getElementById("userOutputContent");
+  userOutputContent.innerHTML = "";
 }
