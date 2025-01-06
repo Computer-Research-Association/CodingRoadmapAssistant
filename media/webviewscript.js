@@ -61,11 +61,10 @@ function submitData() {
     dataToSend += userInputStepIndex + ". " + userInputStep;
     userInputStepIndex++;
   });
-  delete userInputStepIndex; //reset userInputStepIndex number
+  userInputStepIndex = 1; //reset userInputStepIndex number
+  userOutputContent.innerHTML += `</ul>`;
 
   sendData(dataToSend); // send data into webview.ts
-
-  userOutputContent.innerHTML += `</ul>`;
 
   showGptResult(); // get gpt's response and show chat-GPT's result to html.
 
@@ -90,7 +89,7 @@ function showGptResult() {
 
       if (gptOutputContent) {
         gptOutputContent.innerHTML = `<h3>GPT Response:</h3><p>${message.data}</p>`; // show chat-GPT's result to html.
-      } else alert("No response from GPT.");
+      } else alert("No response from Chat-GPT.");
     }
   });
 }
