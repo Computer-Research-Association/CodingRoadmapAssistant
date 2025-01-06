@@ -61,10 +61,10 @@ function submitData() {
     dataToSend += userInputStepIndex + ". " + userInputStep;
     userInputStepIndex++;
   });
-  userInputStepIndex = 1; //reset userInputStepIndex number
-  userOutputContent.innerHTML += `</ul>`;
+  delete userInputStepIndex; //reset userInputStepIndex number
 
   sendData(dataToSend); // send data into webview.ts
+  userOutputContent.innerHTML += `</ul>`;
 
   showGptResult(); // get gpt's response and show chat-GPT's result to html.
 
