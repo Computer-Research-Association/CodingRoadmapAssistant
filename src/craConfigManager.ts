@@ -85,3 +85,7 @@ export async function saveLogToGlobalState(context: vscode.ExtensionContext, log
 
   context.globalState.update("conversationLogs", data);
 }
+
+export function getAllOpenedDocuments(): readonly vscode.TextDocument[] {
+  return vscode.workspace.textDocuments;
+}
