@@ -53,18 +53,19 @@ function submitData() {
 
   const userOutputContent = document.getElementById("userOutputContent");
   userOutputContent.innerHTML = `<h3>Problem Definition:</h3><p>${problemInput}</p><h3>Steps:</h3><ul>`;
-  let data = "problem definition: " + problemInput + ", steps: "; // save data to send to Chat-GPT
+  let dataToSend = "problem definition: " + problemInput + ", steps: "; // save data to send to Chat-GPT
 
-  let index = 1;
-  steps.forEach((step) => {
-    userOutputContent.innerHTML += `<li>${step}</li>`;
-    data += index + ". " + step;
-    index++;
+  let userInputStepIndex = 1;
+  steps.forEach((userInputStep) => {
+    userOutputContent.innerHTML += `<li>${userInputStep}</li>`;
+    dataToSend += userInputStepIndex + ". " + userInputStep;
+    userInputStepIndex++;
   });
-  index = 1; //reset index number
-  userOutputContent.innerHTML += `</ul>`;
+  delete userInputStepIndex; //reset userInputStepIndex number
 
-  sendData(data); // send data into webview.ts
+  sendData(dataToSend); // send data into webview.ts
+
+  userOutputContent.innerHTML += `</ul>`;
 
   showGptResult(); // get gpt's response and show chat-GPT's result to html.
 
@@ -89,7 +90,7 @@ function showGptResult() {
 
       if (gptOutputContent) {
         gptOutputContent.innerHTML = `<h3>GPT Response:</h3><p>${message.data}</p>`; // show chat-GPT's result to html.
-      } else alert("No response from Chat-GPT.");
+      } else alert("No response from GPT.");
     }
   });
 }
@@ -102,8 +103,8 @@ function resetForm() {
 
   document.getElementById("problemInput").value = "";
   const stepInputs = document.querySelectorAll(".stepInput");
-  stepInputs.forEach((input, index) => {
-    if (index === 0) {
+  stepInputs.forEach((input, userInputStepIndex) => {
+    if (userInputStepIndex === 0) {
       input.value = "";
     } else {
       input.parentElement.remove();

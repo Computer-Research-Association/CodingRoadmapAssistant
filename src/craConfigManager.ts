@@ -65,7 +65,7 @@ export async function initPromptMessage(context: vscode.ExtensionContext) {
     {
       role: "system",
       content:
-        "You are my coding assistant to enhance my coding skills. From now on, i’ll give you some coding problem and user’s attempt to solve it. Also you may be given logical steps of the user’s code.",
+        "You are my coding assistant to enhance my coding skills. From now on, I’ll give you some coding problems and the user’s attempts to solve them. Also you may be given logical steps of the user’s code.",
     },
     {
       role: "system",
