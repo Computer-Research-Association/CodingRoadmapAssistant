@@ -89,3 +89,15 @@ export async function saveLogToGlobalState(context: vscode.ExtensionContext, log
 export function getAllOpenedDocuments(): readonly vscode.TextDocument[] {
   return vscode.workspace.textDocuments;
 }
+
+class FileSelectionQuickPickItem implements vscode.QuickPickItem {
+  label: string;
+  description: string | undefined;
+  document: vscode.TextDocument;
+
+  constructor(label: string, description: string | undefined, document: vscode.TextDocument) {
+    this.label = label;
+    this.description = description;
+    this.document = document;
+  }
+}
