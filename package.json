@@ -125,6 +125,7 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "marked": "^15.0.5",
     "openai": "^4.77.0"
   }
 }

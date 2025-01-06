@@ -88,7 +88,7 @@ function showGptResult() {
       const gptOutputContent = document.getElementById("gptOutputContent");
 
       if (gptOutputContent) {
-        gptOutputContent.innerHTML = `<h3>GPT Response:</h3><p>${message.data}</p>`; // show chat-GPT's result to html.
+        gptOutputContent.innerHTML = `<h3>GPT Response:</h3><p>${marked.parse(message.data)}</p>`; // show chat-GPT's result to html.
       } else alert("No response from Chat-GPT.");
     }
   });
