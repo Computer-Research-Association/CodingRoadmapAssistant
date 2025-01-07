@@ -135,7 +135,8 @@ export async function pickOpenedDocument(context: vscode.ExtensionContext): Prom
     return handleError(context, "The number of tokens in the selected document exceeds 5000.");
   }
 
-  context.globalState.update("selectedTextDocument", selectedItem);
+  context.globalState.update("selectedTextDocument", selectedItem.document);
+
   return selectedItem.document;
 }
 
