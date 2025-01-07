@@ -2,6 +2,7 @@ document.getElementById("toggleNav").addEventListener("click", toggleNav);
 document.getElementById("addStep").addEventListener("click", addStep);
 document.getElementById("submitButton").addEventListener("click", submitData);
 document.getElementById("resetButton").addEventListener("click", resetForm);
+
 const vscode = acquireVsCodeApi(); // webview.ts 와 정보 주고받기
 
 function toggleNav() {
@@ -51,20 +52,20 @@ function submitData() {
     steps.push(input.value);
   });
 
-  const userOutputContent = document.getElementById("userOutputContent");
-  userOutputContent.innerHTML = `<h3>Problem Definition:</h3><p>${problemInput}</p><h3>Steps:</h3><ul>`;
+  const userOutputProbBtn = document.getElementById("userOutputProbBtn");
+  const userOutputStepBtn = document.getElementById("userOutputStepBtn");
+  userOutputProbBtn.innerHTML = `<p>${problemInput}</p>`;
   let dataToSend = "problem definition: " + problemInput + ", steps: "; // save data to send to Chat-GPT
 
   let userInputStepIndex = 1;
   steps.forEach((userInputStep) => {
-    userOutputContent.innerHTML += `<li>${userInputStep}</li>`;
-    dataToSend += userInputStepIndex + ". " + userInputStep;
+    userOutputStepBtn.innerHTML += `<li>${userInputStep}</li>`;
+    dataToSend += userInputStepIndex + ". " + userInputStep + " ";
     userInputStepIndex++;
   });
   delete userInputStepIndex; //reset userInputStepIndex number
 
   sendData(dataToSend); // send data into webview.ts
-  userOutputContent.innerHTML += `</ul>`;
 
   showGptResult(); // get gpt's response and show chat-GPT's result to html.
 
