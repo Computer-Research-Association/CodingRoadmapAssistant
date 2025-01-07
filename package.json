@@ -68,6 +68,11 @@
         "command": "openAI.setModel",
         "category": "Coding Roadmap Assistant",
         "title": "Set OpenAI GPT Model"
+      },
+      {
+        "command": "document.selectDocu",
+        "category": "Coding Roadmap Assistant",
+        "title": "Select Document"
       }
     ],
     "configuration": [
