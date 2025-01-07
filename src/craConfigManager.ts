@@ -108,12 +108,11 @@ class FileSelectionQuickPickItem implements vscode.QuickPickItem {
   }
 }
 
-export async function pickOpenedDocument(): Promise<vscode.TextDocument | undefined> {
+export async function pickOpenedDocument(context: vscode.ExtensionContext): Promise<vscode.TextDocument | null> {
   const openedDocs = getAllOpenedDocuments();
 
   if (!openedDocs) {
-    vscode.window.showErrorMessage("There is no opened document!");
-    return undefined;
+    return handleError(context, "There is no opened document");
   }
 
   const quickPickItems = openedDocs.map((doc) => {
@@ -128,7 +127,23 @@ export async function pickOpenedDocument(): Promise<vscode.TextDocument | undefi
 
   const selectedItem = await vscode.window.showQuickPick(quickPickItems, quickPickOptions);
 
-  return selectedItem?.document || undefined;
+  if (!selectedItem) {
+    return handleError(context, "No Document Selected");
+  }
+
+  if (checkGPTTokens(selectedItem.document) > 5000) {
+    return handleError(context, "The number of tokens in the selected document exceeds 5000.");
+  }
+
+  context.globalState.update("selectedTextDocument", selectedItem);
+  return selectedItem.document;
+}
+
+function handleError(context: vscode.ExtensionContext, message: string): null {
+  vscode.window.showErrorMessage(message);
+  context.globalState.update("selectedTextDocument", null);
+  return null;
+}
 
 function checkGPTTokens(document: vscode.TextDocument): number {
   const model = vscode.workspace.getConfiguration().get<string>("openAI.modelSelected");
