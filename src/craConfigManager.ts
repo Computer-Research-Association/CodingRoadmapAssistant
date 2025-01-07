@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { GPTTokens, supportModelType } from "gpt-tokens";
 
 export async function setAPIKey(context: vscode.ExtensionContext) {
   const inputBoxOptions: vscode.InputBoxOptions = {
@@ -128,4 +129,19 @@ export async function pickOpenedDocument(): Promise<vscode.TextDocument | undefi
   const selectedItem = await vscode.window.showQuickPick(quickPickItems, quickPickOptions);
 
   return selectedItem?.document || undefined;
+
+function checkGPTTokens(document: vscode.TextDocument): number {
+  const model = vscode.workspace.getConfiguration().get<string>("openAI.modelSelected");
+
+  const selectedModel = GPTTokens.supportModels.includes(model as supportModelType)
+    ? (model as supportModelType)
+    : "gpt-4o-mini";
+
+  const tokenUsageInfo = new GPTTokens({
+    model: selectedModel,
+    messages: [{ role: "user", content: document.getText() }],
+  });
+
+  console.log(tokenUsageInfo.usedTokens);
+  return tokenUsageInfo.usedTokens;
 }
