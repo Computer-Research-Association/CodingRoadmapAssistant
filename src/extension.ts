@@ -13,7 +13,9 @@ export async function activate(context: vscode.ExtensionContext) {
   const CRAViewProvider = new CRAWebviewViewProvider(context);
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("document.selectDocu", pickOpenedDocument),
+    vscode.commands.registerCommand("document.selectDocu", async () => {
+      await pickOpenedDocument(context);
+    }),
     vscode.commands.registerCommand("openAI.setAPIKey", async () => {
       await setAPIKey(context);
     }),
