@@ -127,5 +127,5 @@ export async function pickOpenedDocument(): Promise<vscode.TextDocument | undefi
 
   const selectedItem = await vscode.window.showQuickPick(quickPickItems, quickPickOptions);
 
-  return selectedItem?.document;
+  return selectedItem?.document || undefined;
 }
