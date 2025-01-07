@@ -66,12 +66,12 @@ export async function showApiKeyError(context: vscode.ExtensionContext) {
 export async function initPromptMessage(context: vscode.ExtensionContext) {
   const data = [
     {
-      role: "system",
+      role: "assistant",
       content:
         "You are my coding assistant to enhance my coding skills. From now on, I’ll give you some coding problems and the user’s attempts to solve them. Also you may be given logical steps of the user’s code.",
     },
     {
-      role: "system",
+      role: "assistant",
       content:
         "Generate the output that includes the following points. 1. Never give the answer. Including code. 2. tutor him. must ask questions. make sure the user understands it themselves. 3. for each logical step, provide three questions made in step 2. number each question 1, 2, 3 for each logical step. ",
     },
@@ -108,6 +108,11 @@ class FileSelectionQuickPickItem implements vscode.QuickPickItem {
   }
 }
 
+/**
+ * 열려있는 document 중 인식할 코드 창 하나를 고르는 것.
+ * @param context vscode 전체 state 식별.
+ * @returns FileSelectionQuickPickItem.document
+ */
 export async function pickOpenedDocument(context: vscode.ExtensionContext): Promise<vscode.TextDocument | null> {
   const openedDocs = getAllOpenedDocuments();
 
