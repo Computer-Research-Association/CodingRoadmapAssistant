@@ -1,5 +1,6 @@
 document.getElementById("toggleNav").addEventListener("click", toggleNav);
 document.getElementById("addStep").addEventListener("click", addStep);
+document.getElementById("delateStep").addEventListener("click", delateStep);
 document.getElementById("submitButton").addEventListener("click", submitData);
 document.getElementById("resetButton").addEventListener("click", resetForm);
 
@@ -32,6 +33,15 @@ function addStep() {
   newStep.classList.add("step", "mb-2");
   newStep.innerHTML = `<input type="text" class="form-control stepInput" placeholder="Step ${stepCount}">`;
   stepContainer.appendChild(newStep);
+}
+
+function delateStep() {
+  const stepContainer = document.getElementById("steps");
+  const stepCount = stepContainer.querySelectorAll(".step").length;
+
+  if (stepCount > 1) {
+    stepContainer.removeChild(stepContainer.lastChild);
+  }
 }
 
 function submitData() {

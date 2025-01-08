@@ -161,3 +161,21 @@ input {
 .invisible {
   display: none;
 }
+
+#delateStep {
+  background-color: #dc3545; /* 붉은색 배경 */
+  color: white; /* 텍스트 색상 */
+  border-radius: 4px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#delateStep span {
+  margin-left: 10px; /* 아이콘과 텍스트 간격 */
+}
