@@ -90,7 +90,14 @@ function showGptResult() {
 
       if (gptOutputContent) {
         gptOutputContent.innerHTML = `<h3>GPT Response:</h3><p>${marked.parse(message.data)}</p>`; // show chat-GPT's result to html.
-      } else alert("No response from Chat-GPT.");
+
+        const additionalBtn = document.getElementById("additionalBtn");
+        if (additionalBtn) {
+          additionalBtn.style.display = "flex";
+        }
+      } else {
+        alert("No response from Chat-GPT.");
+      }
     }
   });
 }
@@ -98,19 +105,35 @@ function showGptResult() {
 function resetForm() {
   const inputSection = document.getElementById("inputSection");
   if (inputSection.style.maxHeight === "0px") {
-    toggleNav();
+    toggleNav(); // Ensure input section is visible
   }
 
+  // Clear problem input
   document.getElementById("problemInput").value = "";
+
+  // Reset step inputs
   const stepInputs = document.querySelectorAll(".stepInput");
-  stepInputs.forEach((input, userInputStepIndex) => {
-    if (userInputStepIndex === 0) {
-      input.value = "";
+  stepInputs.forEach((input, index) => {
+    if (index === 0) {
+      input.value = ""; // Reset the first step input
     } else {
-      input.parentElement.remove();
+      input.parentElement.remove(); // Remove additional steps
     }
   });
 
-  const userOutputContent = document.getElementById("userOutputContent");
-  userOutputContent.innerHTML = "";
+  // Clear user output content
+  document.getElementById("userOutputProbBtn").innerHTML = "";
+  document.getElementById("userOutputStepBtn").innerHTML = "";
+
+  // Reset GPT output content
+  const gptOutputContent = document.getElementById("gptOutputContent");
+  if (gptOutputContent) {
+    gptOutputContent.innerHTML = "";
+  }
+
+  // Hide additional buttons
+  const additionalBtn = document.getElementById("additionalBtn");
+  if (additionalBtn) {
+    additionalBtn.style.display = "none";
+  }
 }
