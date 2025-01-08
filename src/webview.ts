@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
 import OpenAI from "openai";
-import { showApiKeyError, saveLogToGlobalState } from "./craConfigManager";
+import { showApiKeyError, saveLogToGlobalState, pickOpenedDocument } from "./craConfigManager";
 
 export default class CRAWebviewViewProvider implements vscode.WebviewViewProvider {
   private apiKey?: string;
@@ -55,8 +55,21 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
       // send request to OpenAI
       switch (message.command) {
         case "process":
+          // 사용자 코드 추가
+          let textDoc: vscode.TextDocument | null = null;
+
+          while (textDoc === null) {
+            textDoc = await pickOpenedDocument(this.context);
+            if (!textDoc) {
+              vscode.window.showErrorMessage("No document selected. Please select a document.");
+              return;
+            }
+          }
+          // 문제정의+단계+전체 코드
+          const messageTosend = message + "User's Code: " + textDoc.getText();
+
           //GPT API 호출
-          const gptResponse = await this.callGptApi(message.value);
+          const gptResponse = await this.callGptApi(messageTosend);
           //웹뷰로 결과 전달
           webviewView.webview.postMessage({
             command: "setData",
@@ -89,12 +102,30 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
         throw new Error();
       }
 
-      const userMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [{ role: "user", content: prompt }];
+      const initPrompt: OpenAI.Chat.Completions.ChatCompletionMessageParam = {
+        role: "system",
+        content: `You are a program designed to enhance coding skills by helping users identify and address issues in their approach to solving programming problems.
+           From now on, I will provide you with three inputs: 
+           1. A problem definition.
+           2. Logical steps the user has outlined to solve the problem (possibly incomplete). 
+           3.The user's attempt at solving the problem in code. Based on these inputs, you must analyze the provided information and respond with only the following two elements
+           : 1. An explanation of any inconsistencies between the problem definition, the logical steps, and the code provided. Highlight potential issues or misalignments.
+             2. Exactly three guiding questions that encourage users to reflect on their approach, understand the problem more deeply, and work to solve it INDEPENDENTLY. 
+             Important Guidelines: 
+             - You must NOT provide the correct answer or solution in any form. 
+             - Responses should strictly avoid a conversational tone and include only the specified two elements. 
+             - If user's input language is not an English, change output language into user's one. `,
+      };
+
+      const userMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
+        initPrompt,
+        { role: "user", content: prompt },
+      ];
       //gpt에게 사용자 질문 보낸 결과를 담은 객체.
       const completion = await this.openai.chat.completions.create({
         model, // 최신 모델로 변경
         messages: userMessages,
-        max_tokens: 150,
+        max_tokens: 512,
         temperature: 0.7,
       });
       if (completion.choices[0]?.message?.content === null) {

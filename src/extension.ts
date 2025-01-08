@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import CRAWebviewViewProvider from "./webview";
-import { showModelSelectionQuickPick, setAPIKey, onFirstActivation } from "./craConfigManager";
+import { showModelSelectionQuickPick, setAPIKey, onFirstActivation, pickOpenedDocument } from "./craConfigManager";
 
 export async function activate(context: vscode.ExtensionContext) {
   const isInitialized = context.globalState.get<boolean>("isInitialized");
@@ -13,6 +13,9 @@ export async function activate(context: vscode.ExtensionContext) {
   const CRAViewProvider = new CRAWebviewViewProvider(context);
 
   context.subscriptions.push(
+    vscode.commands.registerCommand("document.selectDocu", async () => {
+      await pickOpenedDocument(context);
+    }),
     vscode.commands.registerCommand("openAI.setAPIKey", async () => {
       await setAPIKey(context);
     }),

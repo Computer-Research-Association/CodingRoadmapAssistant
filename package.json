@@ -68,6 +68,11 @@
         "command": "openAI.setModel",
         "category": "Coding Roadmap Assistant",
         "title": "Set OpenAI GPT Model"
+      },
+      {
+        "command": "document.selectDocu",
+        "category": "Coding Roadmap Assistant",
+        "title": "Select Document"
       }
     ],
     "configuration": [
@@ -125,6 +130,7 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "gpt-tokens": "^1.3.13",
     "marked": "^15.0.5",
     "openai": "^4.77.0"
   }
