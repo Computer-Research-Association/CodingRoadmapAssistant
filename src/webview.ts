@@ -93,7 +93,11 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           }
 
           // 키워드 추출용 프롬프트
-          const keywordPrompt = `I'm asking you a question via the gpt api right now. You have to read what I'm sending you and answer with three important keywords. However, when you answer, don't answer as if you're talking to the user, like "Of course!". Instead, send only the three keywords, separated by commas, like "a, b, c". You can't say anything other than the keywords. Even greetings are absolutely forbidden. Please read the following text and do as I said earlier.\n\n"${message.data}"`;
+          const keywordPrompt = `I am asking you to extract three important keywords from the following text. 
+Your response must only consist of exactly three keywords, separated by commas. Do not provide any additional explanations or phrases. 
+Your answer should only be the three keywords, separated by commas, like this: "keyword1, keyword2, keyword3".
+
+Please read the following text and extract three important keywords:\n\n"${message.data}"`;
 
           // GPT API 호출
           const keywordsResponse = await this.callGptApi(keywordPrompt);
