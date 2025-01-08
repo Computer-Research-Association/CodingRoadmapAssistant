@@ -104,12 +104,28 @@ function showGptResult() {
       if (gptOutputContent) {
         gptOutputContent.innerHTML = `<h3>GPT Response:</h3><p>${marked.parse(message.data)}</p>`; // show chat-GPT's result to html.
 
+        vscode.postMessage({
+          command: "keyword",
+          data: message.data,
+        });
+
         const additionalBtn = document.getElementById("additionalBtn");
         if (additionalBtn) {
           additionalBtn.classList.remove("invisible");
         }
       } else {
         alert("No response from Chat-GPT.");
+      }
+    }
+
+    if (message.command === "setKeywords") {
+      const keywordsArray = message.data; // 이미 배열로 전달받음
+      if (keywordsArray.length >= 3) {
+        document.getElementById("button1").textContent = keywordsArray[0];
+        document.getElementById("button2").textContent = keywordsArray[1];
+        document.getElementById("button3").textContent = keywordsArray[2];
+      } else {
+        alert("Failed to extract 3 keywords.");
       }
     }
   });

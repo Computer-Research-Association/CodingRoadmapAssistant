@@ -86,6 +86,28 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           saveLogToGlobalState(this.context, gptData);
 
           break;
+        case "keyword":
+          if (!message.data) {
+            vscode.window.showErrorMessage("No response data provided for keyword extraction.");
+            return;
+          }
+
+          // 키워드 추출용 프롬프트
+          const keywordPrompt = `I'm asking you a question via the gpt api right now. You have to read what I'm sending you and answer with three important keywords. However, when you answer, don't answer as if you're talking to the user, like "Of course!". Instead, send only the three keywords, separated by commas, like "a, b, c". You can't say anything other than the keywords. Even greetings are absolutely forbidden. Please read the following text and do as I said earlier.\n\n"${message.data}"`;
+
+          // GPT API 호출
+          const keywordsResponse = await this.callGptApi(keywordPrompt);
+
+          // 응답을 문자열 배열로 변환 (쉼표 기준 분리)
+          // GPT API 호출 결과에서 키워드 배열로 변환
+          const keywordsArray = keywordsResponse.split(",").map((keyword) => keyword.trim());
+
+          // 웹뷰로 키워드 배열 전달
+          webviewView.webview.postMessage({
+            command: "setKeywords",
+            data: keywordsArray,
+          });
+          break;
       }
     });
   }
