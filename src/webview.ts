@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
 import OpenAI from "openai";
-import { showApiKeyError, saveLogToGlobalState } from "./craConfigManager";
+import { showApiKeyError, saveLogToGlobalState, pickOpenedDocument } from "./craConfigManager";
 
 export default class CRAWebviewViewProvider implements vscode.WebviewViewProvider {
   private apiKey?: string;
@@ -55,8 +55,21 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
       // send request to OpenAI
       switch (message.command) {
         case "process":
+          // 사용자 코드 추가
+          let textDoc: vscode.TextDocument | null = null;
+
+          while (textDoc === null) {
+            textDoc = await pickOpenedDocument(this.context);
+            if (!textDoc) {
+              vscode.window.showErrorMessage("No document selected. Please select a document.");
+              return;
+            }
+          }
+          // 문제정의+단계+전체 코드
+          const messageTosend = message + "User's Code: " + textDoc.getText();
+
           //GPT API 호출
-          const gptResponse = await this.callGptApi(message.value);
+          const gptResponse = await this.callGptApi(messageTosend);
           //웹뷰로 결과 전달
           webviewView.webview.postMessage({
             command: "setData",
