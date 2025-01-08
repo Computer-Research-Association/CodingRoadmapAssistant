@@ -93,7 +93,7 @@ function showGptResult() {
 
         const additionalBtn = document.getElementById("additionalBtn");
         if (additionalBtn) {
-          additionalBtn.style.display = "flex";
+          additionalBtn.classList.remove("invisible");
         }
       } else {
         alert("No response from Chat-GPT.");
