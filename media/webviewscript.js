@@ -8,24 +8,65 @@ document.getElementById("button1").addEventListener("click", () => {
     command: "button1",
     data: gptResponse,
   });
+
+  // 새 응답을 위에 출력하고 기존 응답은 아래에 계속 유지
+  const gptOutputContent = document.getElementById("gptOutputContent");
+  gptOutputContent.innerHTML = `<h3>New GPT Response from Button 1:</h3><p>${marked.parse(gptResponse)}</p>`;
+  gptOutputContent.innerHTML += `<h3>First GPT Response:</h3><p>${marked.parse(initialResponse)}</p>`;
+  gptOutputContent.innerHTML += `<h3>User Prompt:</h3><p>${marked.parse(userPrompt)}</p>`;
+
+  // 버튼 3개 다시 보이게 하기
+  const additionalBtn = document.getElementById("additionalBtn");
+  if (additionalBtn) {
+    additionalBtn.classList.remove("invisible");
+    additionalBtn.style.display = "block";
+  }
 });
 
+// 버튼 2 클릭 시: 새 응답을 출력하고 기존 응답을 아래에 출력
 document.getElementById("button2").addEventListener("click", () => {
   vscode.postMessage({
     command: "button2",
     data: gptResponse,
   });
+
+  // 새 응답을 위에 출력하고 기존 응답은 아래에 계속 유지
+  const gptOutputContent = document.getElementById("gptOutputContent");
+  gptOutputContent.innerHTML = `<h3>New GPT Response from Button 2:</h3><p>${marked.parse(gptResponse)}</p>`;
+  gptOutputContent.innerHTML += `<h3>First GPT Response:</h3><p>${marked.parse(initialResponse)}</p>`;
+  gptOutputContent.innerHTML += `<h3>User Prompt:</h3><p>${marked.parse(userPrompt)}</p>`;
+
+  // 버튼 3개 다시 보이게 하기
+  const additionalBtn = document.getElementById("additionalBtn");
+  if (additionalBtn) {
+    additionalBtn.classList.remove("invisible");
+    additionalBtn.style.display = "block";
+  }
 });
 
+// 버튼 3 클릭 시: 새 응답을 출력하고 기존 응답을 아래에 출력
 document.getElementById("button3").addEventListener("click", () => {
   vscode.postMessage({
     command: "button3",
     data: gptResponse,
   });
+
+  // 새 응답을 위에 출력하고 기존 응답은 아래에 계속 유지
+  const gptOutputContent = document.getElementById("gptOutputContent");
+  gptOutputContent.innerHTML = `<h3>New GPT Response from Button 3:</h3><p>${marked.parse(gptResponse)}</p>`;
+  gptOutputContent.innerHTML += `<h3>First GPT Response:</h3><p>${marked.parse(initialResponse)}</p>`;
+  gptOutputContent.innerHTML += `<h3>User Prompt:</h3><p>${marked.parse(userPrompt)}</p>`;
+
+  // 버튼 3개 다시 보이게 하기
+  const additionalBtn = document.getElementById("additionalBtn");
+  if (additionalBtn) {
+    additionalBtn.classList.remove("invisible");
+    additionalBtn.style.display = "block";
+  }
 });
 
-let gptResponse = "";
 let initialResponse = ""; // 첫 번째 GPT 응답을 저장할 변수
+let userPrompt = ""; // 사용자 프롬프트 저장 변수
 
 const vscode = acquireVsCodeApi(); // webview.ts 와 정보 주고받기
 
@@ -103,6 +144,11 @@ function submitData() {
   showGptResult(); // get gpt's response and show chat-GPT's result to html.
 
   toggleNav();
+
+  const additionalBtn = document.getElementById("additionalBtn");
+  if (additionalBtn) {
+    additionalBtn.style.display = "block";
+  }
 }
 
 // send data into webview.ts
@@ -123,8 +169,25 @@ function showGptResult() {
 
       if (gptOutputContent) {
         gptResponse = message.data;
-        gptOutputContent.innerHTML = `<h3>GPT Response:</h3><p>${marked.parse(message.data)}</p>`; // show chat-GPT's result to html.
 
+        // If it's the first response, store it and show it along with the user's prompt
+        if (!initialResponse) {
+          initialResponse = gptResponse;
+          userPrompt = document.getElementById("problemInput").value; // 저장된 프롬프트
+
+          // Show the first response and user prompt
+          gptOutputContent.innerHTML = `<h3>GPT Response:</h3><p>${marked.parse(gptResponse)}</p>`;
+          gptOutputContent.innerHTML += `<h3>User Prompt:</h3><p>${marked.parse(userPrompt)}</p>`;
+        } else {
+          // If it's not the first response, show it above the previous response
+          gptOutputContent.innerHTML = `<h3>New GPT Response:</h3><p>${marked.parse(gptResponse)}</p>`;
+
+          // Display the first response and user prompt below
+          gptOutputContent.innerHTML += `<h3>First GPT Response:</h3><p>${marked.parse(initialResponse)}</p>`;
+          gptOutputContent.innerHTML += `<h3>User Prompt:</h3><p>${marked.parse(userPrompt)}</p>`;
+        }
+
+        // Display the buttons again below the responses
         const additionalBtn = document.getElementById("additionalBtn");
         if (additionalBtn) {
           additionalBtn.classList.remove("invisible");
@@ -139,8 +202,13 @@ function showGptResult() {
 
 function resetForm() {
   const inputSection = document.getElementById("inputSection");
+  const outputSection = document.getElementById("outputSection");
+  const additionalBtn = document.getElementById("additionalBtn");
+  const gptOutputContent = document.getElementById("gptOutputContent");
+
+  // Ensure input section is visible
   if (inputSection.style.maxHeight === "0px") {
-    toggleNav(); // Ensure input section is visible
+    toggleNav();
   }
 
   // Clear problem input
@@ -161,14 +229,17 @@ function resetForm() {
   document.getElementById("userOutputStepBtn").innerHTML = "";
 
   // Reset GPT output content
-  const gptOutputContent = document.getElementById("gptOutputContent");
   if (gptOutputContent) {
-    gptOutputContent.innerHTML = "";
+    gptOutputContent.innerHTML = ""; // Remove all GPT responses
   }
 
   // Hide additional buttons
-  const additionalBtn = document.getElementById("additionalBtn");
   if (additionalBtn) {
     additionalBtn.style.display = "none";
   }
+
+  // Reset stored responses
+  initialResponse = ""; // 초기 응답 초기화
+  userPrompt = ""; // 사용자 프롬프트 초기화
+  gptResponse = ""; // 현재 GPT 응답 초기화
 }
