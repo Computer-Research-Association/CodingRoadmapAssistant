@@ -86,32 +86,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           saveLogToGlobalState(this.context, gptData);
 
           break;
-        case "keyword":
-          if (!message.data) {
-            vscode.window.showErrorMessage("No response data provided for keyword extraction.");
-            return;
-          }
-
-          // 키워드 추출용 프롬프트
-          const keywordPrompt = `I am asking you to extract three important keywords from the following text. 
-Your response must only consist of exactly three keywords, separated by commas. Do not provide any additional explanations or phrases. 
-Your answer should only be the three keywords, separated by commas, like this: "keyword1, keyword2, keyword3".
-
-Please read the following text and extract three important keywords:\n\n"${message.data}"`;
-
-          // GPT API 호출
-          const keywordsResponse = await this.callGptApi(keywordPrompt);
-
-          // 응답을 문자열 배열로 변환 (쉼표 기준 분리)
-          // GPT API 호출 결과에서 키워드 배열로 변환
-          const keywordsArray = keywordsResponse.split(",").map((keyword) => keyword.trim());
-
-          // 웹뷰로 키워드 배열 전달
-          webviewView.webview.postMessage({
-            command: "setKeywords",
-            data: keywordsArray,
-          });
-          break;
       }
     });
   }
