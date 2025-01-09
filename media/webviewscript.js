@@ -2,6 +2,9 @@ document.getElementById("toggleNav").addEventListener("click", toggleNav);
 document.getElementById("addStep").addEventListener("click", addStep);
 document.getElementById("submitButton").addEventListener("click", submitData);
 document.getElementById("resetButton").addEventListener("click", resetForm);
+const loadingContent = document.getElementById("loadingContent");
+const gptOutputContent = document.getElementById("gptOutputContent");
+const additionalBtn = document.getElementById("additionalBtn");
 
 const vscode = acquireVsCodeApi(); // webview.ts 와 정보 주고받기
 
@@ -58,6 +61,7 @@ function submitData() {
   let dataToSend = "problem definition: " + problemInput + ", steps: "; // save data to send to Chat-GPT
 
   let userInputStepIndex = 1;
+  userOutputStepBtn.innerHTML = "";
   steps.forEach((userInputStep) => {
     userOutputStepBtn.innerHTML += `<li>${userInputStep}</li>`;
     dataToSend += userInputStepIndex + ". " + userInputStep + " ";
@@ -65,15 +69,17 @@ function submitData() {
   });
   delete userInputStepIndex; //reset userInputStepIndex number
 
-  sendData(dataToSend); // send data into webview.ts
-
-  showGptResult(); // get gpt's response and show chat-GPT's result to html.
+  sendData(dataToSend);
+  showGptResult();
 
   toggleNav();
 }
 
-// send data into webview.ts
 function sendData(data) {
+  loadingContent.classList.remove("invisible");
+  additionalBtn.classList.add("invisible");
+  gptOutputContent.classList.add("invisible");
+
   vscode.postMessage({
     command: "process",
     value: data,
@@ -86,12 +92,12 @@ function showGptResult() {
     const message = event.data; // get gpt's response
 
     if (message.command === "setData") {
-      const gptOutputContent = document.getElementById("gptOutputContent");
-
       if (gptOutputContent) {
-        gptOutputContent.innerHTML = `<h3>GPT Response:</h3><p>${marked.parse(message.data)}</p>`; // show chat-GPT's result to html.
+        loadingContent.classList.add("invisible");
+        gptOutputContent.classList.remove("invisible");
 
-        const additionalBtn = document.getElementById("additionalBtn");
+        gptOutputContent.innerHTML = `<h3>[ GPT Response ]</h3><p>${marked.parse(message.data)}</p>`; // show chat-GPT's result to html.
+
         if (additionalBtn) {
           additionalBtn.classList.remove("invisible");
         }
@@ -126,13 +132,11 @@ function resetForm() {
   document.getElementById("userOutputStepBtn").innerHTML = "";
 
   // Reset GPT output content
-  const gptOutputContent = document.getElementById("gptOutputContent");
   if (gptOutputContent) {
     gptOutputContent.innerHTML = "";
   }
 
   // Hide additional buttons
-  const additionalBtn = document.getElementById("additionalBtn");
   if (additionalBtn) {
     additionalBtn.style.display = "none";
   }
