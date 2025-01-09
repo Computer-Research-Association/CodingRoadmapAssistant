@@ -86,6 +86,41 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           saveLogToGlobalState(this.context, gptData);
 
           break;
+        case "button1":
+        case "button2":
+        case "button3":
+          try {
+            // 사용자가 버튼 클릭 시 전달한 데이터 (기존 GPT 응답)
+            const previousResponse = message.data;
+            const userPrompt = `I'll give you the answer you gave before. Summarize it in one sentence:`;
+
+            // GPT 요청에 사용할 조합된 프롬프트
+            const combinedPrompt = `${userPrompt}\n\nPrevious Response:\n${previousResponse}`;
+
+            // GPT API 호출
+            const gptResponse = await this.callGptApi(combinedPrompt);
+
+            // 결과를 웹뷰로 전송
+            webviewView.webview.postMessage({
+              command: "setData",
+              data: gptResponse,
+            });
+
+            // 로그 저장 (선택적)
+            const gptData = [
+              { role: "user", content: userPrompt },
+              { role: "system", content: gptResponse },
+            ];
+            saveLogToGlobalState(this.context, gptData);
+          } catch (error) {
+            console.error("Error processing button click:", error);
+            vscode.window.showErrorMessage("Failed to process button click.");
+          }
+          break;
+
+        default:
+          console.warn(`Unhandled command: ${message.command}`);
+          break;
       }
     });
   }

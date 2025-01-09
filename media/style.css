@@ -179,3 +179,7 @@ input {
 #delateStep span {
   margin-left: 10px; /* 아이콘과 텍스트 간격 */
 }
+
+#additionalBtn.invisible {
+  display: none !important;
+}

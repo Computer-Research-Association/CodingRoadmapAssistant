@@ -3,9 +3,29 @@ document.getElementById("addStep").addEventListener("click", addStep);
 document.getElementById("delateStep").addEventListener("click", delateStep);
 document.getElementById("submitButton").addEventListener("click", submitData);
 document.getElementById("resetButton").addEventListener("click", resetForm);
-document.getElementById("button1").addEventListener("click", btn1);
-document.getElementById("button2").addEventListener("click", btn2);
-document.getElementById("button3").addEventListener("click", btn3);
+document.getElementById("button1").addEventListener("click", () => {
+  vscode.postMessage({
+    command: "button1",
+    data: gptResponse,
+  });
+});
+
+document.getElementById("button2").addEventListener("click", () => {
+  vscode.postMessage({
+    command: "button2",
+    data: gptResponse,
+  });
+});
+
+document.getElementById("button3").addEventListener("click", () => {
+  vscode.postMessage({
+    command: "button3",
+    data: gptResponse,
+  });
+});
+
+let gptResponse = "";
+let initialResponse = ""; // 첫 번째 GPT 응답을 저장할 변수
 
 const vscode = acquireVsCodeApi(); // webview.ts 와 정보 주고받기
 
@@ -102,11 +122,13 @@ function showGptResult() {
       const gptOutputContent = document.getElementById("gptOutputContent");
 
       if (gptOutputContent) {
+        gptResponse = message.data;
         gptOutputContent.innerHTML = `<h3>GPT Response:</h3><p>${marked.parse(message.data)}</p>`; // show chat-GPT's result to html.
 
         const additionalBtn = document.getElementById("additionalBtn");
         if (additionalBtn) {
           additionalBtn.classList.remove("invisible");
+          additionalBtn.style.display = "block";
         }
       } else {
         alert("No response from Chat-GPT.");
@@ -114,10 +136,6 @@ function showGptResult() {
     }
   });
 }
-
-function btn1() {}
-function btn2() {}
-function btn3() {}
 
 function resetForm() {
   const inputSection = document.getElementById("inputSection");
