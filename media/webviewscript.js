@@ -13,7 +13,6 @@ document.getElementById("button1").addEventListener("click", () => {
   const gptOutputContent = document.getElementById("gptOutputContent");
   gptOutputContent.innerHTML = `<h3>New GPT Response from Button 1:</h3><p>${marked.parse(gptResponse)}</p>`;
   gptOutputContent.innerHTML += `<h3>First GPT Response:</h3><p>${marked.parse(initialResponse)}</p>`;
-  gptOutputContent.innerHTML += `<h3>User Prompt:</h3><p>${marked.parse(userPrompt)}</p>`;
 
   // 버튼 3개 다시 보이게 하기
   const additionalBtn = document.getElementById("additionalBtn");
@@ -34,7 +33,6 @@ document.getElementById("button2").addEventListener("click", () => {
   const gptOutputContent = document.getElementById("gptOutputContent");
   gptOutputContent.innerHTML = `<h3>New GPT Response from Button 2:</h3><p>${marked.parse(gptResponse)}</p>`;
   gptOutputContent.innerHTML += `<h3>First GPT Response:</h3><p>${marked.parse(initialResponse)}</p>`;
-  gptOutputContent.innerHTML += `<h3>User Prompt:</h3><p>${marked.parse(userPrompt)}</p>`;
 
   // 버튼 3개 다시 보이게 하기
   const additionalBtn = document.getElementById("additionalBtn");
@@ -55,7 +53,6 @@ document.getElementById("button3").addEventListener("click", () => {
   const gptOutputContent = document.getElementById("gptOutputContent");
   gptOutputContent.innerHTML = `<h3>New GPT Response from Button 3:</h3><p>${marked.parse(gptResponse)}</p>`;
   gptOutputContent.innerHTML += `<h3>First GPT Response:</h3><p>${marked.parse(initialResponse)}</p>`;
-  gptOutputContent.innerHTML += `<h3>User Prompt:</h3><p>${marked.parse(userPrompt)}</p>`;
 
   // 버튼 3개 다시 보이게 하기
   const additionalBtn = document.getElementById("additionalBtn");
