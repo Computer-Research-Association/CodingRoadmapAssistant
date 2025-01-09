@@ -232,6 +232,7 @@ function resetForm() {
 
   // Hide additional buttons
   if (additionalBtn) {
+    additionalBtn.classList.add("invisible");
     additionalBtn.style.display = "none";
   }
 
