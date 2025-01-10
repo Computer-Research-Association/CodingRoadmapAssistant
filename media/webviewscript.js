@@ -174,14 +174,12 @@ function showGptResult() {
 
           // Show the first response and user prompt
           gptOutputContent.innerHTML = `<h3>GPT Response:</h3><p>${marked.parse(gptResponse)}</p>`;
-          gptOutputContent.innerHTML += `<h3>User Prompt:</h3><p>${marked.parse(userPrompt)}</p>`;
         } else {
           // If it's not the first response, show it above the previous response
           gptOutputContent.innerHTML = `<h3>New GPT Response:</h3><p>${marked.parse(gptResponse)}</p>`;
 
           // Display the first response and user prompt below
           gptOutputContent.innerHTML += `<h3>First GPT Response:</h3><p>${marked.parse(initialResponse)}</p>`;
-          gptOutputContent.innerHTML += `<h3>User Prompt:</h3><p>${marked.parse(userPrompt)}</p>`;
         }
 
         // Display the buttons again below the responses
