@@ -28,6 +28,7 @@ document.getElementById("button3").addEventListener("click", () => {
 
 let initialResponse = "";
 let submitCount = 0;
+let gptListenerAdded = false;
 
 const vscode = acquireVsCodeApi();
 
@@ -128,7 +129,7 @@ function sendData(data) {
 
 // get gpt's response and show chat-GPT's result to html.
 function showGptResult() {
-  if (!window.gptListenerAdded) {
+  if (!gptListenerAdded) {
     window.addEventListener("message", (event) => {
       const message = event.data; // get gpt's response
       if (message.command === "setData") {
@@ -162,7 +163,7 @@ function showGptResult() {
         }
       }
     });
-    window.gptListenerAdded = true;
+    gptListenerAdded = true;
   }
 }
 
