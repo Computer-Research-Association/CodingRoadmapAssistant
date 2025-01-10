@@ -10,14 +10,6 @@ document.getElementById("button1").addEventListener("click", () => {
     command: "button1",
     data: initialResponse,
   });
-
-  const gptOutputContent = document.getElementById("gptOutputContent");
-
-  const additionalBtn = document.getElementById("additionalBtn");
-  if (additionalBtn) {
-    additionalBtn.classList.remove("invisible");
-    additionalBtn.style.display = "block";
-  }
 });
 
 document.getElementById("button2").addEventListener("click", () => {
@@ -25,14 +17,6 @@ document.getElementById("button2").addEventListener("click", () => {
     command: "button2",
     data: initialResponse,
   });
-
-  const gptOutputContent = document.getElementById("gptOutputContent");
-
-  const additionalBtn = document.getElementById("additionalBtn");
-  if (additionalBtn) {
-    additionalBtn.classList.remove("invisible");
-    additionalBtn.style.display = "block";
-  }
 });
 
 document.getElementById("button3").addEventListener("click", () => {
@@ -40,14 +24,6 @@ document.getElementById("button3").addEventListener("click", () => {
     command: "button3",
     data: initialResponse,
   });
-
-  const gptOutputContent = document.getElementById("gptOutputContent");
-
-  const additionalBtn = document.getElementById("additionalBtn");
-  if (additionalBtn) {
-    additionalBtn.classList.remove("invisible");
-    additionalBtn.style.display = "block";
-  }
 });
 
 let initialResponse = "";
