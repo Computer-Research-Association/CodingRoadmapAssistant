@@ -164,13 +164,14 @@ function showGptResult() {
         gptResponse = message.data;
 
         // If it's the first response, store it and show it along with the user's prompt
-        if (initialResponse === null) {
+        if (initialResponse === "") {
           initialResponse = gptResponse;
 
           firstResponse.classList.remove("invisible");
           firstResponse.innerHTML += `<p>${marked.parse(initialResponse)}</p>`;
         } else {
           // If it's not the first response, show it above the previous response
+          advancedResponseContent.innerHTML = "";
           advancedResponseContent.classList.remove("invisible");
           advancedResponseContent.innerHTML += `<p>${marked.parse(gptResponse)}</p>`;
         }
