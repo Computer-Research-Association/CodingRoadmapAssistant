@@ -27,7 +27,7 @@ document.getElementById("button3").addEventListener("click", () => {
 });
 
 let initialResponse = "";
-let userPrompt = "";
+let submitCount = 0;
 
 const vscode = acquireVsCodeApi();
 
@@ -93,12 +93,19 @@ function submitData() {
   let dataToSend = "problem definition: " + problemInput + ", steps: "; // save data to send to Chat-GPT
 
   let userInputStepIndex = 1;
+  userOutputStepBtn.innerHTML = "";
   steps.forEach((userInputStep) => {
     userOutputStepBtn.innerHTML += `<li>${userInputStep}</li>`;
     dataToSend += userInputStepIndex + ". " + userInputStep + " ";
     userInputStepIndex++;
   });
   delete userInputStepIndex; //reset userInputStepIndex number
+
+  submitCount++;
+
+  if (submitCount > 1) {
+    clearContent();
+  }
 
   sendData(dataToSend); // send data into webview.ts
   showGptResult(); // get gpt's response and show chat-GPT's result to html.
@@ -197,6 +204,12 @@ function resetForm() {
 
   // Reset stored responses
   initialResponse = "";
-  userPrompt = "";
+  gptResponse = "";
+}
+
+function clearContent() {
+  firstResponseContent.innerHTML = "";
+  advancedResponseContent.innerHTML = "";
+  initialResponse = "";
   gptResponse = "";
 }
