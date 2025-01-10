@@ -1,6 +1,6 @@
 document.getElementById("toggleNav").addEventListener("click", toggleNav);
 document.getElementById("addStep").addEventListener("click", addStep);
-document.getElementById("delateStep").addEventListener("click", delateStep);
+document.getElementById("deleteStep").addEventListener("click", deleteStep);
 document.getElementById("submitButton").addEventListener("click", submitData);
 const firstResponseContent = document.getElementById("firstResponseContent");
 const advancedResponseContent = document.getElementById("advancedResponseContent");
@@ -11,10 +11,8 @@ document.getElementById("button1").addEventListener("click", () => {
     data: initialResponse,
   });
 
-  // 새 응답을 위에 출력하고 기존 응답은 아래에 계속 유지
   const gptOutputContent = document.getElementById("gptOutputContent");
 
-  // 버튼 3개 다시 보이게 하기
   const additionalBtn = document.getElementById("additionalBtn");
   if (additionalBtn) {
     additionalBtn.classList.remove("invisible");
@@ -22,17 +20,14 @@ document.getElementById("button1").addEventListener("click", () => {
   }
 });
 
-// 버튼 2 클릭 시: 새 응답을 출력하고 기존 응답을 아래에 출력
 document.getElementById("button2").addEventListener("click", () => {
   vscode.postMessage({
     command: "button2",
     data: initialResponse,
   });
 
-  // 새 응답을 위에 출력하고 기존 응답은 아래에 계속 유지
   const gptOutputContent = document.getElementById("gptOutputContent");
 
-  // 버튼 3개 다시 보이게 하기
   const additionalBtn = document.getElementById("additionalBtn");
   if (additionalBtn) {
     additionalBtn.classList.remove("invisible");
@@ -40,17 +35,14 @@ document.getElementById("button2").addEventListener("click", () => {
   }
 });
 
-// 버튼 3 클릭 시: 새 응답을 출력하고 기존 응답을 아래에 출력
 document.getElementById("button3").addEventListener("click", () => {
   vscode.postMessage({
     command: "button3",
     data: initialResponse,
   });
 
-  // 새 응답을 위에 출력하고 기존 응답은 아래에 계속 유지
   const gptOutputContent = document.getElementById("gptOutputContent");
 
-  // 버튼 3개 다시 보이게 하기
   const additionalBtn = document.getElementById("additionalBtn");
   if (additionalBtn) {
     additionalBtn.classList.remove("invisible");
@@ -58,10 +50,10 @@ document.getElementById("button3").addEventListener("click", () => {
   }
 });
 
-let initialResponse = ""; // 첫 번째 GPT 응답을 저장할 변수
-let userPrompt = ""; // 사용자 프롬프트 저장 변수
+let initialResponse = "";
+let userPrompt = "";
 
-const vscode = acquireVsCodeApi(); // webview.ts 와 정보 주고받기
+const vscode = acquireVsCodeApi();
 
 function toggleNav() {
   const inputSection = document.getElementById("inputSection");
@@ -92,7 +84,7 @@ function addStep() {
   stepContainer.appendChild(newStep);
 }
 
-function delateStep() {
+function deleteStep() {
   const stepContainer = document.getElementById("steps");
   const stepCount = stepContainer.querySelectorAll(".step").length;
 
@@ -133,7 +125,6 @@ function submitData() {
   delete userInputStepIndex; //reset userInputStepIndex number
 
   sendData(dataToSend); // send data into webview.ts
-  console.log("why" + initialResponse);
   showGptResult(); // get gpt's response and show chat-GPT's result to html.
 
   toggleNav();
@@ -156,7 +147,6 @@ function sendData(data) {
 function showGptResult() {
   if (!window.gptListenerAdded) {
     window.addEventListener("message", (event) => {
-      console.log("Message received: ", event.data);
       const message = event.data; // get gpt's response
       if (message.command === "setData") {
         const gptOutputContent = document.getElementById("gptOutputContent");
@@ -172,8 +162,6 @@ function showGptResult() {
             firstResponseContent.innerHTML += `<h3>GPT's Response</h3><p>${marked.parse(initialResponse)}</p>`;
           } else {
             // If it's not the first response, show it above the previous response
-            console.log("initialResponse" + initialResponse);
-            console.log("gptResponse" + gptResponse);
 
             advancedResponseContent.innerHTML = "";
             advancedResponseContent.classList.remove("invisible");
@@ -232,8 +220,7 @@ function resetForm() {
   }
 
   // Reset stored responses
-  initialResponse = ""; // 초기 응답 초기화
-  userPrompt = ""; // 사용자 프롬프트 초기화
-  gptResponse = ""; // 현재 GPT 응답 초기화
-  console.log("After flush" + initialResponse);
+  initialResponse = "";
+  userPrompt = "";
+  gptResponse = "";
 }
