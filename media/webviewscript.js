@@ -2,6 +2,8 @@ document.getElementById("toggleNav").addEventListener("click", toggleNav);
 document.getElementById("addStep").addEventListener("click", addStep);
 document.getElementById("delateStep").addEventListener("click", delateStep);
 document.getElementById("submitButton").addEventListener("click", submitData);
+const firstResponse = document.getElementById("firstResponseContent");
+const advancedResponseContent = document.getElementById("advancedResponseContent");
 document.getElementById("resetButton").addEventListener("click", resetForm);
 document.getElementById("button1").addEventListener("click", () => {
   vscode.postMessage({
@@ -11,8 +13,6 @@ document.getElementById("button1").addEventListener("click", () => {
 
   // 새 응답을 위에 출력하고 기존 응답은 아래에 계속 유지
   const gptOutputContent = document.getElementById("gptOutputContent");
-  gptOutputContent.innerHTML = `<h3>New GPT Response from Button 1:</h3><p>${marked.parse(gptResponse)}</p>`;
-  gptOutputContent.innerHTML += `<h3>First GPT Response:</h3><p>${marked.parse(initialResponse)}</p>`;
 
   // 버튼 3개 다시 보이게 하기
   const additionalBtn = document.getElementById("additionalBtn");
@@ -31,8 +31,6 @@ document.getElementById("button2").addEventListener("click", () => {
 
   // 새 응답을 위에 출력하고 기존 응답은 아래에 계속 유지
   const gptOutputContent = document.getElementById("gptOutputContent");
-  gptOutputContent.innerHTML = `<h3>New GPT Response from Button 2:</h3><p>${marked.parse(gptResponse)}</p>`;
-  gptOutputContent.innerHTML += `<h3>First GPT Response:</h3><p>${marked.parse(initialResponse)}</p>`;
 
   // 버튼 3개 다시 보이게 하기
   const additionalBtn = document.getElementById("additionalBtn");
@@ -51,8 +49,6 @@ document.getElementById("button3").addEventListener("click", () => {
 
   // 새 응답을 위에 출력하고 기존 응답은 아래에 계속 유지
   const gptOutputContent = document.getElementById("gptOutputContent");
-  gptOutputContent.innerHTML = `<h3>New GPT Response from Button 3:</h3><p>${marked.parse(gptResponse)}</p>`;
-  gptOutputContent.innerHTML += `<h3>First GPT Response:</h3><p>${marked.parse(initialResponse)}</p>`;
 
   // 버튼 3개 다시 보이게 하기
   const additionalBtn = document.getElementById("additionalBtn");
@@ -168,18 +164,15 @@ function showGptResult() {
         gptResponse = message.data;
 
         // If it's the first response, store it and show it along with the user's prompt
-        if (!initialResponse) {
+        if (initialResponse === null) {
           initialResponse = gptResponse;
-          userPrompt = document.getElementById("problemInput").value; // 저장된 프롬프트
 
-          // Show the first response and user prompt
-          gptOutputContent.innerHTML = `<h3>GPT Response:</h3><p>${marked.parse(gptResponse)}</p>`;
+          firstResponse.classList.remove("invisible");
+          firstResponse.innerHTML += `<p>${marked.parse(initialResponse)}</p>`;
         } else {
           // If it's not the first response, show it above the previous response
-          gptOutputContent.innerHTML = `<h3>New GPT Response:</h3><p>${marked.parse(gptResponse)}</p>`;
-
-          // Display the first response and user prompt below
-          gptOutputContent.innerHTML += `<h3>First GPT Response:</h3><p>${marked.parse(initialResponse)}</p>`;
+          advancedResponseContent.classList.remove("invisible");
+          advancedResponseContent.innerHTML += `<p>${marked.parse(gptResponse)}</p>`;
         }
 
         // Display the buttons again below the responses
