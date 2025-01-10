@@ -2,13 +2,13 @@ document.getElementById("toggleNav").addEventListener("click", toggleNav);
 document.getElementById("addStep").addEventListener("click", addStep);
 document.getElementById("delateStep").addEventListener("click", delateStep);
 document.getElementById("submitButton").addEventListener("click", submitData);
-const firstResponse = document.getElementById("firstResponseContent");
+const firstResponseContent = document.getElementById("firstResponseContent");
 const advancedResponseContent = document.getElementById("advancedResponseContent");
 document.getElementById("resetButton").addEventListener("click", resetForm);
 document.getElementById("button1").addEventListener("click", () => {
   vscode.postMessage({
     command: "button1",
-    data: gptResponse,
+    data: initialResponse,
   });
 
   // 새 응답을 위에 출력하고 기존 응답은 아래에 계속 유지
@@ -26,7 +26,7 @@ document.getElementById("button1").addEventListener("click", () => {
 document.getElementById("button2").addEventListener("click", () => {
   vscode.postMessage({
     command: "button2",
-    data: gptResponse,
+    data: initialResponse,
   });
 
   // 새 응답을 위에 출력하고 기존 응답은 아래에 계속 유지
@@ -44,7 +44,7 @@ document.getElementById("button2").addEventListener("click", () => {
 document.getElementById("button3").addEventListener("click", () => {
   vscode.postMessage({
     command: "button3",
-    data: gptResponse,
+    data: initialResponse,
   });
 
   // 새 응답을 위에 출력하고 기존 응답은 아래에 계속 유지
@@ -167,8 +167,8 @@ function showGptResult() {
         if (initialResponse === "") {
           initialResponse = gptResponse;
 
-          firstResponse.classList.remove("invisible");
-          firstResponse.innerHTML += `<p>${marked.parse(initialResponse)}</p>`;
+          firstResponseContent.classList.remove("invisible");
+          firstResponseContent.innerHTML += `<p>${marked.parse(initialResponse)}</p>`;
         } else {
           // If it's not the first response, show it above the previous response
           advancedResponseContent.innerHTML = "";
@@ -187,13 +187,15 @@ function showGptResult() {
       }
     }
   });
+  // Remove existing event listener to avoid duplication
+  window.removeEventListener("message", messageHandler);
+  // Add the new event listener
+  window.addEventListener("message", messageHandler);
 }
 
 function resetForm() {
   const inputSection = document.getElementById("inputSection");
-  const outputSection = document.getElementById("outputSection");
   const additionalBtn = document.getElementById("additionalBtn");
-  const gptOutputContent = document.getElementById("gptOutputContent");
 
   // Ensure input section is visible
   if (inputSection.style.maxHeight === "0px") {
@@ -218,9 +220,8 @@ function resetForm() {
   document.getElementById("userOutputStepBtn").innerHTML = "";
 
   // Reset GPT output content
-  if (gptOutputContent) {
-    gptOutputContent.innerHTML = ""; // Remove all GPT responses
-  }
+  document.getElementById("firstResponseContent").innerHTML = "";
+  document.getElementById("advancedResponseContent").innerHTML = "";
 
   // Hide additional buttons
   if (additionalBtn) {
@@ -232,4 +233,5 @@ function resetForm() {
   initialResponse = ""; // 초기 응답 초기화
   userPrompt = ""; // 사용자 프롬프트 초기화
   gptResponse = ""; // 현재 GPT 응답 초기화
+  showGptResult();
 }
