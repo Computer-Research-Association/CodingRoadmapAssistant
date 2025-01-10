@@ -1,25 +1,104 @@
 {
   "name": "coding-roadmap-assistant",
   "displayName": "Coding Roadmap Assistant",
-  "description": "CRAAAAAANG",
-  "version": "0.0.1",
+  "description": "Coding Companion for Coding Beginners, based on OpenAI API.",
+  "version": "1.0.2",
   "engines": {
     "vscode": "^1.96.0"
   },
   "categories": [
-    "Other"
+    "AI",
+    "Education"
   ],
+  "publisher": "NewCar",
+  "contributors": [
+    {
+      "name": "chachaaa-23",
+      "url": "https://github.com/chachaaa-23"
+    },
+    {
+      "name": "dan05s",
+      "url": "https://github.com/dan05s"
+    },
+    {
+      "name": "Jangmyun",
+      "url": "https://github.com/Jangmyun"
+    },
+    {
+      "name": "young170",
+      "url": "https://github.com/young170"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Computer-Research-Association/CodingRoadmapAssistant"
+  },
+  "bugs": {
+    "url": "https://github.com/Computer-Research-Association/CodingRoadmapAssistant/issues"
+  },
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "craActivitybar",
+          "title": "CRA activitybar",
+          "icon": "media/icons.svg"
+        }
+      ]
+    },
+    "views": {
+      "craActivitybar": [
+        {
+          "id": "craView",
+          "name": "CRA View",
+          "type": "webview"
+        }
+      ]
+    },
     "commands": [
       {
-        "command": "coding-roadmap-assistant.helloWorld",
-        "title": "Hello World"
+        "command": "openAI.setAPIKey",
+        "category": "Coding Roadmap Assistant",
+        "title": "Set OpenAI API Key"
+      },
+      {
+        "command": "openAI.setModel",
+        "category": "Coding Roadmap Assistant",
+        "title": "Set OpenAI GPT Model"
+      },
+      {
+        "command": "document.selectDocu",
+        "category": "Coding Roadmap Assistant",
+        "title": "Select Document"
+      }
+    ],
+    "configuration": [
+      {
+        "title": "CodingRoadmapAssistant",
+        "properties": {
+          "openAI.apiKey": {
+            "type": [
+              "string"
+            ],
+            "default": "",
+            "description": "Open AI API Key"
+          },
+          "openAI.modelSelected": {
+            "type": [
+              "string"
+            ],
+            "default": "gpt-4o-mini",
+            "description": "Open AI GPT Model Selected"
+          }
+        }
       }
     ]
   },
   "scripts": {
+    "deploy": "vsce publish --yarn",
     "vscode:prepublish": "npm run package",
     "compile": "npm run check-types && npm run lint && node esbuild.js",
     "watch": "npm-run-all -p watch:*",
@@ -34,16 +113,25 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.96.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/vscode": "^1.96.0",
     "@typescript-eslint/eslint-plugin": "^8.17.0",
     "@typescript-eslint/parser": "^8.17.0",
-    "eslint": "^9.16.0",
-    "esbuild": "^0.24.0",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^5.7.2",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1"
+    "@vscode/test-electron": "^2.4.1",
+    "@vscode/vsce": "^3.2.1",
+    "esbuild": "^0.24.0",
+    "eslint": "^9.16.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "gpt-tokens": "^1.3.13",
+    "marked": "^15.0.5",
+    "openai": "^4.77.0"
   }
 }

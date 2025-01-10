@@ -1,26 +1,30 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
+import CRAWebviewViewProvider from "./webview";
+import { showModelSelectionQuickPick, setAPIKey, onFirstActivation, pickOpenedDocument } from "./craConfigManager";
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
+  const isInitialized = context.globalState.get<boolean>("isInitialized");
+  if (!isInitialized) {
+    await onFirstActivation(context);
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "coding-roadmap-assistant" is now active!');
+    context.globalState.update("isInitialized", true);
+  }
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('coding-roadmap-assistant.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Coding Roadmap Assistant!');
-	});
+  const CRAViewProvider = new CRAWebviewViewProvider(context);
 
-	context.subscriptions.push(disposable);
+  context.subscriptions.push(
+    vscode.commands.registerCommand("document.selectDocu", async () => {
+      await pickOpenedDocument(context);
+    }),
+    vscode.commands.registerCommand("openAI.setAPIKey", async () => {
+      await setAPIKey(context);
+    }),
+    vscode.commands.registerCommand("openAI.setModel", showModelSelectionQuickPick),
+    vscode.window.registerWebviewViewProvider("craView", CRAViewProvider, {
+      // Webview 등록
+      webviewOptions: { retainContextWhenHidden: true }, //webview 닫아도 요소 유지
+    })
+  );
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() {}
