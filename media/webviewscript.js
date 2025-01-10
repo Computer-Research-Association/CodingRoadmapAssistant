@@ -29,6 +29,7 @@ document.getElementById("button3").addEventListener("click", () => {
 let initialResponse = "";
 let submitCount = 0;
 let gptListenerAdded = false;
+const additionalBtn = document.getElementById("additionalBtn");
 
 const vscode = acquireVsCodeApi();
 
@@ -113,7 +114,6 @@ function submitData() {
 
   toggleNav();
 
-  const additionalBtn = document.getElementById("additionalBtn");
   if (additionalBtn) {
     additionalBtn.style.display = "block";
   }
