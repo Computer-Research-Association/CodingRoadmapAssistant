@@ -133,7 +133,7 @@ function submitData() {
   delete userInputStepIndex; //reset userInputStepIndex number
 
   sendData(dataToSend); // send data into webview.ts
-
+  console.log("why" + initialResponse);
   showGptResult(); // get gpt's response and show chat-GPT's result to html.
 
   toggleNav();
@@ -154,43 +154,45 @@ function sendData(data) {
 
 // get gpt's response and show chat-GPT's result to html.
 function showGptResult() {
-  window.addEventListener("message", (event) => {
-    const message = event.data; // get gpt's response
+  if (!window.gptListenerAdded) {
+    window.addEventListener("message", (event) => {
+      console.log("Message received: ", event.data);
+      const message = event.data; // get gpt's response
+      if (message.command === "setData") {
+        const gptOutputContent = document.getElementById("gptOutputContent");
 
-    if (message.command === "setData") {
-      const gptOutputContent = document.getElementById("gptOutputContent");
+        if (gptOutputContent) {
+          gptResponse = message.data;
 
-      if (gptOutputContent) {
-        gptResponse = message.data;
+          // If it's the first response, store it and show it along with the user's prompt
+          if (initialResponse === "") {
+            initialResponse = gptResponse;
 
-        // If it's the first response, store it and show it along with the user's prompt
-        if (initialResponse === "") {
-          initialResponse = gptResponse;
+            firstResponseContent.classList.remove("invisible");
+            firstResponseContent.innerHTML += `<h3>GPT's Response</h3><p>${marked.parse(initialResponse)}</p>`;
+          } else {
+            // If it's not the first response, show it above the previous response
+            console.log("initialResponse" + initialResponse);
+            console.log("gptResponse" + gptResponse);
 
-          firstResponseContent.classList.remove("invisible");
-          firstResponseContent.innerHTML += `<p>${marked.parse(initialResponse)}</p>`;
+            advancedResponseContent.innerHTML = "";
+            advancedResponseContent.classList.remove("invisible");
+            advancedResponseContent.innerHTML += `<h3 class="advancedResponse">Advanced questions</h3><p>${marked.parse(gptResponse)}</p>`;
+          }
+
+          // Display the buttons again below the responses
+          const additionalBtn = document.getElementById("additionalBtn");
+          if (additionalBtn) {
+            additionalBtn.classList.remove("invisible");
+            additionalBtn.style.display = "block";
+          }
         } else {
-          // If it's not the first response, show it above the previous response
-          advancedResponseContent.innerHTML = "";
-          advancedResponseContent.classList.remove("invisible");
-          advancedResponseContent.innerHTML += `<p>${marked.parse(gptResponse)}</p>`;
+          alert("No response from Chat-GPT.");
         }
-
-        // Display the buttons again below the responses
-        const additionalBtn = document.getElementById("additionalBtn");
-        if (additionalBtn) {
-          additionalBtn.classList.remove("invisible");
-          additionalBtn.style.display = "block";
-        }
-      } else {
-        alert("No response from Chat-GPT.");
       }
-    }
-  });
-  // Remove existing event listener to avoid duplication
-  window.removeEventListener("message", messageHandler);
-  // Add the new event listener
-  window.addEventListener("message", messageHandler);
+    });
+    window.gptListenerAdded = true;
+  }
 }
 
 function resetForm() {
@@ -233,5 +235,5 @@ function resetForm() {
   initialResponse = ""; // 초기 응답 초기화
   userPrompt = ""; // 사용자 프롬프트 초기화
   gptResponse = ""; // 현재 GPT 응답 초기화
-  showGptResult();
+  console.log("After flush" + initialResponse);
 }
