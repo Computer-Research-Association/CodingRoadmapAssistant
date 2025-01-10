@@ -5,26 +5,16 @@ document.getElementById("submitButton").addEventListener("click", submitData);
 const firstResponseContent = document.getElementById("firstResponseContent");
 const advancedResponseContent = document.getElementById("advancedResponseContent");
 document.getElementById("resetButton").addEventListener("click", resetForm);
-document.getElementById("button1").addEventListener("click", () => {
-  vscode.postMessage({
-    command: "button1",
-    data: initialResponse,
-  });
-});
+document.getElementById("button1").addEventListener("click", () => buttonClick(1));
+document.getElementById("button2").addEventListener("click", () => buttonClick(2));
+document.getElementById("button3").addEventListener("click", () => buttonClick(3));
 
-document.getElementById("button2").addEventListener("click", () => {
+function buttonClick(buttonNumber) {
   vscode.postMessage({
-    command: "button2",
+    command: `button${buttonNumber}`,
     data: initialResponse,
   });
-});
-
-document.getElementById("button3").addEventListener("click", () => {
-  vscode.postMessage({
-    command: "button3",
-    data: initialResponse,
-  });
-});
+}
 
 let initialResponse = "";
 let submitCount = 0;
