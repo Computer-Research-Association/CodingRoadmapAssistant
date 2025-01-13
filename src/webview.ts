@@ -3,6 +3,7 @@ import * as path from "path";
 import * as fs from "fs";
 import OpenAI from "openai";
 import { showApiKeyError, saveLogToGlobalState, pickOpenedDocument } from "./craConfigManager";
+import { getUri, getNonce } from "./utilities";
 
 export default class CRAWebviewViewProvider implements vscode.WebviewViewProvider {
   private apiKey?: string;
@@ -23,7 +24,8 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     webviewView.webview.options = {
       enableScripts: true, // 자바스크립트 활성화
       localResourceRoots: [
-        vscode.Uri.joinPath(this.context.extensionUri, "media"), // media 폴더를 로컬 리소스로 설정
+        vscode.Uri.joinPath(this.context.extensionUri, "out"),
+        vscode.Uri.joinPath(this.context.extensionUri, "webview-ui/build"),
       ],
     };
 
@@ -160,6 +162,29 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           console.log(message.data);
       }
     });
+  }
+
+  private _getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri) {
+    const stylesUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.css"]);
+    const scriptUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.js"]);
+    const nonce = getNonce();
+
+    return /*HTML*/ `
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
+          <link rel="stylesheet" type="text/css" href="${stylesUri}">
+          <title>VSCode React</title>
+        </head>
+        <body>
+          <div id="root"></div>
+          <script type="module" nonce="${nonce}" src="${scriptUri}"></script>
+        </body>
+      </html>
+    `;
   }
 
   // GPT API 호출 함수
