@@ -29,25 +29,25 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
       ],
     };
 
-    // HTML 파일 읽기
-    const styleUri = webviewView.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.context.extensionUri, "media", "style.css")
-    );
-    const htmlPath = path.join(this.context.extensionPath, "media", "webview.html");
-    let htmlContent = fs.readFileSync(htmlPath, "utf-8");
+    // // HTML 파일 읽기
+    // const styleUri = webviewView.webview.asWebviewUri(
+    //   vscode.Uri.joinPath(this.context.extensionUri, "media", "style.css")
+    // );
+    // const htmlPath = path.join(this.context.extensionPath, "media", "webview.html");
+    // let htmlContent = fs.readFileSync(htmlPath, "utf-8");
 
-    htmlContent = htmlContent.replace("</head>", `<link rel="stylesheet" href="${styleUri}"></head>`);
+    // htmlContent = htmlContent.replace("</head>", `<link rel="stylesheet" href="${styleUri}"></head>`);
 
-    //웹뷰 HTML 내에서 자바스크립트 파일 경로를 로컬 URI로 변환하여 사용
-    const scriptUri = webviewView.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.context.extensionUri, "media", "webviewscript.js")
-    );
+    // //웹뷰 HTML 내에서 자바스크립트 파일 경로를 로컬 URI로 변환하여 사용
+    // const scriptUri = webviewView.webview.asWebviewUri(
+    //   vscode.Uri.joinPath(this.context.extensionUri, "media", "webviewscript.js")
+    // );
 
-    //HTML 내용에서 script 태그를 삽입할 부분
-    htmlContent = htmlContent.replace(
-      /<script src="webviewscript.js"><\/script>/,
-      `<script src="${scriptUri}"></script>`
-    );
+    // //HTML 내용에서 script 태그를 삽입할 부분
+    // htmlContent = htmlContent.replace(
+    //   /<script src="webviewscript.js"><\/script>/,
+    //   `<script src="${scriptUri}"></script>`
+    // );
 
     //웹뷰 HTML 설정
     webviewView.webview.html = htmlContent;
