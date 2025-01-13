@@ -72,7 +72,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             data: gptResponse,
           });
 
-          // save it's answer to the conversationLog
           const gptData = [
             {
               role: "system",
