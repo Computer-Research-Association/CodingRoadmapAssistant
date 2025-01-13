@@ -156,6 +156,8 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             vscode.window.showErrorMessage("Failed to process button3 click.");
           }
           break;
+        case "debug":
+          console.log(message.data);
       }
     });
   }
@@ -186,6 +188,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
              Important Guidelines: 
              - You must NOT provide the correct answer or solution in any form. 
              - Responses should strictly avoid a conversational tone and include only the specified two elements. 
+             - If user's input language is not an English, change output language into user's one.,
              - Provide a two-sentence summary instead of the first results of gpt. `,
       };
 
