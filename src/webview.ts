@@ -50,7 +50,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     // );
 
     //웹뷰 HTML 설정
-    webviewView.webview.html = htmlContent;
+    webviewView.webview.html = this._getWebviewContent(webviewView.webview, this.context.extensionUri);
 
     webviewView.webview.onDidReceiveMessage(async (message) => {
       switch (message.command) {
