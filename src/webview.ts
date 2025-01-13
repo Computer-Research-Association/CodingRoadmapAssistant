@@ -52,12 +52,9 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     //웹뷰 HTML 설정
     webviewView.webview.html = htmlContent;
 
-    // webviewscript.js 에서 데이터를 받는 핸들러 설정
     webviewView.webview.onDidReceiveMessage(async (message) => {
-      // send request to OpenAI
       switch (message.command) {
         case "process":
-          // 사용자 코드 추가
           let textDoc: vscode.TextDocument | null = null;
 
           while (textDoc === null) {
@@ -67,12 +64,9 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
               return;
             }
           }
-          // 문제정의+단계+전체 코드
           const messageTosend = message + "User's Code: " + textDoc.getText();
 
-          //GPT API 호출
           const gptResponse = await this.callGptApi(messageTosend);
-          //웹뷰로 결과 전달
           webviewView.webview.postMessage({
             command: "setData",
             data: gptResponse,
@@ -90,7 +84,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           break;
         case "button1":
           try {
-            // 사용자가 버튼 클릭 시 전달한 데이터 (기존 GPT 응답)
             const previousResponse = message.data;
             const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the first guiding question. Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the first one:`;
 
