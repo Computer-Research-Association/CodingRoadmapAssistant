@@ -64,9 +64,9 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
               return;
             }
           }
-          const messageTosend = message + "User's Code: " + textDoc.getText();
+          const messageToSend = message + "User's Code: " + textDoc.getText();
 
-          const gptResponse = await this.callGptApi(messageTosend);
+          const gptResponse = await this.callGptApi(messageToSend);
           webviewView.webview.postMessage({
             command: "setData",
             data: gptResponse,
