@@ -104,9 +104,7 @@ function submitData() {
 
   toggleNav();
 
-  if (additionalBtn) {
-    additionalBtn.style.display = "block";
-  }
+  additionalBtn.style.display = "block";
 }
 
 // send data into webview.ts
@@ -144,16 +142,17 @@ function showGptResult() {
 
           // Display the buttons again below the responses
           const additionalBtn = document.getElementById("additionalBtn");
-          if (additionalBtn) {
-            additionalBtn.classList.remove("invisible");
-            additionalBtn.style.display = "block";
-          }
-        } else {
-          alert("No response from Chat-GPT.");
+
+          additionalBtn.classList.remove("invisible");
+          additionalBtn.style.display = "block";
         }
+      } else {
+        console.log("message command is not a setData.");
       }
     });
     gptListenerAdded = true;
+  } else {
+    console.log("gptListenerAdded is already true");
   }
 }
 
