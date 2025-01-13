@@ -2,7 +2,7 @@
   "name": "coding-roadmap-assistant",
   "displayName": "Coding Roadmap Assistant",
   "description": "Coding Companion for Coding Beginners, based on OpenAI API.",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "engines": {
     "vscode": "^1.96.0"
   },
