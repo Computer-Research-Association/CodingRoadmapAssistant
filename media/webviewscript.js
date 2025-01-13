@@ -5,6 +5,9 @@ document.getElementById("submitButton").addEventListener("click", submitData);
 const firstResponseContent = document.getElementById("firstResponseContent");
 const advancedResponseContent = document.getElementById("advancedResponseContent");
 document.getElementById("resetButton").addEventListener("click", resetForm);
+
+const loadingContent = document.getElementById("loadingContent");
+const gptOutputContent = document.getElementById("gptOutputContent");
 document.getElementById("button1").addEventListener("click", () => buttonClick(1));
 document.getElementById("button2").addEventListener("click", () => buttonClick(2));
 document.getElementById("button3").addEventListener("click", () => buttonClick(3));
@@ -22,7 +25,6 @@ let gptListenerAdded = false;
 const additionalBtn = document.getElementById("additionalBtn");
 
 const vscode = acquireVsCodeApi();
-
 function toggleNav() {
   const inputSection = document.getElementById("inputSection");
   const outputSection = document.getElementById("outputSection");
@@ -100,6 +102,7 @@ function submitData() {
   }
 
   sendData(dataToSend); // send data into webview.ts
+
   showGptResult(); // get gpt's response and show chat-GPT's result to html.
 
   toggleNav();
@@ -107,8 +110,11 @@ function submitData() {
   additionalBtn.style.display = "block";
 }
 
-// send data into webview.ts
 function sendData(data) {
+  loadingContent.classList.remove("invisible");
+  additionalBtn.classList.add("invisible");
+  gptOutputContent.classList.add("invisible");
+
   vscode.postMessage({
     command: "process",
     value: data,
@@ -124,6 +130,8 @@ function showGptResult() {
         const gptOutputContent = document.getElementById("gptOutputContent");
 
         if (gptOutputContent) {
+          loadingContent.classList.add("invisible");
+          gptOutputContent.classList.remove("invisible");
           gptResponse = message.data;
 
           // If it's the first response, store it and show it along with the user's prompt
