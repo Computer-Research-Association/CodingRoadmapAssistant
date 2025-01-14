@@ -55,6 +55,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     webviewView.webview.onDidReceiveMessage(async (message) => {
       switch (message.command) {
         case "process":
+          // 사용자 코드 추가
           let textDoc: vscode.TextDocument | null = null;
 
           while (textDoc === null) {
@@ -64,14 +65,18 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
               return;
             }
           }
-          const messageToSend = message + "User's Code: " + textDoc.getText();
+          // 문제정의+단계+전체 코드
+          const messageTosend = message + "User's Code: " + textDoc.getText();
 
-          const gptResponse = await this.callGptApi(messageToSend);
+          //GPT API 호출
+          const gptResponse = await this.callGptApi(messageTosend);
+          //웹뷰로 결과 전달
           webviewView.webview.postMessage({
             command: "setData",
             data: gptResponse,
           });
 
+          // save it's answer to the conversationLog
           const gptData = [
             {
               role: "system",
@@ -81,10 +86,13 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           saveLogToGlobalState(this.context, gptData);
 
           break;
-        case "button1":
+        case "button":
+          const btnNumber = message.number;
           try {
+            // 사용자가 버튼 클릭 시 전달한 데이터 (기존 GPT 응답)
             const previousResponse = message.data;
-            const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the first guiding question. Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the first one:`;
+            const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the guiding question number ${btnNumber}. 
+            Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the question number ${btnNumber}.`;
 
             // GPT 요청에 사용할 조합된 프롬프트
             const combinedPrompt = `${userPrompt}\n\nPrevious Response:\n${previousResponse}`;
@@ -102,54 +110,11 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             const gptData = [{ role: "system", content: gptResponse }];
             saveLogToGlobalState(this.context, gptData);
           } catch (error) {
-            console.error("Error processing button1 click:", error);
-            vscode.window.showErrorMessage("Failed to process button1 click.");
+            console.error(`Error processing button ${btnNumber} click:`, error);
+            vscode.window.showErrorMessage(`Failed to process button ${btnNumber} click.`);
           }
           break;
 
-        case "button2":
-          try {
-            const previousResponse = message.data;
-            const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the second guiding question. Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the second one:`;
-
-            const combinedPrompt = `${userPrompt}\n\nPrevious Response:\n${previousResponse}`;
-
-            const gptResponse = await this.callGptApi(combinedPrompt);
-
-            webviewView.webview.postMessage({
-              command: "setData",
-              data: gptResponse,
-            });
-
-            const gptData = [{ role: "system", content: gptResponse }];
-            saveLogToGlobalState(this.context, gptData);
-          } catch (error) {
-            console.error("Error processing button2 click:", error);
-            vscode.window.showErrorMessage("Failed to process button2 click.");
-          }
-          break;
-
-        case "button3":
-          try {
-            const previousResponse = message.data;
-            const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the third guiding question. Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the third one:`;
-
-            const combinedPrompt = `${userPrompt}\n\nPrevious Response:\n${previousResponse}`;
-
-            const gptResponse = await this.callGptApi(combinedPrompt);
-
-            webviewView.webview.postMessage({
-              command: "setData",
-              data: gptResponse,
-            });
-
-            const gptData = [{ role: "system", content: gptResponse }];
-            saveLogToGlobalState(this.context, gptData);
-          } catch (error) {
-            console.error("Error processing button3 click:", error);
-            vscode.window.showErrorMessage("Failed to process button3 click.");
-          }
-          break;
         case "debug":
           console.log(message.data);
       }
