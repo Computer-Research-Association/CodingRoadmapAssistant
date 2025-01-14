@@ -6,6 +6,25 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [1.1.1] - 2025-01-13
+
+### fix
+
+> update document
+
+## [1.1.0] - 2025-01-13
+
+### feat
+
+> Additional question buttons
+> indicate loading state
+> Delete step button
+> Select document file to send GPT
+
+### fix
+
+> prompt Optimization
+
 ## [1.0.1] - 2025-01-06
 
 ### fix

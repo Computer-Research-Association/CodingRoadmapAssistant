@@ -86,6 +86,78 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           saveLogToGlobalState(this.context, gptData);
 
           break;
+        case "button1":
+          try {
+            // 사용자가 버튼 클릭 시 전달한 데이터 (기존 GPT 응답)
+            const previousResponse = message.data;
+            const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the first guiding question. Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the first one:`;
+
+            // GPT 요청에 사용할 조합된 프롬프트
+            const combinedPrompt = `${userPrompt}\n\nPrevious Response:\n${previousResponse}`;
+
+            // GPT API 호출
+            const gptResponse = await this.callGptApi(combinedPrompt);
+
+            // 결과를 웹뷰로 전송
+            webviewView.webview.postMessage({
+              command: "setData",
+              data: gptResponse,
+            });
+
+            // 로그 저장 (선택적)
+            const gptData = [{ role: "system", content: gptResponse }];
+            saveLogToGlobalState(this.context, gptData);
+          } catch (error) {
+            console.error("Error processing button1 click:", error);
+            vscode.window.showErrorMessage("Failed to process button1 click.");
+          }
+          break;
+
+        case "button2":
+          try {
+            const previousResponse = message.data;
+            const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the second guiding question. Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the second one:`;
+
+            const combinedPrompt = `${userPrompt}\n\nPrevious Response:\n${previousResponse}`;
+
+            const gptResponse = await this.callGptApi(combinedPrompt);
+
+            webviewView.webview.postMessage({
+              command: "setData",
+              data: gptResponse,
+            });
+
+            const gptData = [{ role: "system", content: gptResponse }];
+            saveLogToGlobalState(this.context, gptData);
+          } catch (error) {
+            console.error("Error processing button2 click:", error);
+            vscode.window.showErrorMessage("Failed to process button2 click.");
+          }
+          break;
+
+        case "button3":
+          try {
+            const previousResponse = message.data;
+            const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the third guiding question. Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the third one:`;
+
+            const combinedPrompt = `${userPrompt}\n\nPrevious Response:\n${previousResponse}`;
+
+            const gptResponse = await this.callGptApi(combinedPrompt);
+
+            webviewView.webview.postMessage({
+              command: "setData",
+              data: gptResponse,
+            });
+
+            const gptData = [{ role: "system", content: gptResponse }];
+            saveLogToGlobalState(this.context, gptData);
+          } catch (error) {
+            console.error("Error processing button3 click:", error);
+            vscode.window.showErrorMessage("Failed to process button3 click.");
+          }
+          break;
+        case "debug":
+          console.log(message.data);
       }
     });
   }
@@ -116,6 +188,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
              Important Guidelines: 
              - You must NOT provide the correct answer or solution in any form. 
              - Responses should strictly avoid a conversational tone and include only the specified two elements. 
+             - If user's input language is not an English, change output language into user's one.,
              - Provide a two-sentence summary instead of the first results of gpt. `,
       };
 

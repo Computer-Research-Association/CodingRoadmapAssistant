@@ -1,37 +1,26 @@
 document.getElementById("toggleNav").addEventListener("click", toggleNav);
 document.getElementById("addStep").addEventListener("click", addStep);
+document.getElementById("deleteStep").addEventListener("click", deleteStep);
 document.getElementById("submitButton").addEventListener("click", submitData);
 document.getElementById("resetButton").addEventListener("click", resetForm);
+document.getElementById("button1").addEventListener("click", () => buttonClick(1));
+document.getElementById("button2").addEventListener("click", () => buttonClick(2));
+document.getElementById("button3").addEventListener("click", () => buttonClick(3));
+const loadingContent = document.getElementById("loadingContent");
+const gptOutputContent = document.getElementById("gptOutputContent");
+const additionalBtn = document.getElementById("additionalBtn");
+const firstResponseContent = document.getElementById("firstResponseContent");
+const advancedResponseContent = document.getElementById("advancedResponseContent");
+const vscode = acquireVsCodeApi();
+let initialResponse = "";
+let submitCount = 0;
+let gptListenerAdded = false;
 
-const vscode = acquireVsCodeApi(); // webview.ts 와 정보 주고받기
-
-function toggleNav() {
-  const inputSection = document.getElementById("inputSection");
-  const outputSection = document.getElementById("outputSection");
-  const toggleNavButton = document.getElementById("toggleNav");
-
-  toggleNavButton.textContent = "";
-
-  if (inputSection.style.maxHeight === "0px") {
-    inputSection.style.maxHeight = "100vh";
-    inputSection.style.opacity = "1";
-    outputSection.style.height = "0";
-    outputSection.style.opacity = "0";
-  } else {
-    inputSection.style.maxHeight = "0";
-    inputSection.style.opacity = "0";
-    outputSection.style.height = "100%";
-    outputSection.style.opacity = "1";
-  }
-}
-
-function addStep() {
-  const stepContainer = document.getElementById("steps");
-  const stepCount = stepContainer.querySelectorAll(".step").length + 1;
-  const newStep = document.createElement("div");
-  newStep.classList.add("step", "mb-2");
-  newStep.innerHTML = `<input type="text" class="form-control stepInput" placeholder="Step ${stepCount}">`;
-  stepContainer.appendChild(newStep);
+function debug(message) {
+  vscode.postMessage({
+    command: "debug",
+    data: message,
+  });
 }
 
 function submitData() {
@@ -58,6 +47,7 @@ function submitData() {
   let dataToSend = "problem definition: " + problemInput + ", steps: "; // save data to send to Chat-GPT
 
   let userInputStepIndex = 1;
+  userOutputStepBtn.innerHTML = "";
   steps.forEach((userInputStep) => {
     userOutputStepBtn.innerHTML += `<li>${userInputStep}</li>`;
     dataToSend += userInputStepIndex + ". " + userInputStep + " ";
@@ -65,47 +55,70 @@ function submitData() {
   });
   delete userInputStepIndex; //reset userInputStepIndex number
 
-  sendData(dataToSend); // send data into webview.ts
+  submitCount++;
 
-  showGptResult(); // get gpt's response and show chat-GPT's result to html.
+  if (submitCount > 1) {
+    clearContent();
+  }
+
+  sendData(dataToSend);
+  showGptResult();
 
   toggleNav();
-}
 
-// send data into webview.ts
-function sendData(data) {
-  vscode.postMessage({
-    command: "process",
-    value: data,
-  });
+  additionalBtn.style.display = "block";
 }
 
 // get gpt's response and show chat-GPT's result to html.
 function showGptResult() {
-  window.addEventListener("message", (event) => {
-    const message = event.data; // get gpt's response
+  if (!gptListenerAdded) {
+    window.addEventListener("message", (event) => {
+      const message = event.data; // get gpt's response
+      if (message.command === "setData") {
+        const gptOutputContent = document.getElementById("gptOutputContent");
 
-    if (message.command === "setData") {
-      const gptOutputContent = document.getElementById("gptOutputContent");
+        if (gptOutputContent) {
+          loadingContent.classList.add("invisible");
+          gptResponse = message.data;
 
-      if (gptOutputContent) {
-        gptOutputContent.innerHTML = `<h3>GPT Response:</h3><p>${marked.parse(message.data)}</p>`; // show chat-GPT's result to html.
+          // If it's the first response, store it and show it along with the user's prompt
+          if (initialResponse === "") {
+            initialResponse = gptResponse;
 
-        const additionalBtn = document.getElementById("additionalBtn");
-        if (additionalBtn) {
+            gptOutputContent.classList.remove("invisible");
+            firstResponseContent.classList.remove("invisible");
+            firstResponseContent.innerHTML += `<h3>GPT's Response</h3><p>${marked.parse(initialResponse)}</p>`;
+          } else {
+            // If it's not the first response, show it above the previous response
+
+            advancedResponseContent.innerHTML = "";
+            advancedResponseContent.classList.remove("invisible");
+            advancedResponseContent.innerHTML += `<h3 class="advancedResponse">Advanced questions</h3><p>${marked.parse(gptResponse)}</p>`;
+          }
+
+          // Display the buttons again below the responses
+          const additionalBtn = document.getElementById("additionalBtn");
+
           additionalBtn.classList.remove("invisible");
+          additionalBtn.style.display = "block";
         }
       } else {
-        alert("No response from Chat-GPT.");
+        console.log("message command is not a setData.");
       }
-    }
-  });
+    });
+    gptListenerAdded = true;
+  } else {
+    console.log("gptListenerAdded is already true");
+  }
 }
 
 function resetForm() {
   const inputSection = document.getElementById("inputSection");
+  const additionalBtn = document.getElementById("additionalBtn");
+
+  // Ensure input section is visible
   if (inputSection.style.maxHeight === "0px") {
-    toggleNav(); // Ensure input section is visible
+    toggleNav();
   }
 
   // Clear problem input
@@ -126,14 +139,81 @@ function resetForm() {
   document.getElementById("userOutputStepBtn").innerHTML = "";
 
   // Reset GPT output content
-  const gptOutputContent = document.getElementById("gptOutputContent");
-  if (gptOutputContent) {
-    gptOutputContent.innerHTML = "";
-  }
+  document.getElementById("firstResponseContent").innerHTML = "";
+  document.getElementById("advancedResponseContent").innerHTML = "";
 
   // Hide additional buttons
-  const additionalBtn = document.getElementById("additionalBtn");
   if (additionalBtn) {
+    additionalBtn.classList.add("invisible");
     additionalBtn.style.display = "none";
   }
+
+  // Reset stored responses
+  initialResponse = "";
+  gptResponse = "";
+}
+
+function sendData(data) {
+  loadingContent.classList.remove("invisible");
+  additionalBtn.classList.add("invisible");
+  gptOutputContent.classList.add("invisible");
+
+  vscode.postMessage({
+    command: "process",
+    value: data,
+  });
+}
+
+function addStep() {
+  const stepContainer = document.getElementById("steps");
+  const stepCount = stepContainer.querySelectorAll(".step").length + 1;
+  const newStep = document.createElement("div");
+  newStep.classList.add("step", "mb-2");
+  newStep.innerHTML = `<input type="text" class="form-control stepInput" placeholder="Step ${stepCount}">`;
+  stepContainer.appendChild(newStep);
+}
+
+function deleteStep() {
+  const stepContainer = document.getElementById("steps");
+  const stepCount = stepContainer.querySelectorAll(".step").length;
+
+  if (stepCount > 1) {
+    stepContainer.removeChild(stepContainer.lastChild);
+  }
+}
+
+function toggleNav() {
+  const inputSection = document.getElementById("inputSection");
+  const outputSection = document.getElementById("outputSection");
+  const toggleNavButton = document.getElementById("toggleNav");
+
+  toggleNavButton.textContent = "";
+
+  if (inputSection.style.maxHeight === "0px") {
+    inputSection.style.maxHeight = "100vh";
+    inputSection.style.opacity = "1";
+    outputSection.style.height = "0";
+    outputSection.style.opacity = "0";
+  } else {
+    inputSection.style.maxHeight = "0";
+    inputSection.style.opacity = "0";
+    outputSection.style.height = "100%";
+    outputSection.style.opacity = "1";
+  }
+}
+
+function clearContent() {
+  firstResponseContent.innerHTML = "";
+  advancedResponseContent.innerHTML = "";
+  initialResponse = "";
+  gptResponse = "";
+}
+
+function buttonClick(buttonNumber) {
+  loadingContent.classList.remove("invisible");
+
+  vscode.postMessage({
+    command: `button${buttonNumber}`,
+    data: initialResponse,
+  });
 }
