@@ -3,9 +3,9 @@ document.getElementById("addStep").addEventListener("click", addStep);
 document.getElementById("deleteStep").addEventListener("click", deleteStep);
 document.getElementById("submitButton").addEventListener("click", submitData);
 document.getElementById("resetButton").addEventListener("click", resetForm);
-document.getElementById("button1").addEventListener("click", () => buttonClick(1));
-document.getElementById("button2").addEventListener("click", () => buttonClick(2));
-document.getElementById("button3").addEventListener("click", () => buttonClick(3));
+document.getElementById("button1").addEventListener("click", () => sendBtnData(1));
+document.getElementById("button2").addEventListener("click", () => sendBtnData(2));
+document.getElementById("button3").addEventListener("click", () => sendBtnData(3));
 const loadingContent = document.getElementById("loadingContent");
 const gptOutputContent = document.getElementById("gptOutputContent");
 const additionalBtn = document.getElementById("additionalBtn");
@@ -163,6 +163,15 @@ function sendData(data) {
     value: data,
   });
 }
+function sendBtnData(buttonNumber) {
+  loadingContent.classList.remove("invisible");
+
+  vscode.postMessage({
+    command: "button",
+    data: initialResponse,
+    number: buttonNumber,
+  });
+}
 
 function addStep() {
   const stepContainer = document.getElementById("steps");
@@ -207,13 +216,4 @@ function clearContent() {
   advancedResponseContent.innerHTML = "";
   initialResponse = "";
   gptResponse = "";
-}
-
-function buttonClick(buttonNumber) {
-  loadingContent.classList.remove("invisible");
-
-  vscode.postMessage({
-    command: `button${buttonNumber}`,
-    data: initialResponse,
-  });
 }
