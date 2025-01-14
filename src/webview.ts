@@ -3,6 +3,7 @@ import * as path from "path";
 import * as fs from "fs";
 import OpenAI from "openai";
 import { showApiKeyError, saveLogToGlobalState, pickOpenedDocument } from "./craConfigManager";
+import { getUri, getNonce } from "./utilities";
 
 export default class CRAWebviewViewProvider implements vscode.WebviewViewProvider {
   private apiKey?: string;
@@ -23,39 +24,37 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     webviewView.webview.options = {
       enableScripts: true, // 자바스크립트 활성화
       localResourceRoots: [
-        vscode.Uri.joinPath(this.context.extensionUri, "media"), // media 폴더를 로컬 리소스로 설정
+        vscode.Uri.joinPath(this.context.extensionUri, "out"),
+        vscode.Uri.joinPath(this.context.extensionUri, "webview-ui/build"),
       ],
     };
 
-    // HTML 파일 읽기
-    const styleUri = webviewView.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.context.extensionUri, "media", "style.css")
-    );
-    const htmlPath = path.join(this.context.extensionPath, "media", "webview.html");
-    let htmlContent = fs.readFileSync(htmlPath, "utf-8");
+    // // HTML 파일 읽기
+    // const styleUri = webviewView.webview.asWebviewUri(
+    //   vscode.Uri.joinPath(this.context.extensionUri, "media", "style.css")
+    // );
+    // const htmlPath = path.join(this.context.extensionPath, "media", "webview.html");
+    // let htmlContent = fs.readFileSync(htmlPath, "utf-8");
 
-    htmlContent = htmlContent.replace("</head>", `<link rel="stylesheet" href="${styleUri}"></head>`);
+    // htmlContent = htmlContent.replace("</head>", `<link rel="stylesheet" href="${styleUri}"></head>`);
 
-    //웹뷰 HTML 내에서 자바스크립트 파일 경로를 로컬 URI로 변환하여 사용
-    const scriptUri = webviewView.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.context.extensionUri, "media", "webviewscript.js")
-    );
+    // //웹뷰 HTML 내에서 자바스크립트 파일 경로를 로컬 URI로 변환하여 사용
+    // const scriptUri = webviewView.webview.asWebviewUri(
+    //   vscode.Uri.joinPath(this.context.extensionUri, "media", "webviewscript.js")
+    // );
 
-    //HTML 내용에서 script 태그를 삽입할 부분
-    htmlContent = htmlContent.replace(
-      /<script src="webviewscript.js"><\/script>/,
-      `<script src="${scriptUri}"></script>`
-    );
+    // //HTML 내용에서 script 태그를 삽입할 부분
+    // htmlContent = htmlContent.replace(
+    //   /<script src="webviewscript.js"><\/script>/,
+    //   `<script src="${scriptUri}"></script>`
+    // );
 
     //웹뷰 HTML 설정
-    webviewView.webview.html = htmlContent;
+    webviewView.webview.html = this._getWebviewContent(webviewView.webview, this.context.extensionUri);
 
-    // webviewscript.js 에서 데이터를 받는 핸들러 설정
     webviewView.webview.onDidReceiveMessage(async (message) => {
-      // send request to OpenAI
       switch (message.command) {
         case "process":
-          // 사용자 코드 추가
           let textDoc: vscode.TextDocument | null = null;
 
           while (textDoc === null) {
@@ -65,18 +64,14 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
               return;
             }
           }
-          // 문제정의+단계+전체 코드
-          const messageTosend = message + "User's Code: " + textDoc.getText();
+          const messageToSend = message + "User's Code: " + textDoc.getText();
 
-          //GPT API 호출
-          const gptResponse = await this.callGptApi(messageTosend);
-          //웹뷰로 결과 전달
+          const gptResponse = await this.callGptApi(messageToSend);
           webviewView.webview.postMessage({
             command: "setData",
             data: gptResponse,
           });
 
-          // save it's answer to the conversationLog
           const gptData = [
             {
               role: "system",
@@ -88,7 +83,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           break;
         case "button1":
           try {
-            // 사용자가 버튼 클릭 시 전달한 데이터 (기존 GPT 응답)
             const previousResponse = message.data;
             const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the first guiding question. Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the first one:`;
 
@@ -160,6 +154,29 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           console.log(message.data);
       }
     });
+  }
+
+  private _getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri) {
+    const stylesUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.css"]);
+    const scriptUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.js"]);
+    const nonce = getNonce();
+
+    return /*HTML*/ `
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
+          <link rel="stylesheet" type="text/css" href="${stylesUri}">
+          <title>VSCode React</title>
+        </head>
+        <body>
+          <div id="root"></div>
+          <script type="module" nonce="${nonce}" src="${scriptUri}"></script>
+        </body>
+      </html>
+    `;
   }
 
   // GPT API 호출 함수
