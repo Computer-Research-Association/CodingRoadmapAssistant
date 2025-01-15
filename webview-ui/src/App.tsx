@@ -2,6 +2,7 @@ import "./styles/App.css";
 // import { vscode } from "./utilities/vscode";
 import Header from "./components/Header";
 import ChatInput from "./components/ChatInput";
+import ChatContent from "./components/ChatContent";
 
 function App() {
   // function handleHowdyClick() {
@@ -14,7 +15,7 @@ function App() {
   return (
     <div id="chat">
       <Header />
-      <main className="chat-container"></main>
+      <ChatContent />
       <ChatInput />
     </div>
   );
