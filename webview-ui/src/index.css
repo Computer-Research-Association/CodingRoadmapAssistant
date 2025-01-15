@@ -35,7 +35,7 @@ body {
   justify-content: space-between;
 }
 
-.chat-container {
+#chat-container {
   display: flex;
   flex-direction: column;
   background-color: inherit;
@@ -44,5 +44,22 @@ body {
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.learnCRA {
+  display: flex;
+  height: 100%;
+  width: 100%;
   justify-content: center;
+  align-items: center;
 }
