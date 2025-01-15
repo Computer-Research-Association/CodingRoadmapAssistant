@@ -20,11 +20,14 @@
 }
 
 .chat-input {
+  min-height: 18px;
+  height: auto;
   box-sizing: content-box;
   flex: 1;
   border: none;
   overflow: auto;
   padding: 8px;
+  scrollbar-width: none;
 }
 
 .chat-input:focus {
@@ -95,5 +98,20 @@
 }
 
 .chat-input-options {
-  margin: 4px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+}
+
+.input-state-indicator {
+  color: var(--vscode-input-placeholderForeground);
+  border: 2px solid var(--vscode-input-placeholderForeground);
+  padding: 2px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+#chatWithCodebase {
+  color: var(--vscode-input-placeholderForeground);
 }
