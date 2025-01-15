@@ -1,6 +1,45 @@
 .header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   height: 30px;
+  padding: 10px 20px;
+  position: relative; /* Required for positioning hover effects correctly */
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.icon {
+  display: flex;
+  gap: 10px;
+}
+
+.icon-clear,
+.icon-history {
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  position: relative; /* Ensures ::before is positioned relative to the icon */
+}
+
+.icon-clear:hover::before,
+.icon-history:hover::before {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 20%;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.icon-clear:hover::before,
+.icon-history:hover::before {
+  opacity: 1; /* Visible on hover */
 }
