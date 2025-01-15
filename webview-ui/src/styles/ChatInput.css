@@ -1,0 +1,117 @@
+* {
+  box-sizing: border-box;
+}
+
+.chat-input-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: inherit;
+  padding: 8px;
+  color: var(--vscode-input-foreground);
+}
+
+.chat-input-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: var(--vscode-input-background);
+  position: relative;
+  border-radius: 4px;
+}
+
+.chat-input {
+  min-height: 18px;
+  height: auto;
+  box-sizing: content-box;
+  flex: 1;
+  border: none;
+  overflow: auto;
+  padding: 8px;
+  scrollbar-width: none;
+}
+
+.chat-input:focus {
+  outline: none;
+}
+
+.chat-input:empty::before {
+  content: attr(data-placeholder);
+  color: var(--vscode-input-placeholderForeground);
+}
+
+.chat-input-button {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+  color: inherit;
+  background-color: inherit;
+  border: none;
+  color: var(--vscode-input-placeholderForeground);
+}
+
+.chat-input-button .tooltip {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 4px;
+  font-size: 12px;
+  opacity: 0;
+  white-space: nowrap;
+}
+
+.chat-input-button:hover {
+  color: var(--vscode-button-foreground);
+}
+
+.chat-input-button:hover .tooltip {
+  color: var(--vscode-input-placeholderForeground);
+  left: -125%;
+  opacity: 1;
+}
+
+.chat-input-button .icon {
+  z-index: 10;
+  opacity: 0.7;
+}
+
+.chat-input-button .background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0.5;
+  border-radius: 50%;
+}
+
+.chat-input-button:hover .background {
+  opacity: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.chat-input-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+}
+
+.input-state-indicator {
+  color: var(--vscode-input-placeholderForeground);
+  border: 2px solid var(--vscode-input-placeholderForeground);
+  padding: 2px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+#chatWithCodebase {
+  color: var(--vscode-input-placeholderForeground);
+}
