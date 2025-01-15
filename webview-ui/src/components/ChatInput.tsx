@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
+import "../styles/ChatInput.css";
 
 function ChatInput() {
+  // const [message, setMessage] = useState([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputHeight, setInputHeight] = useState("18px");
 
@@ -15,12 +17,24 @@ function ChatInput() {
 
   return (
     <div className="chat-input-container">
-      <div
-        className="chat-input"
-        ref={inputRef}
-        contentEditable="true"
-        onInput={handleInputResize}
-        style={{ height: inputHeight }}></div>
+      <div className="chat-input-wrapper">
+        <div
+          className="chat-input"
+          ref={inputRef}
+          contentEditable="true"
+          onInput={handleInputResize}
+          style={{ height: inputHeight }}
+          data-placeholder="Type your message here..."></div>
+
+        <button className="chat-input-button">
+          <div className="tooltip">Send</div>
+          <span className="icon">⏎</span>
+          <div className="background"></div>
+        </button>
+      </div>
+      <div className="chat-input-options">
+        <div className="input-state-indicator">{"Definition"}</div>
+      </div>
     </div>
   );
 }
