@@ -28,6 +28,7 @@
 
 .icon-clear:hover::before,
 .icon-history:hover::before {
+  content: ""; /* 렌더링 위해 필수.  */
   position: absolute;
   top: -5px;
   left: -5px;
