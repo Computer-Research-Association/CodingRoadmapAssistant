@@ -12,12 +12,11 @@ function App() {
   // }
 
   return (
-    <>
+    <div id="chat">
       <Header />
-      <div className="chat-container">
-        <ChatInput />
-      </div>
-    </>
+      <main className="chat-container"></main>
+      <ChatInput />
+    </div>
   );
 }
 
