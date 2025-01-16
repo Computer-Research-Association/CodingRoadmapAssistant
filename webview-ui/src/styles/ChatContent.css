@@ -1,14 +1,24 @@
 .message-box {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   padding: 6px;
   margin-bottom: 10px;
   border-radius: 4px;
-  border: 1px solid #e1e1e1;
+  border: 0.5px solid #e1e1e1;
   align-items: flex-start;
   text-align: left;
   width: 100%;
   flex-grow: 1;
+}
+
+.message-text {
+  flex-grow: 1;
+}
+
+.message-icon {
+  display: flex;
+  gap: 4px;
+  text-align: right;
 }
 
 .message-type {

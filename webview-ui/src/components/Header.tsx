@@ -1,6 +1,6 @@
 import "../styles/Header.css";
 import { AiOutlineClear } from "react-icons/ai";
-import { RiHistoryFill } from "react-icons/ri";
+import { VscHistory } from "react-icons/vsc";
 
 function Header() {
   return (
@@ -12,7 +12,7 @@ function Header() {
             <AiOutlineClear />
           </div>
           <div className="icon-history">
-            <RiHistoryFill />
+            <VscHistory />
           </div>
         </div>
       </div>
