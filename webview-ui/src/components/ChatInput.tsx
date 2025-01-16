@@ -9,7 +9,7 @@ function ChatInput() {
   const { messages, addMessage } = useMessagesStore();
   const inputType = messages.length > 0 ? "Step" : "Definition";
 
-  const handleInputResize = () => {
+  const resizeInput = () => {
     const input = inputRef.current;
     if (input !== null) {
       input.style.height = "18px";
