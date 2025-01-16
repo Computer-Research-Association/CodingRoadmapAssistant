@@ -18,6 +18,13 @@ function ChatInput() {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    resizeInput();
+    if (e.key === "Enter") {
+      console.log("Enter key pressed");
+    }
+  };
+
   const handleSendMessage = () => {
     const input = inputRef.current;
     if (input !== null) {
@@ -37,7 +44,7 @@ function ChatInput() {
           className="chat-input"
           ref={inputRef}
           contentEditable="true"
-          onInput={handleInputResize}
+          onKeyDown={handleKeyDown}
           style={{ height: inputHeight }}
           data-placeholder="Type your message here..."></div>
 
