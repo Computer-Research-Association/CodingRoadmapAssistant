@@ -5,6 +5,7 @@
   height: 30px;
   padding: 10px 20px;
   position: relative; /* Required for positioning hover effects correctly */
+  margin: 2%;
 }
 
 .title {
