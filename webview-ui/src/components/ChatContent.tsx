@@ -4,7 +4,7 @@ import { VscTrash } from "react-icons/vsc";
 import { VscEdit } from "react-icons/vsc";
 
 function ChatContent() {
-  const { messages } = useMessagesStore();
+  const { messages, deleteMessage } = useMessagesStore();
 
   return (
     <main id="chat-container">
@@ -17,8 +17,12 @@ function ChatContent() {
                 <div className="message-content">{message.content}</div>
               </div>
               <div className="message-icon">
-                <VscTrash />
-                <VscEdit />
+                <div className="message-icon-trash" onClick={() => deleteMessage(index)}>
+                  <VscTrash />
+                </div>
+                <div className="message-icon-edit">
+                  <VscEdit />
+                </div>
               </div>
             </div>
           ))}
