@@ -8,4 +8,5 @@ export interface MessagesState {
   addMessage: (message: Message) => void;
   clearMessages: () => void;
   deleteMessage: (index: number) => void;
+  updateMessage: (index: number, newMessage: string) => void;
 }
