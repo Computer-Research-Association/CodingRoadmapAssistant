@@ -11,7 +11,7 @@ function ChatInput() {
 
   const resizeInput = () => {
     const input = inputRef.current;
-    if (input !== null) {
+    if (input) {
       input.style.height = "18px";
       const height = input.scrollHeight + "px";
       setInputHeight(height);
