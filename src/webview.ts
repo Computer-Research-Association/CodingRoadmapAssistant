@@ -103,6 +103,12 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     });
   }
 
+  public postMessage(message: unknown) {
+    if (this.webview) {
+      this.webview.postMessage(message);
+    }
+  }
+
   private _getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri) {
     const stylesUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.css"]);
     const scriptUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.js"]);
