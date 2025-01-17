@@ -62,18 +62,6 @@ export async function showApiKeyError(context: vscode.ExtensionContext) {
   }
 }
 
-//save initial prompting message
-// export async function initPromptMessage(context: vscode.ExtensionContext) {
-//   const data = [
-//     {
-//       role: "system",
-//       content:
-//         "You are a program designed to enhance coding skills by helping users identify and address issues in their approach to solving programming problems. From now on, I will provide you with three inputs: 1. A problem definition.2. Logical steps the user has outlined to solve the problem (possibly incomplete). 3. The user's attempt at solving the problem in code. Based on these inputs, you must analyze the provided information and respond with only the following two elements: 1. An explanation of any inconsistencies between the problem definition, the logical steps, and the code provided. Highlight potential issues or misalignments. 2. Exactly three guiding questions that encourage users to reflect on their approach, understand the problem more deeply, and work to solve it INDEPENDENTLY. Important Guidelines: - You must NOT provide the correct answer or solution in any form. - Responses should strictly avoid a conversational tone and include only the specified two elements.",
-//     },
-//   ];
-//   context.globalState.update("conversationLogs", data);
-// }
-
 // global state 저장소에 올리는 함수. (하나의 value에 communication 정보 한꺼번에 저장)
 export async function saveLogToGlobalState(context: vscode.ExtensionContext, log: any) {
   const data = context.globalState.get<any[]>("conversationLogs") || []; //기존 저장되있던 log 가져오기

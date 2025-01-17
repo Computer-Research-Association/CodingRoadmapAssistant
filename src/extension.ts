@@ -13,7 +13,7 @@ export async function activate(context: vscode.ExtensionContext) {
   const CRAViewProvider = new CRAWebviewViewProvider(context);
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("document.selectDocu", async () => {
+    vscode.commands.registerCommand("document.selectDocument", async () => {
       await pickOpenedDocument(context);
     }),
     vscode.commands.registerCommand("openAI.setAPIKey", async () => {
@@ -25,6 +25,17 @@ export async function activate(context: vscode.ExtensionContext) {
       webviewOptions: { retainContextWhenHidden: true }, //webview 닫아도 요소 유지
     })
   );
+
+  vscode.window.onDidChangeActiveTextEditor((editor) => {
+    if (editor && CRAViewProvider.getWebview()) {
+      const { document } = editor;
+      const message = {
+        command: "activateDocument",
+        data: document.fileName,
+      };
+      CRAViewProvider.postMessage(message);
+    }
+  });
 }
 
 export function deactivate() {}

@@ -9,6 +9,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
   private apiKey?: string;
   private context: vscode.ExtensionContext;
   private openai?: OpenAI;
+  private webview?: vscode.Webview;
 
   constructor(context: vscode.ExtensionContext) {
     this.context = context;
@@ -20,6 +21,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     _context: vscode.WebviewViewResolveContext,
     _token: vscode.CancellationToken
   ) {
+    this.webview = webviewView.webview;
     // 웹뷰의 옵션에 localResourceRoots를 설정
     webviewView.webview.options = {
       enableScripts: true, // 자바스크립트 활성화
@@ -28,26 +30,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
         vscode.Uri.joinPath(this.context.extensionUri, "webview-ui/build"),
       ],
     };
-
-    // // HTML 파일 읽기
-    // const styleUri = webviewView.webview.asWebviewUri(
-    //   vscode.Uri.joinPath(this.context.extensionUri, "media", "style.css")
-    // );
-    // const htmlPath = path.join(this.context.extensionPath, "media", "webview.html");
-    // let htmlContent = fs.readFileSync(htmlPath, "utf-8");
-
-    // htmlContent = htmlContent.replace("</head>", `<link rel="stylesheet" href="${styleUri}"></head>`);
-
-    // //웹뷰 HTML 내에서 자바스크립트 파일 경로를 로컬 URI로 변환하여 사용
-    // const scriptUri = webviewView.webview.asWebviewUri(
-    //   vscode.Uri.joinPath(this.context.extensionUri, "media", "webviewscript.js")
-    // );
-
-    // //HTML 내용에서 script 태그를 삽입할 부분
-    // htmlContent = htmlContent.replace(
-    //   /<script src="webviewscript.js"><\/script>/,
-    //   `<script src="${scriptUri}"></script>`
-    // );
 
     //웹뷰 HTML 설정
     webviewView.webview.html = this._getWebviewContent(webviewView.webview, this.context.extensionUri);
@@ -119,6 +101,12 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           console.log(message.data);
       }
     });
+  }
+
+  public postMessage(message: unknown) {
+    if (this.webview) {
+      this.webview.postMessage(message);
+    }
   }
 
   private _getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri) {
@@ -219,5 +207,9 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
     //OpenAI 객체 생성
     this.setOpenaiWithApiKey(this.apiKey);
+  }
+
+  public getWebview() {
+    return this.webview;
   }
 }
