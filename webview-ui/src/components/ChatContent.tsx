@@ -26,6 +26,7 @@ function ChatContent() {
   const handleContentChange = (e: React.ChangeEvent<HTMLDivElement>) => {
     //contentEditable 에서 text 변경 감지 시, content update
     setEditedContent(e.target.innerText);
+    console.log(messages);
   };
 
   const handleBlur = (index: number) => {
@@ -50,7 +51,7 @@ function ChatContent() {
                     className="message-content"
                     contentEditable={true}
                     onBlur={() => handleBlur(index)} // 메시지 업데이트
-                    onInput={handleContentChange}>
+                    onChange={handleContentChange}>
                     {editedContent}
                   </div>
                 ) : (
