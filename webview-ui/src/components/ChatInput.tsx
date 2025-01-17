@@ -24,6 +24,18 @@ function ChatInput() {
     };
   }, []);
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      if (!e.shiftKey && !e.metaKey) {
+        e.preventDefault();
+        handleSendMessage();
+      }
+      if (e.metaKey && !e.shiftKey) {
+        console.log(messages);
+      }
+    }
+  };
+
   const handleSendMessage = () => {
     const input = inputRef.current;
     if (input !== null) {
@@ -32,7 +44,7 @@ function ChatInput() {
         content: input.innerText || "",
       };
       addMessage(message);
-      input.textContent = "";
+      input.innerText = "";
     }
   };
 
@@ -49,6 +61,7 @@ function ChatInput() {
           className="chat-input"
           ref={inputRef}
           contentEditable="true"
+          onKeyDown={handleKeyDown}
           data-placeholder="Type your message here..."></div>
 
         <button className="chat-input-button" onClick={handleSendMessage}>
