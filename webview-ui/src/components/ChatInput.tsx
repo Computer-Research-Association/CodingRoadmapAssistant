@@ -29,7 +29,7 @@ function ChatInput() {
     if (input !== null) {
       const message: Message = {
         type: inputType,
-        content: input.textContent || "",
+        content: input.innerText || "",
       };
       addMessage(message);
       input.textContent = "";
