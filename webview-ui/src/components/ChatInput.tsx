@@ -5,7 +5,6 @@ import { Message } from "../types/messageStoreTypes";
 
 function ChatInput() {
   const inputRef = useRef<HTMLInputElement>(null);
-  // const [inputHeight, setInputHeight] = useState("");
   const { messages, addMessage } = useMessagesStore();
   const inputType = messages.length > 0 ? "Step" : "Definition";
 
