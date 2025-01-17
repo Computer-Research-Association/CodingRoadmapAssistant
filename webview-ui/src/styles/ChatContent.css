@@ -65,3 +65,7 @@
 .message-icon-edit:hover::before {
   opacity: 1; /* Visible on hover */
 }
+
+.messages-container {
+  padding: 8px;
+}
