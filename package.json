@@ -44,7 +44,7 @@
       "activitybar": [
         {
           "id": "craActivitybar",
-          "title": "CRA activitybar",
+          "title": "Coding Roadmap Assistant",
           "icon": "media/icons.svg"
         }
       ]
@@ -53,7 +53,7 @@
       "craActivitybar": [
         {
           "id": "craView",
-          "name": "CRA View",
+          "name": "",
           "type": "webview"
         }
       ]
