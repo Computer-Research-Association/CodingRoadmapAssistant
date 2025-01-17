@@ -21,7 +21,7 @@
 
 .chat-input {
   min-height: 18px;
-  height: auto;
+  height: min-content;
   box-sizing: content-box;
   flex: 1;
   border: none;
