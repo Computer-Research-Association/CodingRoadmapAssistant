@@ -7,8 +7,26 @@
   display: flex;
   flex-direction: column;
   background-color: inherit;
-  padding: 8px;
+  padding: 0 8px;
   color: var(--vscode-input-foreground);
+}
+
+.chat-input-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+
+  color: var(--vscode-input-placeholderForeground);
+}
+
+.input-document-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  border: 1px solid var(--vscode-input-placeholderForeground);
+  border-radius: 4px;
 }
 
 .chat-input-wrapper {
@@ -106,8 +124,8 @@
 
 .input-state-indicator {
   color: var(--vscode-input-placeholderForeground);
-  border: 2px solid var(--vscode-input-placeholderForeground);
-  padding: 2px;
+  border: 1px solid var(--vscode-input-placeholderForeground);
+  padding: 2px 4px;
   border-radius: 4px;
   text-align: center;
 }
