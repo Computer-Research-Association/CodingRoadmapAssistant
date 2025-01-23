@@ -8,21 +8,6 @@ function ChatInput() {
   const inputRef = useRef<HTMLInputElement>(null);
   const { messages, addMessage } = useMessagesStore();
   const inputType = messages.length > 0 ? "Step" : "Definition";
-  const [activatedDocument, setActivatedDocument] = useState<string>("");
-
-  useEffect(() => {
-    const handleMessage = (e: MessageEvent) => {
-      const { command, data } = e.data;
-      if (command === "activateDocument") {
-        setActivatedDocument(data);
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-    return () => {
-      window.removeEventListener("message", handleMessage);
-    };
-  }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
@@ -50,12 +35,7 @@ function ChatInput() {
 
   return (
     <div className="chat-input-container">
-      <div className="chat-input-info">
-        <div className="input-document-indicator">
-          <VscFile />
-          {activatedDocument ? activatedDocument.split("/").pop() : "No file selected"}
-        </div>
-      </div>
+      <ChatInputInfo />
       <div className="chat-input-wrapper">
         <div
           className="chat-input"
@@ -79,3 +59,30 @@ function ChatInput() {
 }
 
 export default ChatInput;
+
+function ChatInputInfo() {
+  const [activatedDocument, setActivatedDocument] = useState<string>("");
+
+  useEffect(() => {
+    const handleMessage = (e: MessageEvent) => {
+      const { command, data } = e.data;
+      if (command === "activateDocument") {
+        setActivatedDocument(data);
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
+
+  return (
+    <div className="chat-input-info">
+      <div className="input-document-indicator">
+        <VscFile />
+        {activatedDocument ? activatedDocument.split("/").pop() : "No file selected"}
+      </div>
+    </div>
+  );
+}
