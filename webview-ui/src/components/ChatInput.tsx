@@ -3,6 +3,7 @@ import "../styles/ChatInput.css";
 import useMessagesStore from "../stores/messagesStore";
 import { Message } from "../types/messageStoreTypes";
 import { VscFile } from "react-icons/vsc";
+import getOs from "../utilities/getOs";
 
 function ChatInput() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -10,12 +11,18 @@ function ChatInput() {
   const inputType = messages.length > 0 ? "Step" : "Definition";
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    const os = getOs();
+    const isSendMessageShortcut =
+      (os === "mac" && !e.metaKey && !e.shiftKey) || (os !== "mac" && !e.ctrlKey && !e.shiftKey);
+
+    const isLogMessagesShortcut =
+      (os === "mac" && e.metaKey && !e.shiftKey) || (os !== "mac" && e.ctrlKey && !e.shiftKey);
+
     if (e.key === "Enter") {
-      if (!e.shiftKey && !e.metaKey) {
+      if (isSendMessageShortcut) {
         e.preventDefault();
         handleSendMessage();
-      }
-      if (e.metaKey && !e.shiftKey) {
+      } else if (isLogMessagesShortcut) {
         console.log(messages);
       }
     }
