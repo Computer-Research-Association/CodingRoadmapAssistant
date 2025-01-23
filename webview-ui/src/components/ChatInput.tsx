@@ -34,6 +34,7 @@ function ChatInput() {
       const message: Message = {
         type: inputType,
         content: input.innerText || "",
+        editable: true,
       };
       addMessage(message);
       input.innerText = "";

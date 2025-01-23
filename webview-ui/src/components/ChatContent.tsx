@@ -43,7 +43,7 @@ function MessageBox({
         <div className="message-type">{index === 0 ? message.type : `${message.type} ${index}`}</div>
         <div
           className="message-content"
-          contentEditable={true}
+          contentEditable={message.editable}
           onBlur={(e) => handleBlur(e, index)} // input 입력받고, focus out 시 값 update
         >
           {message.content}
