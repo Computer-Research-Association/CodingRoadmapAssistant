@@ -56,10 +56,12 @@ function MessageBox({
 }) {
   const { deleteMessage } = useMessagesStore();
 
+  const messageType = index === 0 ? message.type : message.type === "result" ? "result" : `${message.type} ${index}`;
+
   return (
     <div className="message-box">
       <div className="message-text">
-        <div className="message-type">{index === 0 ? message.type : `${message.type} ${index}`}</div>
+        <div className="message-type">{messageType}</div>
         <div
           className="message-content"
           contentEditable={message.editable}
