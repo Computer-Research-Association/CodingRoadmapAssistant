@@ -1,11 +1,30 @@
 import useMessagesStore from "../stores/messagesStore";
 import "../styles/ChatContent.css";
 import { VscTrash } from "react-icons/vsc";
-import React from "react";
+import React, { useEffect } from "react";
 import { Message } from "../types/messageStoreTypes";
 
 function ChatContent() {
-  const { messages, updateMessage } = useMessagesStore();
+  const { messages, updateMessage, addMessage } = useMessagesStore();
+
+  useEffect(() => {
+    const handleGetGPTResponse = (e: MessageEvent) => {
+      const { command, data } = e.data;
+      if (command === "setGptResponse") {
+        const gptResponseMessage: Message = {
+          type: "result",
+          content: data,
+          editable: false,
+        };
+        addMessage(gptResponseMessage);
+      }
+    };
+
+    window.addEventListener("message", handleGetGPTResponse);
+    return () => {
+      window.removeEventListener("message", handleGetGPTResponse);
+    };
+  }, [addMessage]);
 
   const handleBlur = (e: React.ChangeEvent<HTMLDivElement>, index: number) => {
     updateMessage(index, e.target.innerText);
@@ -37,13 +56,15 @@ function MessageBox({
 }) {
   const { deleteMessage } = useMessagesStore();
 
+  const messageType = index === 0 ? message.type : message.type === "result" ? "result" : `${message.type} ${index}`;
+
   return (
     <div className="message-box">
       <div className="message-text">
-        <div className="message-type">{index === 0 ? message.type : `${message.type} ${index}`}</div>
+        <div className="message-type">{messageType}</div>
         <div
           className="message-content"
-          contentEditable={true}
+          contentEditable={message.editable}
           onBlur={(e) => handleBlur(e, index)} // input 입력받고, focus out 시 값 update
         >
           {message.content}

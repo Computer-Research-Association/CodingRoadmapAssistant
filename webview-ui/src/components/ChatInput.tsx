@@ -3,35 +3,29 @@ import "../styles/ChatInput.css";
 import useMessagesStore from "../stores/messagesStore";
 import { Message } from "../types/messageStoreTypes";
 import { VscFile } from "react-icons/vsc";
+import getOs from "../utilities/getOs";
+import { openai, combineMessages } from "../utilities/openai";
 
 function ChatInput() {
   const inputRef = useRef<HTMLInputElement>(null);
   const { messages, addMessage } = useMessagesStore();
   const inputType = messages.length > 0 ? "Step" : "Definition";
-  const [activatedDocument, setActivatedDocument] = useState<string>("");
-
-  useEffect(() => {
-    const handleMessage = (e: MessageEvent) => {
-      const { command, data } = e.data;
-      if (command === "activateDocument") {
-        setActivatedDocument(data);
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-    return () => {
-      window.removeEventListener("message", handleMessage);
-    };
-  }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    const os = getOs();
+    const isSendMessageShortcut =
+      (os === "mac" && !e.metaKey && !e.shiftKey) || (os !== "mac" && !e.ctrlKey && !e.shiftKey);
+
+    const isLogMessagesShortcut =
+      (os === "mac" && e.metaKey && !e.shiftKey) || (os !== "mac" && e.ctrlKey && !e.shiftKey);
+
     if (e.key === "Enter") {
-      if (!e.shiftKey && !e.metaKey) {
+      if (isSendMessageShortcut) {
         e.preventDefault();
         handleSendMessage();
-      }
-      if (e.metaKey && !e.shiftKey) {
-        console.log(messages);
+      } else if (isLogMessagesShortcut) {
+        e.preventDefault();
+        openai.sendMessage(combineMessages(messages));
       }
     }
   };
@@ -42,6 +36,7 @@ function ChatInput() {
       const message: Message = {
         type: inputType,
         content: input.innerText || "",
+        editable: true,
       };
       addMessage(message);
       input.innerText = "";
@@ -50,12 +45,7 @@ function ChatInput() {
 
   return (
     <div className="chat-input-container">
-      <div className="chat-input-info">
-        <div className="input-document-indicator">
-          <VscFile />
-          {activatedDocument ? activatedDocument.split("/").pop() : "No file selected"}
-        </div>
-      </div>
+      <ChatInputInfo />
       <div className="chat-input-wrapper">
         <div
           className="chat-input"
@@ -79,3 +69,30 @@ function ChatInput() {
 }
 
 export default ChatInput;
+
+function ChatInputInfo() {
+  const [activatedDocument, setActivatedDocument] = useState<string>("");
+
+  useEffect(() => {
+    const handleMessage = (e: MessageEvent) => {
+      const { command, data } = e.data;
+      if (command === "activateDocument") {
+        setActivatedDocument(data);
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
+
+  return (
+    <div className="chat-input-info">
+      <div className="input-document-indicator">
+        <VscFile />
+        {activatedDocument ? activatedDocument.split("/").pop() : "No file selected"}
+      </div>
+    </div>
+  );
+}
