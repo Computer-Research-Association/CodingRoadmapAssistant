@@ -26,6 +26,15 @@ export async function activate(context: vscode.ExtensionContext) {
     })
   );
 
+  // 초기 editor activated document 정보 전송
+  const editor = vscode.window.activeTextEditor;
+  setTimeout(() => {
+    CRAViewProvider.postMessage({
+      command: "activateDocument",
+      data: editor?.document.fileName,
+    });
+  }, 1000);
+
   vscode.window.onDidChangeActiveTextEditor((editor) => {
     if (editor && CRAViewProvider.getWebview()) {
       const { document } = editor;
