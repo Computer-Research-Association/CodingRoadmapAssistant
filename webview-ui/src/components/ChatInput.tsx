@@ -10,6 +10,7 @@ function ChatInput() {
   const inputRef = useRef<HTMLInputElement>(null);
   const { messages, addMessage } = useMessagesStore();
   const inputType = messages.length > 0 ? "Step" : "Definition";
+  const [isComposing, setIsComposing] = useState(false);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     const os = getOs();
@@ -20,6 +21,10 @@ function ChatInput() {
       (os === "mac" && e.metaKey && !e.shiftKey) || (os !== "mac" && e.ctrlKey && !e.shiftKey);
 
     if (e.key === "Enter") {
+      if (isComposing) {
+        return;
+      }
+
       if (isSendMessageShortcut) {
         e.preventDefault();
         handleSendMessage();
@@ -52,6 +57,8 @@ function ChatInput() {
           ref={inputRef}
           contentEditable="true"
           onKeyDown={handleKeyDown}
+          onCompositionStart={() => setIsComposing(true)}
+          onCompositionEnd={() => setIsComposing(false)}
           data-placeholder="Type your message here..."></div>
 
         <button className="chat-input-button" onClick={handleSendMessage}>
