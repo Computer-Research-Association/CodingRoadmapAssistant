@@ -48,6 +48,9 @@ function ChatInput() {
     }
   };
 
+  const definitionPlaceholderText = "Type your problem definition here...";
+  const stepPlaceholderText = "Type your steps here...";
+
   return (
     <div className="chat-input-container">
       <ChatInputInfo />
@@ -59,7 +62,7 @@ function ChatInput() {
           onKeyDown={handleKeyDown}
           onCompositionStart={() => setIsComposing(true)}
           onCompositionEnd={() => setIsComposing(false)}
-          data-placeholder="Type your message here..."></div>
+          data-placeholder={inputType === "Definition" ? definitionPlaceholderText : stepPlaceholderText}></div>
 
         <button className="chat-input-button" onClick={handleSendMessage}>
           <div className="tooltip">Send</div>
