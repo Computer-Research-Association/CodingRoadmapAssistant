@@ -6,7 +6,7 @@ import { Message } from "../types/messageStoreTypes";
 
 function ChatContent() {
   const { messages, updateMessage, addMessage } = useMessagesStore();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const handleGetGPTResponse = (e: MessageEvent) => {
@@ -19,6 +19,8 @@ function ChatContent() {
         };
         addMessage(gptResponseMessage);
         setLoading(false);
+      } else if (command === "setLoading") {
+        setLoading(data);
       }
     };
 

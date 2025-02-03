@@ -11,7 +11,6 @@ function ChatInput() {
   const { messages, addMessage } = useMessagesStore();
   const inputType = messages.length > 0 ? "Step" : "Definition";
   const [isComposing, setIsComposing] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     const os = getOs();
@@ -45,7 +44,7 @@ function ChatInput() {
         editable: true,
       };
       addMessage(message);
-      setIsLoading(true);
+      window.postMessage({ command: "setLoading", data: true });
       input.innerText = "";
     }
   };
