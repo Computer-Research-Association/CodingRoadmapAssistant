@@ -6,7 +6,7 @@ import { Message } from "../types/messageStoreTypes";
 
 function ChatContent() {
   const { messages, updateMessage, addMessage } = useMessagesStore();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const handleGetGPTResponse = (e: MessageEvent) => {
