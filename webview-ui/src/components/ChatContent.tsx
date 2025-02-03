@@ -71,9 +71,11 @@ function MessageBox({
         </div>
       </div>
       <div className="message-icon">
-        <div className="message-icon-trash" onClick={() => deleteMessage(index)}>
-          <VscTrash />
-        </div>
+        {messageType !== "Definition" && (
+          <div className="message-icon-trash" onClick={() => deleteMessage(index)}>
+            <VscTrash />
+          </div>
+        )}
       </div>
     </div>
   );
