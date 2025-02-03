@@ -31,6 +31,7 @@ function ChatInput() {
       } else if (isLogMessagesShortcut) {
         e.preventDefault();
         openai.sendMessage(combineMessages(messages));
+        window.postMessage({ command: "setLoading", data: true });
       }
     }
   };
@@ -44,7 +45,6 @@ function ChatInput() {
         editable: true,
       };
       addMessage(message);
-      window.postMessage({ command: "setLoading", data: true });
       input.innerText = "";
     }
   };
