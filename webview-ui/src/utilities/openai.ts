@@ -1,14 +1,14 @@
 import { vscode } from "./vscode";
 import { Message } from "../types/messageStoreTypes";
 
-export const combineMessages = (messages: Message[]): string => {
+export const combineInitMessages = (messages: Message[]): string => {
   return messages.map((message, i) => `${i === 0 ? "Definition" : i} ${message.content}`).join("\n");
 };
 
 export const openai = {
-  sendMessage: (message: string) => {
+  sendInitMessage: (message: string) => {
     vscode.postMessage({
-      command: "process",
+      command: "initialRequest",
       value: message,
     });
   },

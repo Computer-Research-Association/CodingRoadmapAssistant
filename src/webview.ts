@@ -36,7 +36,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
     webviewView.webview.onDidReceiveMessage(async (message) => {
       switch (message.command) {
-        case "process":
+        case "initialRequest":
           // 사용자 코드 추가
           let textDoc: vscode.TextDocument | null = null;
 
@@ -65,7 +65,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
               content: gptResponse,
             },
           ];
-          saveLogToGlobalState(this.context, gptData);
+          saveLogToGlobalState(this.context, gptData); //vscode 저장소에 저장
 
           break;
         case "button":

@@ -3,6 +3,7 @@ import "../styles/ChatContent.css";
 import { VscTrash } from "react-icons/vsc";
 import React, { useEffect, useRef } from "react";
 import { Message } from "../types/messageStoreTypes";
+import { openai } from "../utilities/openai";
 
 function ChatContent() {
   const { messages, updateMessage, addMessage } = useMessagesStore();
@@ -64,10 +65,6 @@ function MessageBox({
 
   const messageType = index === 0 ? message.type : message.type === "result" ? "result" : `${message.type} ${index}`;
 
-  const handleGeneratedNewResponse = (option: number) => {
-    window.postMessage({ command: "generatedNewResponse", option }, "*");
-  };
-
   return (
     <div className="message-box">
       <div className="message-text">
@@ -84,9 +81,9 @@ function MessageBox({
           <div className="message-actions">
             <span className="message-actions-label">Generate New Response:</span>
             <div className="message-buttons">
-              <button onClick={() => handleGeneratedNewResponse(1)}>1</button>
-              <button onClick={() => handleGeneratedNewResponse(2)}>2</button>
-              <button onClick={() => handleGeneratedNewResponse(3)}>3</button>
+              {/* <button onClick={() => openai.sendAdditionalMessage(1)}>1</button>
+              <button onClick={() => openai.sendAdditionalMessage(2)}>2</button>
+              <button onClick={() => openai.sendAdditionalMessage(3)}>3</button> */}
             </div>
           </div>
         )}
