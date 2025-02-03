@@ -81,9 +81,9 @@ function MessageBox({
           <div className="message-actions">
             <span className="message-actions-label">Generate New Response:</span>
             <div className="message-buttons">
-              {/* <button onClick={() => openai.sendAdditionalMessage(1)}>1</button>
+              <button onClick={() => openai.sendAdditionalMessage(1)}>1</button>
               <button onClick={() => openai.sendAdditionalMessage(2)}>2</button>
-              <button onClick={() => openai.sendAdditionalMessage(3)}>3</button> */}
+              <button onClick={() => openai.sendAdditionalMessage(3)}>3</button>
             </div>
           </div>
         )}

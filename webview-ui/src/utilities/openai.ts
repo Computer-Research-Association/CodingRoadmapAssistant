@@ -12,4 +12,11 @@ export const openai = {
       value: message,
     });
   },
+  sendAdditionalMessage: (message: string, option: number) => {
+    vscode.postMessage({
+      command: "button",
+      value: message,
+      number: option,
+    });
+  },
 };
