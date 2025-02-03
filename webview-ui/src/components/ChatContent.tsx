@@ -1,7 +1,7 @@
 import useMessagesStore from "../stores/messagesStore";
 import "../styles/ChatContent.css";
 import { VscTrash } from "react-icons/vsc";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Message } from "../types/messageStoreTypes";
 
 function ChatContent() {
@@ -30,6 +30,11 @@ function ChatContent() {
     updateMessage(index, e.target.innerText);
   };
 
+  const messageEndRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" }); // 자신이 호출된 요소가 사용자에게 표시되도록 상위 컨테이너를 스크롤
+  }, [messages]);
+
   return (
     <main id="chat-container">
       {messages && messages.length > 0 ? (
@@ -41,6 +46,7 @@ function ChatContent() {
       ) : (
         <div className="learnCRA">LEARN CRA!!!</div>
       )}
+      <div ref={messageEndRef}></div>
     </main>
   );
 }
