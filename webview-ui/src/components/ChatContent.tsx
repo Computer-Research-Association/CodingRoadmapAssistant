@@ -1,11 +1,12 @@
 import useMessagesStore from "../stores/messagesStore";
 import "../styles/ChatContent.css";
 import { VscTrash } from "react-icons/vsc";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Message } from "../types/messageStoreTypes";
 
 function ChatContent() {
   const { messages, updateMessage, addMessage } = useMessagesStore();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const handleGetGPTResponse = (e: MessageEvent) => {
@@ -17,6 +18,7 @@ function ChatContent() {
           editable: false,
         };
         addMessage(gptResponseMessage);
+        setLoading(false);
       }
     };
 
@@ -46,6 +48,7 @@ function ChatContent() {
       ) : (
         <div className="learnCRA">LEARN CRA!!!</div>
       )}
+      {loading ? <div className="loading">Loading...</div> : null}
       <div ref={messageEndRef}></div>
     </main>
   );
