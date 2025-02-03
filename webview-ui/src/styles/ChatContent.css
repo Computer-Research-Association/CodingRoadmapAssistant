@@ -89,3 +89,37 @@
 .messages-container {
   padding: 8px;
 }
+
+.message-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 8px;
+  padding: 6px;
+  border: 1px solid grey;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.message-actions-label {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.message-buttons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.message-buttons button {
+  background: var(--vscode-button-background);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.message-buttons button:hover {
+  background: var(--vscode-button-hoverBackground);
+}

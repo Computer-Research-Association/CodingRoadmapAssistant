@@ -64,6 +64,10 @@ function MessageBox({
 
   const messageType = index === 0 ? message.type : message.type === "result" ? "result" : `${message.type} ${index}`;
 
+  const handleGeneratedNewResponse = (option: number) => {
+    window.postMessage({ command: "generatedNewResponse", option }, "*");
+  };
+
   return (
     <div className="message-box">
       <div className="message-text">
@@ -75,7 +79,19 @@ function MessageBox({
         >
           {message.content}
         </div>
+
+        {messageType === "result" && (
+          <div className="message-actions">
+            <span className="message-actions-label">Generate New Response:</span>
+            <div className="message-buttons">
+              <button onClick={() => handleGeneratedNewResponse(1)}>1</button>
+              <button onClick={() => handleGeneratedNewResponse(2)}>2</button>
+              <button onClick={() => handleGeneratedNewResponse(3)}>3</button>
+            </div>
+          </div>
+        )}
       </div>
+
       <div className="message-icon">
         {messageType !== "Definition" && (
           <div className="message-icon-trash" onClick={() => deleteMessage(index)}>
