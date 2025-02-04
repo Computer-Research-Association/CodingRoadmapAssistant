@@ -6,6 +6,7 @@ export interface Message {
 
 export interface MessagesState {
   messages: Message[];
+  stepCount: number;
   addMessage: (message: Message) => void;
   clearMessages: () => void;
   deleteMessage: (index: number) => void;
