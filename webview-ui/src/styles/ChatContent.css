@@ -90,6 +90,25 @@
   padding: 8px;
 }
 
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  font-size: 3rem;
+  color: var(--vscode-editor-foreground);
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+
 .message-actions {
   display: flex;
   flex-direction: column;

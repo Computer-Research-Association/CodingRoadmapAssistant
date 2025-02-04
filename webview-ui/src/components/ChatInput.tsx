@@ -31,6 +31,7 @@ function ChatInput() {
       } else if (isLogMessagesShortcut) {
         e.preventDefault();
         openai.sendInitMessage(combineMessages(messages, stepCount));
+        window.postMessage({ command: "setLoading", data: true });
       }
     }
   };
