@@ -8,7 +8,7 @@ import { openai, combineInitMessages } from "../utilities/openai";
 
 function ChatInput() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { messages, addMessage } = useMessagesStore();
+  const { messages, addMessage, stepCount } = useMessagesStore();
   const inputType = messages.length > 0 ? "Step" : "Definition";
   const [isComposing, setIsComposing] = useState(false);
 
@@ -30,7 +30,7 @@ function ChatInput() {
         handleSendMessage();
       } else if (isLogMessagesShortcut) {
         e.preventDefault();
-        openai.sendInitMessage(combineInitMessages(messages));
+        openai.sendInitMessage(combineInitMessages(messages, stepCount));
       }
     }
   };
