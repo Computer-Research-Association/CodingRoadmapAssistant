@@ -4,7 +4,7 @@ import useMessagesStore from "../stores/messagesStore";
 import { Message } from "../types/messageStoreTypes";
 import { VscFile } from "react-icons/vsc";
 import getOs from "../utilities/getOs";
-import { openai, combineInitMessages } from "../utilities/openai";
+import { openai, combineMessages } from "../utilities/openai";
 
 function ChatInput() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -30,7 +30,7 @@ function ChatInput() {
         handleSendMessage();
       } else if (isLogMessagesShortcut) {
         e.preventDefault();
-        openai.sendInitMessage(combineInitMessages(messages, stepCount));
+        openai.sendInitMessage(combineMessages(messages, stepCount));
       }
     }
   };

@@ -1,7 +1,7 @@
 import { vscode } from "./vscode";
 import { Message } from "../types/messageStoreTypes";
 
-export const combineInitMessages = (messages: Message[], stepCount: number): string => {
+export const combineMessages = (messages: Message[], stepCount: number): string => {
   return messages
     .map(
       (message, i) =>

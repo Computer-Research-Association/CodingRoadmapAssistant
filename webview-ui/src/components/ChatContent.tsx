@@ -3,7 +3,7 @@ import "../styles/ChatContent.css";
 import { VscTrash } from "react-icons/vsc";
 import React, { useEffect, useRef } from "react";
 import { Message } from "../types/messageStoreTypes";
-import { combineInitMessages, openai } from "../utilities/openai";
+import { combineMessages, openai } from "../utilities/openai";
 
 function ChatContent() {
   const { messages, updateMessage, addMessage } = useMessagesStore();
@@ -66,7 +66,7 @@ function MessageBox({
   const messageType = index === 0 ? message.type : message.type === "result" ? "result" : `${message.type} ${index}`;
 
   const clickAdditionalBtn = (index: number) => {
-    openai.sendAdditionalMessage(combineInitMessages(messages, stepCount), index);
+    openai.sendAdditionalMessage(combineMessages(messages, stepCount), index);
   };
 
   return (
