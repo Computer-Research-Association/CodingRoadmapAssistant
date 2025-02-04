@@ -3,6 +3,7 @@ import "../styles/ChatContent.css";
 import { VscTrash } from "react-icons/vsc";
 import React, { useEffect, useRef, useState } from "react";
 import { Message } from "../types/messageStoreTypes";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 function ChatContent() {
   const { messages, updateMessage, addMessage } = useMessagesStore();
@@ -50,7 +51,11 @@ function ChatContent() {
       ) : (
         <div className="learnCRA">LEARN CRA!!!</div>
       )}
-      {loading ? <div className="loading">Loading...</div> : null}
+      {loading ? (
+        <div className="loading">
+          <AiOutlineLoading3Quarters />
+        </div>
+      ) : null}
       <div ref={messageEndRef}></div>
     </main>
   );
