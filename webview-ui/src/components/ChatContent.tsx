@@ -3,6 +3,7 @@ import "../styles/ChatContent.css";
 import { VscTrash } from "react-icons/vsc";
 import React, { useEffect, useRef } from "react";
 import { Message } from "../types/messageStoreTypes";
+import { combineMessages, openai } from "../utilities/openai";
 
 function ChatContent() {
   const { messages, updateMessage, addMessage } = useMessagesStore();
@@ -60,9 +61,13 @@ function MessageBox({
   index: number;
   message: Message;
 }) {
-  const { deleteMessage } = useMessagesStore();
+  const { deleteMessage, messages, stepCount } = useMessagesStore();
 
   const messageType = index === 0 ? message.type : message.type === "result" ? "result" : `${message.type} ${index}`;
+
+  const clickAdditionalBtn = (index: number) => {
+    openai.sendAdditionalMessage(combineMessages(messages, stepCount), index);
+  };
 
   return (
     <div className="message-box">
@@ -75,7 +80,19 @@ function MessageBox({
         >
           {message.content}
         </div>
+
+        {messageType === "result" && (
+          <div className="message-actions">
+            <span className="message-actions-label">Generate New Response:</span>
+            <div className="message-buttons">
+              <button onClick={() => clickAdditionalBtn(1)}>1</button>
+              <button onClick={() => clickAdditionalBtn(2)}>2</button>
+              <button onClick={() => clickAdditionalBtn(3)}>3</button>
+            </div>
+          </div>
+        )}
       </div>
+
       <div className="message-icon">
         {messageType !== "Definition" && (
           <div className="message-icon-trash" onClick={() => deleteMessage(index)}>
