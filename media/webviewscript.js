@@ -159,7 +159,7 @@ function sendData(data) {
   gptOutputContent.classList.add("invisible");
 
   vscode.postMessage({
-    command: "process",
+    command: "initialRequest",
     value: data,
   });
 }

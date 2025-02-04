@@ -1,15 +1,27 @@
 import { vscode } from "./vscode";
 import { Message } from "../types/messageStoreTypes";
 
-export const combineMessages = (messages: Message[]): string => {
-  return messages.map((message, i) => `${i === 0 ? "Definition" : i} ${message.content}`).join("\n");
+export const combineMessages = (messages: Message[], stepCount: number): string => {
+  return messages
+    .map(
+      (message, i) =>
+        `${i === 0 ? "Definition" : i <= stepCount + 1 ? "Step " + i : "Response between GPT and User"} ${message.content}`
+    )
+    .join("\n");
 };
 
 export const openai = {
-  sendMessage: (message: string) => {
+  sendInitMessage: (message: string) => {
     vscode.postMessage({
-      command: "process",
+      command: "initialRequest",
       value: message,
+    });
+  },
+  sendAdditionalMessage: (message: string, option: number) => {
+    vscode.postMessage({
+      command: "button",
+      value: message,
+      number: option,
     });
   },
 };
