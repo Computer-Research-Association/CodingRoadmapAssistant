@@ -162,3 +162,19 @@ class FileSelectionQuickPickItem implements vscode.QuickPickItem {
   }
 }
 
+/**
+ * @member label: problem definition
+ * @member description: for timestamp
+ * @member log: selected conversation log itself
+ */
+class ConversationLogQuickPickItem implements vscode.QuickPickItem {
+  label: string;
+  description: string | undefined;
+  log: any;
+
+  constructor(label: string, description: string | undefined, log: any) {
+    this.label = label;
+    this.description = description;
+    this.log = log;
+  }
+}
