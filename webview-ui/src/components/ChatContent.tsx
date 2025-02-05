@@ -33,7 +33,7 @@ function ChatContent() {
     return () => {
       window.removeEventListener("message", handleGetGPTResponse);
     };
-  }, [addMessage, loadMessages]);
+  }, [addMessage, loadMessages, setTimestamp]);
 
   const handleBlur = (e: React.ChangeEvent<HTMLDivElement>, index: number) => {
     updateMessage(index, e.target.innerText);
