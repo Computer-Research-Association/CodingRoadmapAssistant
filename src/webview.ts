@@ -49,7 +49,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           const messageToSend = message.value + "User's Code: " + textDoc.getText();
 
           //GPT API 호출
-          const gptResponse = await this.callGptApi(messageTosend);
+          const gptResponse = await this.callGptApi(messageToSend);
           //웹뷰로 결과 전달
           webviewView.webview.postMessage({
             command: "setGptResponse",
