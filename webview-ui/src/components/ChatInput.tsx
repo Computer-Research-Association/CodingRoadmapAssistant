@@ -9,7 +9,7 @@ import { openai, combineMessages } from "../utilities/openai";
 function ChatInput() {
   const inputRef = useRef<HTMLInputElement>(null);
   const { messages, addMessage, stepCount } = useMessagesStore();
-  const inputType = messages.length > 0 ? "Step" : "Definition";
+  const [inputType, setInputType] = useState(messages.length > 0 ? "Step" : "Definition");
   const [isComposing, setIsComposing] = useState(false);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -32,25 +32,35 @@ function ChatInput() {
         e.preventDefault();
         openai.sendInitMessage(combineMessages(messages, stepCount));
         window.postMessage({ command: "setLoading", data: true });
+        setInputType("additional");
       }
     }
   };
 
   const handleSendMessage = () => {
     const input = inputRef.current;
-    if (input !== null) {
+    if (input !== null && input.innerText.trim() !== "") {
       const message: Message = {
         type: inputType,
-        content: input.innerText || "",
+        content: input.innerText.trim(),
         editable: true,
       };
       addMessage(message);
       input.innerText = "";
+      if (inputType === "Definition") {
+        setInputType("Step 1");
+      } else if (inputType.startsWith("Step")) {
+        const stepNumber = parseInt(inputType.replace("Step ", ""), 10) || 1;
+        setInputType(`Step ${stepNumber + 1}`);
+      } else {
+        setInputType("Additional");
+      }
     }
   };
 
   const definitionPlaceholderText = "Type your problem definition here...";
   const stepPlaceholderText = "Type your steps here...";
+  const additionalPlaceholderText = "Ask an additional question here...";
 
   return (
     <div className="chat-input-container">
@@ -63,7 +73,13 @@ function ChatInput() {
           onKeyDown={handleKeyDown}
           onCompositionStart={() => setIsComposing(true)}
           onCompositionEnd={() => setIsComposing(false)}
-          data-placeholder={inputType === "Definition" ? definitionPlaceholderText : stepPlaceholderText}></div>
+          data-placeholder={
+            inputType === "Definition"
+              ? definitionPlaceholderText
+              : inputType.startsWith("Step")
+                ? stepPlaceholderText
+                : additionalPlaceholderText
+          }></div>
 
         <button className="chat-input-button" onClick={handleSendMessage}>
           <div className="tooltip">Send</div>
