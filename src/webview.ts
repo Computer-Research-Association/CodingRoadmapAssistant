@@ -1,4 +1,6 @@
 import * as vscode from "vscode";
+import * as path from "path";
+import * as fs from "fs";
 import OpenAI from "openai";
 import { showApiKeyError, saveLogToGlobalState, pickOpenedDocument } from "./craConfigManager";
 import { getUri, getNonce } from "./utilities";
@@ -46,10 +48,10 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             }
           }
           // 문제정의+단계+전체 코드
-          const messageToSend = message.value + "User's Code: " + textDoc.getText();
+          const messageTosend = message.value + "User's Code: " + textDoc.getText();
 
           //GPT API 호출
-          const gptResponse = await this.callGptApi(messageToSend);
+          const gptResponse = await this.callGptApi(messageTosend);
           //웹뷰로 결과 전달
           webviewView.webview.postMessage({
             command: "setGptResponse",
@@ -64,8 +66,8 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             },
           ];
           saveLogToGlobalState(this.context, gptData); //vscode 저장소에 저장
-          break;
 
+          break;
         case "button":
           const btnNumber = message.number;
           try {
@@ -93,10 +95,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             console.error(`Error processing button ${btnNumber} click:`, error);
             vscode.window.showErrorMessage(`Failed to process button ${btnNumber} click.`);
           }
-          break;
-
-        case "saveMessageLog":
-          saveLogToGlobalState(this.context, message.data);
           break;
 
         case "debug":

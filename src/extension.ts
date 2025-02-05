@@ -6,10 +6,8 @@ export async function activate(context: vscode.ExtensionContext) {
   const isInitialized = context.globalState.get<boolean>("isInitialized");
   if (!isInitialized) {
     await onFirstActivation(context);
+
     context.globalState.update("isInitialized", true);
-  }
-  if (!context.globalState.get<any[]>("conversationLogs")) {
-    context.globalState.update("conversationLogs", []);
   }
 
   const CRAViewProvider = new CRAWebviewViewProvider(context);
