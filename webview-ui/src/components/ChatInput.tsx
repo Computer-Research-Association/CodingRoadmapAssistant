@@ -12,6 +12,12 @@ function ChatInput() {
   const [inputType, setInputType] = useState(messages.length > 0 ? "Step" : "Definition");
   const [isComposing, setIsComposing] = useState(false);
 
+  useEffect(() => {
+    if (messages.length === 0) {
+      setInputType("Definition");
+    }
+  }, [messages]);
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     const os = getOs();
     const isSendMessageShortcut =
