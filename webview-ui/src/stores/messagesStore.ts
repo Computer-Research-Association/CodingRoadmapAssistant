@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { MessagesState } from "../types/messageStoreTypes";
 
 const useMessagesStore = create<MessagesState>((set) => ({
+  timestamp: 0,
   messages: [],
   stepCount: 0,
   addMessage: (newMessage) =>
@@ -24,6 +25,12 @@ const useMessagesStore = create<MessagesState>((set) => ({
       messages: state.messages.map((msg, idx) => (idx === index ? { ...msg, content: newContent } : msg)),
     }));
   },
+  loadMessages: (messages) =>
+    set({
+      messages,
+      stepCount: messages.filter((msg) => msg.type === "step").length,
+    }),
+  setTimestamp: (timestamp) => set({ timestamp }),
 }));
 
 export default useMessagesStore;
