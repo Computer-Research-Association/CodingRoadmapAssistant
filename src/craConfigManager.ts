@@ -123,6 +123,31 @@ export async function pickOpenedDocument(context: vscode.ExtensionContext): Prom
   return selectedItem.document;
 }
 
+export async function pickConversationLog(context: vscode.ExtensionContext): Promise<any | null> {
+  const conversationLogs = context.globalState.get<any[]>("conversationLogs") || [];
+
+  if (!conversationLogs) {
+    return handleError(context, "There is no conversation log");
+  }
+
+  const quickPickItems = conversationLogs.map((log) => {
+    return new ConversationLogQuickPickItem(log.messages[0].content, new Date(log.timestamp).toISOString(), log);
+  });
+
+  const quickPickOptions: vscode.QuickPickOptions = {
+    placeHolder: "Select a log.",
+    ignoreFocusOut: true,
+  };
+
+  const selectedItem = await vscode.window.showQuickPick(quickPickItems, quickPickOptions);
+
+  if (!selectedItem) {
+    return handleError(context, "No Log Selected");
+  }
+
+  return selectedItem.log;
+}
+
 function handleError(context: vscode.ExtensionContext, message: string): null {
   vscode.window.showErrorMessage(message);
   context.globalState.update("selectedTextDocument", null);
