@@ -2,6 +2,8 @@ import useMessagesStore from "../stores/messagesStore";
 import "../styles/ChatContent.css";
 import { VscTrash } from "react-icons/vsc";
 import React, { useEffect, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 import { Message } from "../types/messageStoreTypes";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { combineMessages, openai } from "../utilities/openai";
@@ -88,7 +90,7 @@ function MessageBox({
           contentEditable={message.editable}
           onBlur={(e) => handleBlur(e, index)} // input 입력받고, focus out 시 값 update
         >
-          {message.content}
+          <ReactMarkdown rehypePlugins={[rehypeRaw]}>{message.content}</ReactMarkdown>
         </div>
 
         {messageType === "result" && (
@@ -104,7 +106,7 @@ function MessageBox({
       </div>
 
       <div className="message-icon">
-        {messageType !== "Definition" && (
+        {messageType !== "Definition" && messageType !== "result" && (
           <div className="message-icon-trash" onClick={() => deleteMessage(index)}>
             <VscTrash />
           </div>
