@@ -73,7 +73,8 @@ function MessageBox({
 }) {
   const { deleteMessage, messages, stepCount } = useMessagesStore();
 
-  const messageType = index === 0 ? message.type : message.type === "result" ? "result" : `${message.type} ${index}`;
+  const messageType =
+    message.type === "result" ? "result" : message.type.startsWith("Step") ? `${message.type} ${index}` : message.type;
 
   const clickAdditionalBtn = (index: number) => {
     openai.sendAdditionalMessage(combineMessages(messages, stepCount), index);

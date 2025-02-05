@@ -4,6 +4,7 @@ import { MessagesState } from "../types/messageStoreTypes";
 const useMessagesStore = create<MessagesState>((set) => ({
   messages: [],
   stepCount: 0,
+  inputType: "Definition",
   addMessage: (newMessage) =>
     set((state) => {
       const isStep = state.messages.length > 0 && newMessage.type === "step";
@@ -12,7 +13,7 @@ const useMessagesStore = create<MessagesState>((set) => ({
         stepCount: isStep ? state.stepCount + 1 : state.stepCount,
       };
     }),
-  clearMessages: () => set({ messages: [], stepCount: 0 }),
+  clearMessages: () => set({ messages: [], stepCount: 0, inputType: "Definition" }),
   deleteMessage: (index: number) =>
     set((state) => {
       const newMessages = state.messages.filter((_, i) => i !== index);

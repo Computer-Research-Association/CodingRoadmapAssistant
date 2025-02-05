@@ -48,12 +48,9 @@ function ChatInput() {
       addMessage(message);
       input.innerText = "";
       if (inputType === "Definition") {
-        setInputType("Step 1");
+        setInputType("Step");
       } else if (inputType.startsWith("Step")) {
-        const stepNumber = parseInt(inputType.replace("Step ", ""), 10) || 1;
-        setInputType(`Step ${stepNumber + 1}`);
-      } else {
-        setInputType("Additional");
+        setInputType(`Step`);
       }
     }
   };
