@@ -42,7 +42,8 @@ function ChatInput() {
   };
 
   useEffect(() => {
-    if (timeStamp !== 0) {
+    console.log(timeStamp);
+    if (timeStamp !== 0 && messages.length > 0) {
       vscode.postMessage({
         command: "saveMessageLog",
         data: {
