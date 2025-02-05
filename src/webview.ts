@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import OpenAI from "openai";
 import { showApiKeyError, saveLogToGlobalState, pickOpenedDocument } from "./craConfigManager";
 import { getUri, getNonce } from "./utilities";
+import { pickConversationLog } from "./craConfigManager";
 
 export default class CRAWebviewViewProvider implements vscode.WebviewViewProvider {
   private apiKey?: string;
@@ -97,6 +98,17 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
         case "saveMessageLog":
           saveLogToGlobalState(this.context, message.data);
+          break;
+
+        case "history":
+          const selectedLog = await pickConversationLog(this.context);
+          console.log(selectedLog);
+          if (selectedLog) {
+            webviewView.webview.postMessage({
+              command: "setSelectedLog",
+              data: selectedLog,
+            });
+          }
           break;
 
         case "debug":
