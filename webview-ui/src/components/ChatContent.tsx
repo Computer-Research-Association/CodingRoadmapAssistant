@@ -86,15 +86,19 @@ function MessageBox({
   };
 
   const clickAdditionalQuestionBtn = () => {
-    setAdditionalContent(<div>Type your question into the below input box.</div>);
+    setAdditionalContent(<div>Type your question into the below input box ⬇️</div>);
   };
 
   const clickNewQuestionBtn = () => {
     setAdditionalContent(
       <div>
-        Do you sure you want to move to another question? (conversations will be save at the log)
-        <button className="clickNewQuestionBtn-selectYes">Yes</button>
-        <button className="clickNewQuestionBtn-selectNo">No</button>
+        Do you sure you want to make another question? (conversations will be save at the log)
+        <div>
+          <button className="clickNewQuestionBtn-selectYes">Yes</button>
+          <button className="clickNewQuestionBtn-selectNo" onClick={() => setAdditionalContent(null)}>
+            No
+          </button>
+        </div>
       </div>
     );
   };
