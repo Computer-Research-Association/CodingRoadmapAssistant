@@ -87,23 +87,6 @@ export function getAllOpenedDocuments(): readonly vscode.TextDocument[] {
 }
 
 /**
- * @member label: filename
- * @member description: for uri string
- * @member document: selected TextDocument itself
- */
-class FileSelectionQuickPickItem implements vscode.QuickPickItem {
-  label: string;
-  description: string | undefined;
-  document: vscode.TextDocument;
-
-  constructor(label: string, description: string | undefined, document: vscode.TextDocument) {
-    this.label = label;
-    this.description = description;
-    this.document = document;
-  }
-}
-
-/**
  * 열려있는 document 중 인식할 코드 창 하나를 고르는 것.
  * @param context vscode 전체 state 식별.
  * @returns FileSelectionQuickPickItem.document
@@ -161,3 +144,21 @@ function checkGPTTokens(document: vscode.TextDocument): number {
   console.log(tokenUsageInfo.usedTokens);
   return tokenUsageInfo.usedTokens;
 }
+
+/**
+ * @member label: filename
+ * @member description: for uri string
+ * @member document: selected TextDocument itself
+ */
+class FileSelectionQuickPickItem implements vscode.QuickPickItem {
+  label: string;
+  description: string | undefined;
+  document: vscode.TextDocument;
+
+  constructor(label: string, description: string | undefined, document: vscode.TextDocument) {
+    this.label = label;
+    this.description = description;
+    this.document = document;
+  }
+}
+
