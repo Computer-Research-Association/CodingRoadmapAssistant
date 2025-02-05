@@ -64,8 +64,8 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             },
           ];
           saveLogToGlobalState(this.context, gptData); //vscode 저장소에 저장
-
           break;
+
         case "button":
           const btnNumber = message.number;
           try {
@@ -93,6 +93,10 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             console.error(`Error processing button ${btnNumber} click:`, error);
             vscode.window.showErrorMessage(`Failed to process button ${btnNumber} click.`);
           }
+          break;
+
+        case "saveMessageLog":
+          saveLogToGlobalState(this.context, message.data);
           break;
 
         case "debug":
