@@ -8,6 +8,7 @@ export interface MessagesState {
   timestamp: number;
   messages: Message[];
   stepCount: number;
+  inputType: string;
   addMessage: (message: Message) => void;
   clearMessages: () => void;
   deleteMessage: (index: number) => void;

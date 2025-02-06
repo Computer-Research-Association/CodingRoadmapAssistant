@@ -126,6 +126,8 @@ export async function pickOpenedDocument(context: vscode.ExtensionContext): Prom
 export async function pickConversationLog(context: vscode.ExtensionContext): Promise<any | null> {
   const conversationLogs = context.globalState.get<any[]>("conversationLogs") || [];
 
+  console.log(conversationLogs);
+
   if (!conversationLogs) {
     return handleError(context, "There is no conversation log");
   }
