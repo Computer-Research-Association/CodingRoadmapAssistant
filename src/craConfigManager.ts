@@ -130,27 +130,21 @@ export async function pickConversationLog(context: vscode.ExtensionContext): Pro
     return handleError(context, "There is no conversation log");
   }
 
-  const quickPickItems = conversationLogs.map((log) => {
-    return new ConversationLogQuickPickItem(log.messages[0].content, new Date(log.timestamp).toISOString(), log);
-  });
+  const quickPick = vscode.window.createQuickPick();
 
-  const quickPickOptions: vscode.QuickPickOptions = {
-    placeHolder: "Select a log.",
-    ignoreFocusOut: true,
+  const updateQuickPickItems = (logs: any[]) => {
+    quickPick.items = logs.map(
+      (log) => new ConversationLogQuickPickItem(log.messages[0].content, new Date(log.timestamp).toISOString(), log)
+    );
   };
 
-  const quickPick = vscode.window.createQuickPick();
-  quickPick.items = quickPickItems;
-  quickPick.placeholder = quickPickOptions.placeHolder;
+  updateQuickPickItems(conversationLogs);
+  quickPick.placeholder = "Select a log";
   quickPick.ignoreFocusOut = true;
-  quickPick.activeItems = [];
-  quickPick.selectedItems = [];
-
-  let selectedItem: ConversationLogQuickPickItem | undefined;
 
   return new Promise<any | null>((resolve) => {
     quickPick.onDidAccept(() => {
-      selectedItem = quickPick.selectedItems[0] as ConversationLogQuickPickItem;
+      const selectedItem = quickPick.selectedItems[0] as ConversationLogQuickPickItem;
       quickPick.hide();
       resolve(selectedItem?.log || null);
     });
@@ -158,19 +152,25 @@ export async function pickConversationLog(context: vscode.ExtensionContext): Pro
     quickPick.onDidTriggerItemButton(async (event) => {
       const item = event.item as ConversationLogQuickPickItem;
 
+      // get fresh data from globalState (after changed data)
+      const currentLogs = context.globalState.get<any[]>("conversationLogs") || [];
+
       // Remove the log from globalState
-      const updatedLogs = conversationLogs.filter((log) => log.timestamp !== item.log.timestamp);
+      const updatedLogs = currentLogs.filter((log) => log.timestamp !== item.log.timestamp);
       await context.globalState.update("conversationLogs", updatedLogs);
 
-      // Update QuickPick items
-      quickPick.items = updatedLogs.map(
-        (log) => new ConversationLogQuickPickItem(log.messages[0].content, new Date(log.timestamp).toISOString(), log)
-      );
+      // update quickPick item into updatedLogs
+      updateQuickPickItems(updatedLogs);
+
+      if (updatedLogs.length === 0) {
+        quickPick.hide();
+        resolve(null);
+      }
     });
 
     quickPick.onDidHide(() => {
       quickPick.dispose();
-      if (!selectedItem) {
+      if (!quickPick.selectedItems.length) {
         resolve(null);
       }
     });
