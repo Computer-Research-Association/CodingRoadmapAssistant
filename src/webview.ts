@@ -88,6 +88,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           break;
 
         case "history":
+          console.log("1");
           const selectedLog = await pickConversationLog(this.context);
           console.log(selectedLog);
           if (selectedLog) {
