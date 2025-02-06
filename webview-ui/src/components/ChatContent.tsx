@@ -81,8 +81,8 @@ function MessageBox({
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" }); // 자신이 호출된 요소가 사용자에게 표시되도록 상위 컨테이너를 스크롤
   }, [additionalContent]);
 
-  const clickAdditionalBtn = (index: number) => {
-    openai.sendAdditionalMessage(combineMessages(messages, stepCount), index);
+  const clickAdditionalBtn = () => {
+    openai.sendAdditionalMessage(combineMessages(messages, stepCount));
   };
 
   const clickAdditionalQuestionBtn = () => {
@@ -94,7 +94,9 @@ function MessageBox({
       <div>
         Do you sure you want to make another question? (conversations will be save at the log)
         <div>
-          <button className="clickNewQuestionBtn-selectYes">Yes</button>
+          <button className="clickNewQuestionBtn-selectYes" onClick={clickAdditionalBtn}>
+            Yes
+          </button>
           <button className="clickNewQuestionBtn-selectNo" onClick={() => setAdditionalContent(null)}>
             No
           </button>
@@ -115,17 +117,6 @@ function MessageBox({
           >
             {message.content}
           </div>
-
-          {messageType === "result" && (
-            <div className="message-actions">
-              <span className="message-actions-label">Generate New Response:</span>
-              <div className="message-buttons">
-                <button onClick={() => clickAdditionalBtn(1)}>1</button>
-                <button onClick={() => clickAdditionalBtn(2)}>2</button>
-                <button onClick={() => clickAdditionalBtn(3)}>3</button>
-              </div>
-            </div>
-          )}
         </div>
 
         <div className="message-icon">
