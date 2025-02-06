@@ -4,6 +4,7 @@ import * as fs from "fs";
 import OpenAI from "openai";
 import { showApiKeyError, saveLogToGlobalState, pickOpenedDocument } from "./craConfigManager";
 import { getUri, getNonce } from "./utilities";
+import { pickConversationLog } from "./craConfigManager";
 
 export default class CRAWebviewViewProvider implements vscode.WebviewViewProvider {
   private apiKey?: string;
@@ -57,15 +58,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             command: "setGptResponse",
             data: gptResponse,
           });
-
-          // save it's answer to the conversationLog
-          const gptData = [
-            {
-              role: "system",
-              content: gptResponse,
-            },
-          ];
-          saveLogToGlobalState(this.context, gptData); //vscode 저장소에 저장
+          break;
 
           break;
         case "button":
@@ -87,13 +80,24 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
               command: "setData",
               data: gptResponse,
             });
-
-            // 로그 저장 (선택적)
-            const gptData = [{ role: "system", content: gptResponse }];
-            saveLogToGlobalState(this.context, gptData);
           } catch (error) {
             console.error(`Error processing button  click:`, error);
             vscode.window.showErrorMessage(`Failed to process button click.`);
+          }
+          break;
+
+        case "saveMessageLog":
+          saveLogToGlobalState(this.context, message.data);
+          break;
+
+        case "history":
+          const selectedLog = await pickConversationLog(this.context);
+          console.log(selectedLog);
+          if (selectedLog) {
+            webviewView.webview.postMessage({
+              command: "setSelectedLog",
+              data: selectedLog,
+            });
           }
           break;
 
@@ -146,20 +150,44 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
       const initPrompt: OpenAI.Chat.Completions.ChatCompletionMessageParam = {
         role: "system",
-        content: `You are a program designed to enhance coding skills by helping users identify and address issues in their approach to solving programming problems.
-          If user's input language is NOT an English(cf. Korean), CHANGE GPT's output language into user's one. 
-           From now on, I will provide you with three inputs: 
+        content: `You are to enhance coding skills by helping users identify and address issues in their approach to solving programming problems.
+           The user will provide you with three inputs: 
             1. A problem definition.
             2. Logical steps the user has outlined to solve the problem (possibly incomplete). 
             3. The user's attempt at solving the problem in code. 
-           Based on these inputs, you must analyze the provided information and respond with only the following two elements
-           : 1. An explanation of any inconsistencies between the problem definition, the logical steps, and the code provided. Highlight potential issues or misalignments.
-             2. Exactly three guiding questions that encourage users to reflect on their approach, understand the problem more deeply, and work to solve it INDEPENDENTLY. 
-             Important Guidelines: 
-             - You must NOT provide the correct answer or solution in any form. 
-             - Responses should strictly avoid a conversational tone and include only the specified two elements. 
-             - If user's input language is not an English, change output language into user's one.,
-             - Provide a two-sentence summary instead of the first results of gpt. `,
+           Based on these inputs, you must analyze the provided information and respond with only the following element:
+              - Exactly three guiding questions that encourage users to reflect on their approach, understand the problem more deeply, and work to solve it INDEPENDENTLY.
+            Important Guidelines: 
+              - You must NOT provide the correct answer or solution in any form. 
+              - Responses should strictly avoid a conversational tone and include only the specified element. 
+            Example Response:
+              - Here is an example of an input and a response
+            
+            USER INPUT
+            Definition: Given the head of a singly linked list, return true if it is a palindrome or false otherwise.
+            Steps:
+             1. Traverse the linked list and save the values.
+             2. Compare from each end of the values and check whether they are the same; till the end pointers meet in the middle.
+             3. if all same, true; if a different value is found, false.
+            Code:
+             class Solution:
+              def isPalindrome(self, head: Optional[ListNode]) -> bool:
+                list_vals = []
+                while head:
+                    list_vals.append(head.val)
+                    head = head.next
+        
+                left, right = 0, len(list_vals)
+                while left <= right and list_vals[left] == list_vals[right]:
+                    right -= 1
+                    left += 1
+                return left > right
+             
+            GPT RESPONSE
+            Response:
+             1. How does initializing right as len(list_vals) instead of len(list_vals) - 1 affect the range of indices being compared?
+             2. What happens when left and right are updated inside the loop—does the comparison sequence proceed as expected?
+             3. Under what condition should the function return True? Does the current return statement correctly reflect the stopping condition?`,
       };
 
       const userMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
@@ -176,10 +204,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
       if (completion.choices[0]?.message?.content === null) {
         return "No response from GPT.";
       }
-
-      // save user's question to the conversationLog
-      saveLogToGlobalState(this.context, userMessages);
-
       return completion.choices[0]?.message?.content.trim();
     } catch (error: any) {
       console.error("GPT API Error:", error); // 콘솔에 상세 에러 출력

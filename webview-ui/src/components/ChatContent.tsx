@@ -7,7 +7,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { combineMessages, openai } from "../utilities/openai";
 
 function ChatContent() {
-  const { messages, updateMessage, addMessage } = useMessagesStore();
+  const { messages, updateMessage, addMessage, loadMessages, setTimestamp } = useMessagesStore();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -24,6 +24,9 @@ function ChatContent() {
         setLoading(false);
       } else if (command === "setLoading") {
         setLoading(data);
+      } else if (command === "setSelectedLog") {
+        setTimestamp(data.timestamp);
+        loadMessages(data.messages as Message[]);
       }
     };
 
@@ -31,7 +34,7 @@ function ChatContent() {
     return () => {
       window.removeEventListener("message", handleGetGPTResponse);
     };
-  }, [addMessage]);
+  }, [addMessage, loadMessages, setTimestamp]);
 
   const handleBlur = (e: React.ChangeEvent<HTMLDivElement>, index: number) => {
     updateMessage(index, e.target.innerText);
@@ -75,8 +78,9 @@ function MessageBox({
   const { deleteMessage, messages, stepCount } = useMessagesStore();
   const [additionalContent, setAdditionalContent] = useState<React.ReactNode | null>(null);
 
-  const messageType = index === 0 ? message.type : message.type === "result" ? "result" : `${message.type} ${index}`;
-  const messageEndRef = useRef<HTMLDivElement | null>(null);
+  const messageType =
+    message.type === "result" ? "result" : message.type.startsWith("Step") ? `${message.type} ${index}` : message.type;
+    const messageEndRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" }); // 자신이 호출된 요소가 사용자에게 표시되도록 상위 컨테이너를 스크롤
   }, [additionalContent]);
