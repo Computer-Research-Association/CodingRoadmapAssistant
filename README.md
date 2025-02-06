@@ -17,14 +17,27 @@
 
 👤 **NewCar**
 
-- Github: [@chachaaa-23](https://github.com/chachaaa-23)
-- Github: [@dan05s](https://github.com/dan05s)
-- Github: [@Jangmyun](https://github.com/Jangmyun)
-- Github: [@young170](https://github.com/young170)
+|    ![](https://github.com/chachaaa-23.png)     |  ![](https://github.com/dan05s.png)  |   ![](https://github.com/Jangmyun.png)   |  ![](https://github.com//young170.png)   |
+| :--------------------------------------------: | :----------------------------------: | :--------------------------------------: | :--------------------------------------: |
+| [@chachaaa-23](https://github.com/chachaaa-23) | [@dan05s](https://github.com/dan05s) | [@Jangmyun](https://github.com/Jangmyun) | [@young170](https://github.com/young170) |
 
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Computer-Research-Association/CodingRoadmapAssistant/issues).
+
+#### Installation ( for contributing )
+
+1. install the recommended extensions (dbaeumer.vscode-eslint, connor4312.esbuild-problem-matchers", ms-vscode.extension-test-runner, tobermory.es6-string-html)
+
+2. install NPM package
+
+```shell
+npm run install:all
+```
+
+3. Press `F5` to open a new window with your extension loaded.
+
+- You can open the full set of our API when you open the file `node_modules/@types/vscode/index.d.ts`.
 
 ## Show your support
 
