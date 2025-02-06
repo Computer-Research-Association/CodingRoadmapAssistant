@@ -150,7 +150,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
       const initPrompt: OpenAI.Chat.Completions.ChatCompletionMessageParam = {
         role: "system",
-        content: `You are to enhance coding skills by helping users identify and address issues in their approach to solving programming problems.
+        content: `You are a program designed to enhance coding skills by helping users identify and address issues in their approach to solving programming problems.
            The user will provide you with three inputs: 
             1. A problem definition.
             2. Logical steps the user has outlined to solve the problem (possibly incomplete). 
