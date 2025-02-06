@@ -222,15 +222,23 @@ class FileSelectionQuickPickItem implements vscode.QuickPickItem {
  * @member label: problem definition
  * @member description: for timestamp
  * @member log: selected conversation log itself
+ * @member buttons: delete button
  */
 class ConversationLogQuickPickItem implements vscode.QuickPickItem {
   label: string;
   description: string | undefined;
   log: any;
+  buttons: readonly vscode.QuickInputButton[];
 
   constructor(label: string, description: string | undefined, log: any) {
     this.label = label;
     this.description = description;
     this.log = log;
+    this.buttons = [
+      {
+        iconPath: new vscode.ThemeIcon("trash"),
+        tooltip: "Delete this conversation log",
+      },
+    ];
   }
 }
