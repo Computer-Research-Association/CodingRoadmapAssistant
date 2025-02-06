@@ -139,13 +139,44 @@ export async function pickConversationLog(context: vscode.ExtensionContext): Pro
     ignoreFocusOut: true,
   };
 
-  const selectedItem = await vscode.window.showQuickPick(quickPickItems, quickPickOptions);
+  const quickPick = vscode.window.createQuickPick();
+  quickPick.items = quickPickItems;
+  quickPick.placeholder = quickPickOptions.placeHolder;
+  quickPick.ignoreFocusOut = true;
+  quickPick.activeItems = [];
+  quickPick.selectedItems = [];
 
-  if (!selectedItem) {
-    return handleError(context, "No Log Selected");
-  }
+  let selectedItem: ConversationLogQuickPickItem | undefined;
 
-  return selectedItem.log;
+  return new Promise<any | null>((resolve) => {
+    quickPick.onDidAccept(() => {
+      selectedItem = quickPick.selectedItems[0] as ConversationLogQuickPickItem;
+      quickPick.hide();
+      resolve(selectedItem?.log || null);
+    });
+
+    quickPick.onDidTriggerItemButton(async (event) => {
+      const item = event.item as ConversationLogQuickPickItem;
+
+      // Remove the log from globalState
+      const updatedLogs = conversationLogs.filter((log) => log.timestamp !== item.log.timestamp);
+      await context.globalState.update("conversationLogs", updatedLogs);
+
+      // Update QuickPick items
+      quickPick.items = updatedLogs.map(
+        (log) => new ConversationLogQuickPickItem(log.messages[0].content, new Date(log.timestamp).toISOString(), log)
+      );
+    });
+
+    quickPick.onDidHide(() => {
+      quickPick.dispose();
+      if (!selectedItem) {
+        resolve(null);
+      }
+    });
+
+    quickPick.show();
+  });
 }
 
 function handleError(context: vscode.ExtensionContext, message: string): null {
