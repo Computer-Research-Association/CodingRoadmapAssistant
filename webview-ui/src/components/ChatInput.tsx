@@ -17,7 +17,7 @@ function ChatInput() {
     if (messages.length === 0) {
       setInputType("Definition");
     } else {
-      if (messages[messages.length - 1].type === "Additional" || messages[messages.length - 1].type === "result") {
+      if (messages[messages.length - 1].type === "Additional" || messages[messages.length - 1].type === "Result") {
         setInputType("Additional");
       }
       if (messages[messages.length - 1].type === "Step") {
@@ -40,13 +40,18 @@ function ChatInput() {
       }
 
       if (isSendMessageShortcut) {
+        // 메시시 기존 배열에 add
         e.preventDefault();
         if (messages.length === 0) {
           setTimestamp(Date.now());
         }
         handleSendMessage();
       } else if (isLogMessagesShortcut) {
-        e.preventDefault();
+        // 메시지, gpt 에게 전송 시
+        // additional question일 때
+        if (messages[messages.length - 1].type === "Step")
+          // initial question일 때
+          e.preventDefault();
         openai.sendInitMessage(combineMessages(messages, stepCount));
         window.postMessage({ command: "setLoading", data: true });
         setInputType("additional");

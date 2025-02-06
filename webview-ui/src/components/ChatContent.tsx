@@ -16,7 +16,7 @@ function ChatContent() {
       if (command === "setGptResponse") {
         const gptResponseMessage: Message = {
           // 메시지 전달받기
-          type: "result",
+          type: "Result",
           content: data,
           editable: false,
         };
@@ -75,11 +75,11 @@ function MessageBox({
   index: number;
   message: Message;
 }) {
-  const { deleteMessage, messages, stepCount } = useMessagesStore();
+  const { deleteMessage, messages, stepCount, clearMessages } = useMessagesStore();
   const [additionalContent, setAdditionalContent] = useState<React.ReactNode | null>(null);
 
   const messageType =
-    message.type === "result" ? "result" : message.type.startsWith("Step") ? `${message.type} ${index}` : message.type;
+    message.type === "Result" ? "Result" : message.type.startsWith("Step") ? `${message.type} ${index}` : message.type;
   const messageEndRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" }); // 자신이 호출된 요소가 사용자에게 표시되도록 상위 컨테이너를 스크롤
@@ -98,7 +98,7 @@ function MessageBox({
       <div>
         Do you sure you want to make another question? (conversations will be save at the log)
         <div>
-          <button className="clickNewQuestionBtn-selectYes" onClick={sendAdditionalQuestion}>
+          <button className="clickNewQuestionBtn-selectYes" onClick={clearMessages}>
             Yes
           </button>
           <button className="clickNewQuestionBtn-selectNo" onClick={() => setAdditionalContent(null)}>
@@ -132,7 +132,7 @@ function MessageBox({
         </div>
       </div>
       <div className="additional">
-        {messageType === "result" && (
+        {messageType === "Result" && (
           <div>
             <div className="additional-question">
               <button className="additional-question-button" onClick={clickAdditionalQuestionBtn}>
