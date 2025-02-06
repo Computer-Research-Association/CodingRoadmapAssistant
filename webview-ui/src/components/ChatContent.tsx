@@ -7,7 +7,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { combineMessages, openai } from "../utilities/openai";
 
 function ChatContent() {
-  const { messages, updateMessage, addMessage } = useMessagesStore();
+  const { messages, updateMessage, addMessage, loadMessages, setTimestamp } = useMessagesStore();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -23,6 +23,9 @@ function ChatContent() {
         setLoading(false);
       } else if (command === "setLoading") {
         setLoading(data);
+      } else if (command === "setSelectedLog") {
+        setTimestamp(data.timestamp);
+        loadMessages(data.messages as Message[]);
       }
     };
 
@@ -30,7 +33,7 @@ function ChatContent() {
     return () => {
       window.removeEventListener("message", handleGetGPTResponse);
     };
-  }, [addMessage]);
+  }, [addMessage, loadMessages, setTimestamp]);
 
   const handleBlur = (e: React.ChangeEvent<HTMLDivElement>, index: number) => {
     updateMessage(index, e.target.innerText);

@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import OpenAI from "openai";
 import { showApiKeyError, saveLogToGlobalState, pickOpenedDocument } from "./craConfigManager";
 import { getUri, getNonce } from "./utilities";
+import { pickConversationLog } from "./craConfigManager";
 
 export default class CRAWebviewViewProvider implements vscode.WebviewViewProvider {
   private apiKey?: string;
@@ -55,15 +56,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             command: "setGptResponse",
             data: gptResponse,
           });
-
-          // save it's answer to the conversationLog
-          const gptData = [
-            {
-              role: "system",
-              content: gptResponse,
-            },
-          ];
-          saveLogToGlobalState(this.context, gptData); //vscode 저장소에 저장
           break;
 
         case "button":
@@ -85,10 +77,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
               command: "setData",
               data: gptResponse,
             });
-
-            // 로그 저장 (선택적)
-            const gptData = [{ role: "system", content: gptResponse }];
-            saveLogToGlobalState(this.context, gptData);
           } catch (error) {
             console.error(`Error processing button ${btnNumber} click:`, error);
             vscode.window.showErrorMessage(`Failed to process button ${btnNumber} click.`);
@@ -97,6 +85,18 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
         case "saveMessageLog":
           saveLogToGlobalState(this.context, message.data);
+          break;
+
+        case "history":
+          console.log("1");
+          const selectedLog = await pickConversationLog(this.context);
+          console.log(selectedLog);
+          if (selectedLog) {
+            webviewView.webview.postMessage({
+              command: "setSelectedLog",
+              data: selectedLog,
+            });
+          }
           break;
 
         case "debug":
@@ -178,10 +178,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
       if (completion.choices[0]?.message?.content === null) {
         return "No response from GPT.";
       }
-
-      // save user's question to the conversationLog
-      saveLogToGlobalState(this.context, userMessages);
-
       return completion.choices[0]?.message?.content.trim();
     } catch (error: any) {
       console.error("GPT API Error:", error); // 콘솔에 상세 에러 출력

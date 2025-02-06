@@ -9,10 +9,9 @@ import { vscode } from "../utilities/vscode";
 
 function ChatInput() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { messages, addMessage, stepCount } = useMessagesStore();
+  const { messages, addMessage, stepCount, timestamp, setTimestamp } = useMessagesStore();
   const [inputType, setInputType] = useState(messages.length > 0 ? "Step" : "Definition");
   const [isComposing, setIsComposing] = useState(false);
-  const [timeStamp, setTimeStamp] = useState(0);
 
   useEffect(() => {
     if (messages.length === 0) {
@@ -36,7 +35,7 @@ function ChatInput() {
       if (isSendMessageShortcut) {
         e.preventDefault();
         if (messages.length === 0) {
-          setTimeStamp(Date.now());
+          setTimestamp(Date.now());
         }
         handleSendMessage();
       } else if (isLogMessagesShortcut) {
@@ -49,17 +48,17 @@ function ChatInput() {
   };
 
   useEffect(() => {
-    console.log(timeStamp);
-    if (timeStamp !== 0 && messages.length > 0) {
+    console.log(timestamp);
+    if (timestamp !== 0 && messages.length > 0) {
       vscode.postMessage({
         command: "saveMessageLog",
         data: {
-          timestamp: timeStamp,
+          timestamp: timestamp,
           messages: messages,
         },
       });
     }
-  }, [messages, timeStamp]);
+  }, [messages, timestamp]);
 
   const handleSendMessage = () => {
     const input = inputRef.current;
