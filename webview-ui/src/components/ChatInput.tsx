@@ -5,12 +5,14 @@ import { Message } from "../types/messageStoreTypes";
 import { VscFile } from "react-icons/vsc";
 import getOs from "../utilities/getOs";
 import { openai, combineMessages } from "../utilities/openai";
+import { vscode } from "../utilities/vscode";
 
 function ChatInput() {
   const inputRef = useRef<HTMLInputElement>(null);
   const { messages, addMessage, stepCount } = useMessagesStore();
   const [inputType, setInputType] = useState(messages.length > 0 ? "Step" : "Definition");
   const [isComposing, setIsComposing] = useState(false);
+  const [timeStamp, setTimeStamp] = useState(0);
 
   useEffect(() => {
     if (messages.length === 0) {
@@ -33,6 +35,9 @@ function ChatInput() {
 
       if (isSendMessageShortcut) {
         e.preventDefault();
+        if (messages.length === 0) {
+          setTimeStamp(Date.now());
+        }
         handleSendMessage();
       } else if (isLogMessagesShortcut) {
         e.preventDefault();
@@ -42,6 +47,19 @@ function ChatInput() {
       }
     }
   };
+
+  useEffect(() => {
+    console.log(timeStamp);
+    if (timeStamp !== 0 && messages.length > 0) {
+      vscode.postMessage({
+        command: "saveMessageLog",
+        data: {
+          timestamp: timeStamp,
+          messages: messages,
+        },
+      });
+    }
+  }, [messages, timeStamp]);
 
   const handleSendMessage = () => {
     const input = inputRef.current;
