@@ -16,6 +16,13 @@ function ChatInput() {
   useEffect(() => {
     if (messages.length === 0) {
       setInputType("Definition");
+    } else {
+      if (messages[messages.length - 1].type === "Additional" || messages[messages.length - 1].type === "result") {
+        setInputType("Additional");
+      }
+      if (messages[messages.length - 1].type === "Step") {
+        setInputType("Step");
+      }
     }
   }, [messages]);
 
@@ -48,7 +55,6 @@ function ChatInput() {
   };
 
   useEffect(() => {
-    console.log(timestamp);
     if (timestamp !== 0 && messages.length > 0) {
       vscode.postMessage({
         command: "saveMessageLog",
