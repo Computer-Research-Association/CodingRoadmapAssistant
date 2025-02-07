@@ -4,7 +4,7 @@ Contributions, issues and feature requests are welcome!<br />Feel free to check 
 
 #### Installation ( for contributing )
 
-1. install the recommended extensions (dbaeumer.vscode-eslint, connor4312.esbuild-problem-matchers", ms-vscode.extension-test-runner, tobermory.es6-string-html)
+1. install the recommended extensions (`dbaeumer.vscode-eslint`, `connor4312.esbuild-problem-matchers`, `ms-vscode.extension-test-runner`, `tobermory.es6-string-html`)
 
 2. install NPM package
 
@@ -71,3 +71,8 @@ git push origin <issueNumber>-<featureName>
 ```
 
 5. Open a pull request
+
+## Coding convention
+
+- Ensure that all code written in this workspace is automatically formatted and linted using the configured prettier and eslint settings.
+- It is recommended to write JSDoc for frequently used utility functions."
