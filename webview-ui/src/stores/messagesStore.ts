@@ -8,7 +8,7 @@ const useMessagesStore = create<MessagesState>((set) => ({
   inputType: "Definition",
   addMessage: (newMessage) =>
     set((state) => {
-      const isStep = state.messages.length > 0 && newMessage.type === "step";
+      const isStep = state.messages.length > 0 && newMessage.type === "Step";
       return {
         messages: [...state.messages, newMessage],
         stepCount: isStep ? state.stepCount + 1 : state.stepCount,
@@ -18,7 +18,7 @@ const useMessagesStore = create<MessagesState>((set) => ({
   deleteMessage: (index: number) =>
     set((state) => {
       const newMessages = state.messages.filter((_, i) => i !== index);
-      const newStepCount = newMessages.filter((msg) => msg.type === "step").length;
+      const newStepCount = newMessages.filter((msg) => msg.type === "Step").length;
       return { messages: newMessages, stepCount: newStepCount };
     }),
   updateMessage: (index: number, newContent: string) => {
@@ -29,7 +29,7 @@ const useMessagesStore = create<MessagesState>((set) => ({
   loadMessages: (messages) =>
     set({
       messages,
-      stepCount: messages.filter((msg) => msg.type === "step").length,
+      stepCount: messages.filter((msg) => msg.type === "Step").length,
     }),
   setTimestamp: (timestamp) => set({ timestamp }),
   updateMessagesEditableState: (newState) =>

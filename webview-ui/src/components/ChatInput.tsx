@@ -17,7 +17,7 @@ function ChatInput() {
     if (messages.length === 0) {
       setInputType("Definition");
     } else {
-      if (messages[messages.length - 1].type === "Additional" || messages[messages.length - 1].type === "result") {
+      if (messages[messages.length - 1].type === "Additional" || messages[messages.length - 1].type === "Result") {
         setInputType("Additional");
       }
       if (messages[messages.length - 1].type === "Step") {
