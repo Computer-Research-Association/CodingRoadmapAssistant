@@ -4,6 +4,9 @@ import { VscTrash } from "react-icons/vsc";
 import React, { useEffect, useRef, useState } from "react";
 import { Message } from "../types/messageStoreTypes";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { RiChatNewLine } from "react-icons/ri";
+import { GrHistory } from "react-icons/gr";
+
 // import { combineMessages, openai } from "../utilities/openai";
 
 function ChatContent() {
@@ -55,8 +58,38 @@ function ChatContent() {
         </div>
       ) : (
         <div className="description">
-          <p>Welcome to Coding Roadmap Assistant, best was to help your programming solving skills.</p>
-          <p>How To Start</p>
+          <p className="intro">
+            Welcome to <strong>Coding Roadmap Assistant</strong>, the best way to help your programming solving skills.
+          </p>
+          <p className="how-to-start-title">
+            <strong>How To Start</strong>
+          </p>
+          <ol className="steps">
+            <li>1. First, open the code file you are writing to solve.</li>
+            <li>2. Enter the problem definition of the coding problem you want to solve.</li>
+            <li>3. Enter the process of solving the problem step by step.</li>
+            <li>
+              4. Press <kbd>ctrl + ⏎</kbd> or <kbd>⌘ + ⏎</kbd> to run.
+            </li>
+            <li>
+              5. After the leading question appears, if there is an additional question, enter the additional question
+              and press enter.
+            </li>
+            <li>
+              6. Press <kbd>ctrl + ⏎</kbd> or <kbd>⌘ + ⏎</kbd> again to run.
+            </li>
+          </ol>
+          <p className="additional-info">
+            <strong className="spacing">
+              <RiChatNewLine />
+            </strong>{" "}
+            <span className="spacing">Start a new conversation</span>
+            <br />
+            <strong className="spacing">
+              <GrHistory />
+            </strong>{" "}
+            <span className="spacing">List of conversations so far</span>
+          </p>
         </div>
       )}
       {loading ? (
