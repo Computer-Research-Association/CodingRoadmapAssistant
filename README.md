@@ -9,10 +9,6 @@
 
 > Coding Companion for Coding Beginners, based on OpenAI API.
 
-## Prerequisites
-
-- vscode ^1.96.0
-
 ## Author
 
 👤 **NewCar**
@@ -21,9 +17,13 @@
 | :--------------------------------------------: | :----------------------------------: | :--------------------------------------: | :--------------------------------------: |
 | [@chachaaa-23](https://github.com/chachaaa-23) | [@dan05s](https://github.com/dan05s) | [@Jangmyun](https://github.com/Jangmyun) | [@young170](https://github.com/young170) |
 
-## 🤝 Contributing
+## Contributing
 
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Computer-Research-Association/CodingRoadmapAssistant/issues).
+
+#### Prerequisites
+
+- vscode ^1.96.0
 
 #### Installation ( for contributing )
 
@@ -47,7 +47,3 @@ Give a ⭐️ if this project helped you!
 
 Copyright © 2025 [NewCar](https://github.com/orgs/Computer-Research-Association/teams/24-2-newcar).<br />
 This project is [MIT](https://mit-license.org/) licensed.
-
----
-
-_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
