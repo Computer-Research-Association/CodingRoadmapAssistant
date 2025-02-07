@@ -1,7 +1,8 @@
 import "../styles/Header.css";
 import useMessagesStore from "../stores/messagesStore";
-import { AiOutlineClear } from "react-icons/ai";
-import { VscHistory } from "react-icons/vsc";
+import { GrHistory } from "react-icons/gr";
+import { RiChatNewLine } from "react-icons/ri";
+
 import { vscode } from "../utilities/vscode";
 
 function Header() {
@@ -18,10 +19,10 @@ function Header() {
         <div className="title">Chat with CRA</div>
         <div className="icon flex">
           <div className="icon-clear" onClick={clearMessages}>
-            <AiOutlineClear />
+            <RiChatNewLine />
           </div>
           <div className="icon-history" onClick={handleHistoryClick}>
-            <VscHistory />
+            <GrHistory />
           </div>
         </div>
       </div>
