@@ -45,7 +45,7 @@
         {
           "id": "craActivitybar",
           "title": "Coding Roadmap Assistant",
-          "icon": "media/icons.svg"
+          "icon": "/icon.svg"
         }
       ]
     },
