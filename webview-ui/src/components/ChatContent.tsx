@@ -54,7 +54,10 @@ function ChatContent() {
           ))}
         </div>
       ) : (
-        <div className="learnCRA">LEARN CRA!!!</div>
+        <div className="description">
+          <p>Welcome to Coding Roadmap Assistant, best was to help your programming solving skills.</p>
+          <p>How To Start</p>
+        </div>
       )}
       {loading ? (
         <div className="loading">
