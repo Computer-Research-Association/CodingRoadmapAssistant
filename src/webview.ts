@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import OpenAI from "openai";
-import { showApiKeyError, saveLogToGlobalState, pickOpenedDocument } from "./craConfigManager";
+import { showApiKeyError, saveLogToGlobalState } from "./craConfigManager";
 import { getUri, getNonce } from "./utilities";
 import { pickConversationLog } from "./craConfigManager";
 
@@ -37,17 +37,13 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
       switch (message.command) {
         case "initialRequest":
           // 사용자 코드 추가
-          let textDoc: vscode.TextDocument | null = null;
+          let textDoc: vscode.TextDocument | undefined;
 
-          while (textDoc === null) {
-            textDoc = await pickOpenedDocument(this.context);
-            if (!textDoc) {
-              vscode.window.showErrorMessage("No document selected. Please select a document.");
-              return;
-            }
-          }
+          textDoc = vscode.window.activeTextEditor?.document;
+          console.log(textDoc?.getText());
+
           // 문제정의+단계+전체 코드
-          const messageToSend = message.value + "User's Code: " + textDoc.getText();
+          const messageToSend = message.value + "User's Code: " + (textDoc?.getText() || "");
 
           //GPT API 호출
           const gptResponse = await this.callGptApi(messageToSend);
@@ -59,12 +55,11 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           break;
 
         case "button":
-          const btnNumber = message.number;
           try {
             // 사용자가 버튼 클릭 시 전달한 데이터 (기존 GPT 응답)
             const previousResponse = message.data;
-            const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the guiding question number ${btnNumber}. 
-            Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the question number ${btnNumber}.`;
+            const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the guiding question. 
+            Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the question.`;
 
             // GPT 요청에 사용할 조합된 프롬프트
             const combinedPrompt = `${userPrompt}\n\nPrevious Response:\n${previousResponse}`;
@@ -74,12 +69,12 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
             // 결과를 웹뷰로 전송
             webviewView.webview.postMessage({
-              command: "setData",
+              command: "setGptResponse",
               data: gptResponse,
             });
           } catch (error) {
-            console.error(`Error processing button ${btnNumber} click:`, error);
-            vscode.window.showErrorMessage(`Failed to process button ${btnNumber} click.`);
+            console.error(`Error processing button:`, error);
+            vscode.window.showErrorMessage(`Failed to process button`);
           }
           break;
 
