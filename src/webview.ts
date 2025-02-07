@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import OpenAI from "openai";
-import { showApiKeyError, saveLogToGlobalState, pickOpenedDocument } from "./craConfigManager";
+import { showApiKeyError, saveLogToGlobalState } from "./craConfigManager";
 import { getUri, getNonce } from "./utilities";
 import { pickConversationLog } from "./craConfigManager";
 
@@ -37,17 +37,13 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
       switch (message.command) {
         case "initialRequest":
           // 사용자 코드 추가
-          let textDoc: vscode.TextDocument | null = null;
+          let textDoc: vscode.TextDocument | undefined;
 
-          while (textDoc === null) {
-            textDoc = await pickOpenedDocument(this.context);
-            if (!textDoc) {
-              vscode.window.showErrorMessage("No document selected. Please select a document.");
-              return;
-            }
-          }
+          textDoc = vscode.window.activeTextEditor?.document;
+          console.log(textDoc?.getText());
+
           // 문제정의+단계+전체 코드
-          const messageToSend = message.value + "User's Code: " + textDoc.getText();
+          const messageToSend = message.value + "User's Code: " + (textDoc?.getText() || "");
 
           //GPT API 호출
           const gptResponse = await this.callGptApi(messageToSend);

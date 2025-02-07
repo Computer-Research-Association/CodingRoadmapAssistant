@@ -29,7 +29,7 @@ const useMessagesStore = create<MessagesState>((set) => ({
   loadMessages: (messages) =>
     set({
       messages,
-      stepCount: messages.filter((msg) => msg.type === "step").length,
+      stepCount: messages.filter((msg) => msg.type === "Step").length,
     }),
   setTimestamp: (timestamp) => set({ timestamp }),
   updateMessagesEditableState: (newState) =>
