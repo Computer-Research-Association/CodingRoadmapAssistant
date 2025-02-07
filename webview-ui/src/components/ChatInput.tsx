@@ -9,7 +9,7 @@ import { vscode } from "../utilities/vscode";
 
 function ChatInput() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { messages, addMessage, stepCount, timestamp, setTimestamp } = useMessagesStore();
+  const { messages, addMessage, stepCount, timestamp, setTimestamp, updateMessagesEditableState } = useMessagesStore();
   const [inputType, setInputType] = useState(messages.length > 0 ? "Step" : "Definition");
   const [isComposing, setIsComposing] = useState(false);
 
@@ -17,7 +17,7 @@ function ChatInput() {
     if (messages.length === 0) {
       setInputType("Definition");
     } else {
-      if (messages[messages.length - 1].type === "Additional" || messages[messages.length - 1].type === "result") {
+      if (messages[messages.length - 1].type === "Additional" || messages[messages.length - 1].type === "Result") {
         setInputType("Additional");
       }
       if (messages[messages.length - 1].type === "Step") {
@@ -47,6 +47,7 @@ function ChatInput() {
         handleSendMessage();
       } else if (isLogMessagesShortcut) {
         e.preventDefault();
+        updateMessagesEditableState(false);
         openai.sendInitMessage(combineMessages(messages, stepCount));
         window.postMessage({ command: "setLoading", data: true });
         setInputType("additional");
@@ -72,7 +73,7 @@ function ChatInput() {
       const message: Message = {
         type: inputType,
         content: input.innerText.trim(),
-        editable: inputType !== "Definition" && inputType !== "Additional",
+        editable: true,
       };
       addMessage(message);
       input.innerText = "";

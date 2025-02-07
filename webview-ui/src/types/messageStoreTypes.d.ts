@@ -15,4 +15,5 @@ export interface MessagesState {
   updateMessage: (index: number, newMessage: string) => void;
   loadMessages: (messages: Message[]) => void;
   setTimestamp: (timestamp: number) => void;
+  updateMessagesEditableState: (newState: boolean) => void;
 }
