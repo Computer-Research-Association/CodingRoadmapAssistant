@@ -16,7 +16,7 @@ function ChatContent() {
       if (command === "setGptResponse") {
         const gptResponseMessage: Message = {
           // 메시지 전달받기
-          type: "result",
+          type: "Result",
           content: data,
           editable: false,
         };
@@ -79,7 +79,7 @@ function MessageBox({
   const [additionalContent, setAdditionalContent] = useState<React.ReactNode | null>(null);
 
   const messageType =
-    message.type === "result" ? "result" : message.type.startsWith("Step") ? `${message.type} ${index}` : message.type;
+    message.type === "Result" ? "Result" : message.type.startsWith("Step") ? `${message.type} ${index}` : message.type;
   const messageEndRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" }); // 자신이 호출된 요소가 사용자에게 표시되도록 상위 컨테이너를 스크롤
@@ -128,7 +128,7 @@ function MessageBox({
         </div>
       </div>
       <div className="additional">
-        {messageType === "result" && (
+        {messageType === "Result" && (
           <div>
             <div className="additional-question">
               <button className="additional-question-button" onClick={clickQuestionBtn}>
