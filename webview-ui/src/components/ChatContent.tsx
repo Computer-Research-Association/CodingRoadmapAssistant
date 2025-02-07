@@ -75,39 +75,39 @@ function MessageBox({
   index: number;
   message: Message;
 }) {
-  const { deleteMessage } = useMessagesStore();
-  // const [additionalContent, setAdditionalContent] = useState<React.ReactNode | null>(null);
+  const { deleteMessage, clearMessages } = useMessagesStore();
+  const [additionalContent, setAdditionalContent] = useState<React.ReactNode | null>(null);
 
   const messageType =
     message.type === "result" ? "result" : message.type.startsWith("Step") ? `${message.type} ${index}` : message.type;
-  // const messageEndRef = useRef<HTMLDivElement | null>(null);
-  // useEffect(() => {
-  //   messageEndRef.current?.scrollIntoView({ behavior: "smooth" }); // 자신이 호출된 요소가 사용자에게 표시되도록 상위 컨테이너를 스크롤
-  // }, [additionalContent]);
+  const messageEndRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" }); // 자신이 호출된 요소가 사용자에게 표시되도록 상위 컨테이너를 스크롤
+  }, [additionalContent]);
 
   // const sendAdditionalQuestion = () => {
   //   openai.sendAdditionalMessage(combineMessages(messages, stepCount));
   // };
 
-  // const clickAdditionalQuestionBtn = () => {
-  //   setAdditionalContent(<div>Type your question into the below input box ⬇️</div>);
-  // };
+  const clickQuestionBtn = () => {
+    setAdditionalContent(<div>Type your question into the below input box ⬇️</div>);
+  };
 
-  // const clickNewQuestionBtn = () => {
-  //   setAdditionalContent(
-  //     <div>
-  //       Do you sure you want to make another question? (conversations will be save at the log)
-  //       <div>
-  //         <button className="clickNewQuestionBtn-selectYes" onClick={clearMessages}>
-  //           Yes
-  //         </button>
-  //         <button className="clickNewQuestionBtn-selectNo" onClick={() => setAdditionalContent(null)}>
-  //           No
-  //         </button>
-  //       </div>
-  //     </div>
-  //   );
-  // };
+  const clickNewQuestionBtn = () => {
+    setAdditionalContent(
+      <div>
+        Do you sure you want to make another question? (conversations will be save at the log)
+        <div>
+          <button className="clickNewQuestionBtn-selectYes" onClick={clearMessages}>
+            Yes
+          </button>
+          <button className="clickNewQuestionBtn-selectNo" onClick={() => setAdditionalContent(null)}>
+            No
+          </button>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="message">
@@ -135,14 +135,20 @@ function MessageBox({
         {messageType === "result" && (
           <div>
             <div className="additional-question">
-              <button className="additional-question-button">🐜 Do you have any extra question?</button>
+              <button className="additional-question-button" onClick={clickQuestionBtn}>
+                🐜 Do you have any extra question?
+              </button>
             </div>
             <div className="additional-new">
-              <button className="additional-new-button">👀 Do you want to start a new question?</button>
+              <button className="additional-new-button" onClick={clickNewQuestionBtn}>
+                👀 Do you want to start a new question?
+              </button>
             </div>
+            {additionalContent && <div className="additional-content">{additionalContent}</div>}
           </div>
         )}
       </div>
+      <div ref={messageEndRef}></div>
     </div>
   );
 }
