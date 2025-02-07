@@ -266,6 +266,7 @@
 
 .description .additional-info .spacing1 {
   text-align: left;
+  margin-left: 0px;
 }
 
 .description .additional-info .spacing2 {
@@ -283,4 +284,9 @@
 .description .additional-info i {
   margin-right: 16px;
   vertical-align: middle;
+}
+
+.description {
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
