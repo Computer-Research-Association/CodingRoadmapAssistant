@@ -72,7 +72,7 @@ function ChatInput() {
       const message: Message = {
         type: inputType,
         content: input.innerText.trim(),
-        editable: true,
+        editable: inputType !== "Definition" && inputType !== "Additional",
       };
       addMessage(message);
       input.innerText = "";
