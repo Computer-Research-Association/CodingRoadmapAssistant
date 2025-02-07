@@ -208,3 +208,85 @@
   margin-bottom: 12px;
   line-height: 1.4;
 }
+
+/* Description Container */
+.description {
+  color: var(--vscode-editor-foreground);
+  background: rgba(var(--vscode-editor-background), 0.9);
+  padding: 15px 30px;
+  border-radius: 12px;
+  margin: 40px auto;
+  max-width: 750px;
+  width: 90%;
+  word-wrap: break-word;
+}
+
+.description .how-to-start-title {
+  font-size: 1.2rem;
+  text-align: left;
+  color: var(--vscode-input-foreground);
+  margin-bottom: 6px;
+}
+
+.description .steps {
+  background: var(--vscode-list-inactiveSelectionBackground);
+  color: var(--vscode-input-foreground);
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  list-style-type: none;
+  word-wrap: break-word;
+}
+
+.description .steps li {
+  margin-bottom: 6px;
+  padding: 4px 0;
+  display: flex;
+  align-items: center;
+}
+
+.description .steps li::before {
+  content: attr(data-step);
+  font-weight: bold;
+  margin-right: 10px;
+  color: var(--vscode-input-foreground);
+}
+
+.description .additional-info {
+  margin-top: 12px;
+  padding: 8px;
+  background-color: var(--vscode-editor-background);
+  border-radius: 8px;
+  border: 1px solid var(--vscode-input-border);
+  color: var(--vscode-editor-foreground);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.description .additional-info .spacing1 {
+  text-align: left;
+  margin-left: 0px;
+}
+
+.description .additional-info .spacing2 {
+  margin-left: auto;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
+}
+
+.description .additional-info span {
+  margin-left: 7px;
+}
+
+.description .additional-info i {
+  margin-right: 16px;
+  vertical-align: middle;
+}
+
+.description {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
