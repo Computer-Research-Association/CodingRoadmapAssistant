@@ -9,7 +9,7 @@ import { vscode } from "../utilities/vscode";
 
 function ChatInput() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { messages, addMessage, stepCount, timestamp, setTimestamp } = useMessagesStore();
+  const { messages, addMessage, stepCount, timestamp, setTimestamp, loadMessages } = useMessagesStore();
   const [inputType, setInputType] = useState(messages.length > 0 ? "Step" : "Definition");
   const [isComposing, setIsComposing] = useState(false);
 
@@ -49,7 +49,7 @@ function ChatInput() {
         e.preventDefault();
         openai.sendInitMessage(combineMessages(messages, stepCount));
         window.postMessage({ command: "setLoading", data: true });
-        setInputType("additional");
+        handleGptSendMessage();
       }
     }
   };
@@ -72,7 +72,7 @@ function ChatInput() {
       const message: Message = {
         type: inputType,
         content: input.innerText.trim(),
-        editable: inputType !== "Definition" && inputType !== "Additional",
+        editable: inputType !== "Definition" && inputType === "Additional",
       };
       addMessage(message);
       input.innerText = "";
@@ -82,6 +82,18 @@ function ChatInput() {
         setInputType(`Step`);
       }
     }
+  };
+
+  const handleGptSendMessage = () => {
+    if (messages.length === 0) return;
+
+    openai.sendInitMessage(combineMessages(messages, stepCount));
+    window.postMessage({ command: "setLoading", data: true });
+
+    const updatedMessages = messages.map((msg) => ({ ...msg, editable: false }));
+    loadMessages(updatedMessages);
+
+    setInputType("Additional");
   };
 
   const definitionPlaceholderText = "Type your problem definition here...";
