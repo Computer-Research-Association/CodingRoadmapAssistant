@@ -85,10 +85,6 @@ function MessageBox({
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" }); // 자신이 호출된 요소가 사용자에게 표시되도록 상위 컨테이너를 스크롤
   }, [additionalContent]);
 
-  // const sendAdditionalQuestion = () => {
-  //   openai.sendAdditionalMessage(combineMessages(messages, stepCount));
-  // };
-
   const clickQuestionBtn = () => {
     setAdditionalContent(<div>Type your question into the below input box ⬇️</div>);
   };
@@ -136,12 +132,12 @@ function MessageBox({
           <div>
             <div className="additional-question">
               <button className="additional-question-button" onClick={clickQuestionBtn}>
-                🐜 Do you have any extra question?
+                Do you have any extra✨ question?
               </button>
             </div>
             <div className="additional-new">
               <button className="additional-new-button" onClick={clickNewQuestionBtn}>
-                👀 Do you want to start a new question?
+                Do you want to start a new👀 question?
               </button>
             </div>
             {additionalContent && <div className="additional-content">{additionalContent}</div>}

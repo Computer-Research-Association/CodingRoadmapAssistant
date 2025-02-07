@@ -143,3 +143,68 @@
 .message-buttons button:hover {
   background: var(--vscode-button-hoverBackground);
 }
+/* Additional Content Container */
+.additional {
+  margin: 16px 0;
+  width: 100%;
+}
+
+/* Button Container */
+.additional-question,
+.additional-new {
+  margin-bottom: 12px;
+}
+
+/* Base Button Styles */
+.additional-question-button,
+.additional-new-button {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--vscode-button-background);
+  background: transparent;
+  color: var(--vscode-editor-foreground);
+  font-size: 0.9rem;
+  transition: all 0.1s ease;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.additional-question-button:hover,
+.additional-new-button:hover {
+  background: var(--vscode-button-background);
+  transform: translateY(-1px);
+}
+
+/* Additional Content Area */
+.additional-content {
+  margin-top: 16px;
+  border-radius: 6px;
+  background: rgba(var(--vscode-editor-background), 0.5);
+  border: 1px solid var(--vscode-input-border);
+}
+
+/* Yes/No Button Container */
+.clickNewQuestionBtn-selectYes,
+.clickNewQuestionBtn-selectNo {
+  margin-top: 8px;
+  margin-right: 8px;
+  padding: 4px 14px;
+  border-radius: 4px;
+  border: none;
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.clickNewQuestionBtn-selectNo {
+  background: var(--vscode-errorForeground);
+}
+
+/* Confirmation Message */
+.additional-content > div {
+  text-align: center;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
