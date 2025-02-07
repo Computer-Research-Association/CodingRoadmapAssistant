@@ -80,15 +80,15 @@ function ChatContent() {
             </li>
           </ol>
           <p className="additional-info">
-            <strong className="spacing">
+            <strong className="spacing1">
               <RiChatNewLine />
             </strong>{" "}
-            <span className="spacing">Start a new conversation</span>
+            <span className="spacing1">New Chat</span>
             <br />
-            <strong className="spacing">
+            <strong className="spacing2">
               <GrHistory />
             </strong>{" "}
-            <span className="spacing">List of conversations so far</span>
+            <span className="spacing2">Chatting History</span>
           </p>
         </div>
       )}
