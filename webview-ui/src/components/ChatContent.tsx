@@ -82,7 +82,7 @@ function MessageBox({
     message.type === "result" ? "result" : message.type.startsWith("Step") ? `${message.type} ${index}` : message.type;
   const messageEndRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    messageEndRef.current?.scrollIntoView({ behavior: "smooth" }); // 자신이 호출된 요소가 사용자에게 표시되도록 상위 컨테이너를 스크롤
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [additionalContent]);
 
   const clickQuestionBtn = () => {
