@@ -32,6 +32,13 @@ const useMessagesStore = create<MessagesState>((set) => ({
       stepCount: messages.filter((msg) => msg.type === "step").length,
     }),
   setTimestamp: (timestamp) => set({ timestamp }),
+  updateMessagesEditableState: (newState) =>
+    set((state) => ({
+      messages: state.messages.map((msg) => ({
+        ...msg,
+        editable: newState,
+      })),
+    })),
 }));
 
 export default useMessagesStore;
