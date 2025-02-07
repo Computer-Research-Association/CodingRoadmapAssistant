@@ -48,7 +48,12 @@ function ChatInput() {
       } else if (isLogMessagesShortcut) {
         e.preventDefault();
         updateMessagesEditableState(false);
-        openai.sendInitMessage(combineMessages(messages, stepCount));
+
+        if (messages[messages.length - 1].type === "Step") {
+          openai.sendInitMessage(combineMessages(messages, stepCount));
+        } else {
+          openai.sendAdditionalMessage(combineMessages(messages, stepCount));
+        }
         window.postMessage({ command: "setLoading", data: true });
         setInputType("additional");
       }
