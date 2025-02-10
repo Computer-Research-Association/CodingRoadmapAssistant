@@ -62,19 +62,16 @@ function ChatContent() {
             Welcome to <strong>Coding Roadmap Assistant</strong>, the best way to help your programming solving skills.
           </p>
           <p className="how-to-start-title">
-            <strong>How To Start</strong>
+            <strong>How to Start</strong>
           </p>
           <ol className="steps">
-            <li>1. First, open the code file you are writing to solve.</li>
-            <li>2. Enter the problem definition of the coding problem you want to solve.</li>
+            <li>1. First, open the source code file you are working on.</li>
+            <li>2. Enter the problem definition you want to solve.</li>
             <li>3. Enter the process of solving the problem step by step.</li>
             <li>
               4. Press <kbd>ctrl + ⏎</kbd> or <kbd>⌘ + ⏎</kbd> to run.
             </li>
-            <li>
-              5. After the leading question appears, if there is an additional question, enter the additional question
-              and press enter.
-            </li>
+            <li>5. After the guiding questions are generated, ask additional questions if needed</li>
             <li>
               6. Press <kbd>ctrl + ⏎</kbd> or <kbd>⌘ + ⏎</kbd> again to run.
             </li>
@@ -88,7 +85,7 @@ function ChatContent() {
             <strong className="spacing2">
               <GrHistory />
             </strong>{" "}
-            <span className="spacing2">Chatting History</span>
+            <span className="spacing2">Chat History</span>
           </p>
         </div>
       )}
@@ -126,13 +123,13 @@ function MessageBox({
   }, [additionalContent]);
 
   const clickQuestionBtn = () => {
-    setAdditionalContent(<div>Type your question into the below input box ⬇️</div>);
+    setAdditionalContent(<div>Type your question in the input box below ⬇️</div>);
   };
 
   const clickNewQuestionBtn = () => {
     setAdditionalContent(
       <div>
-        Do you sure you want to make another question? (conversations will be save at the log)
+        Are you sure you want to ask another question? (conversations will be saved in the logs)
         <div>
           <button className="clickNewQuestionBtn-selectYes" onClick={clearMessages}>
             Yes
@@ -172,7 +169,7 @@ function MessageBox({
           <div>
             <div className="additional-question">
               <button className="additional-question-button" onClick={clickQuestionBtn}>
-                Do you have any extra✨ question?
+                Do you have any extra✨ questions?
               </button>
             </div>
             <div className="additional-new">
