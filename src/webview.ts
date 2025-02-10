@@ -1,13 +1,14 @@
 import * as vscode from "vscode";
-import * as path from "path";
-import * as fs from "fs";
 import OpenAI from "openai";
-import { showApiKeyError, saveLogToGlobalState, pickOpenedDocument } from "./craConfigManager";
+import { showApiKeyError, saveLogToGlobalState } from "./craConfigManager";
+import { getUri, getNonce } from "./utilities";
+import { pickConversationLog } from "./craConfigManager";
 
 export default class CRAWebviewViewProvider implements vscode.WebviewViewProvider {
   private apiKey?: string;
   private context: vscode.ExtensionContext;
   private openai?: OpenAI;
+  private webview?: vscode.Webview;
 
   constructor(context: vscode.ExtensionContext) {
     this.context = context;
@@ -19,78 +20,46 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     _context: vscode.WebviewViewResolveContext,
     _token: vscode.CancellationToken
   ) {
+    this.webview = webviewView.webview;
     // 웹뷰의 옵션에 localResourceRoots를 설정
     webviewView.webview.options = {
       enableScripts: true, // 자바스크립트 활성화
       localResourceRoots: [
-        vscode.Uri.joinPath(this.context.extensionUri, "media"), // media 폴더를 로컬 리소스로 설정
+        vscode.Uri.joinPath(this.context.extensionUri, "out"),
+        vscode.Uri.joinPath(this.context.extensionUri, "webview-ui/build"),
       ],
     };
 
-    // HTML 파일 읽기
-    const styleUri = webviewView.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.context.extensionUri, "media", "style.css")
-    );
-    const htmlPath = path.join(this.context.extensionPath, "media", "webview.html");
-    let htmlContent = fs.readFileSync(htmlPath, "utf-8");
-
-    htmlContent = htmlContent.replace("</head>", `<link rel="stylesheet" href="${styleUri}"></head>`);
-
-    //웹뷰 HTML 내에서 자바스크립트 파일 경로를 로컬 URI로 변환하여 사용
-    const scriptUri = webviewView.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.context.extensionUri, "media", "webviewscript.js")
-    );
-
-    //HTML 내용에서 script 태그를 삽입할 부분
-    htmlContent = htmlContent.replace(
-      /<script src="webviewscript.js"><\/script>/,
-      `<script src="${scriptUri}"></script>`
-    );
-
     //웹뷰 HTML 설정
-    webviewView.webview.html = htmlContent;
+    webviewView.webview.html = this._getWebviewContent(webviewView.webview, this.context.extensionUri);
 
-    // webviewscript.js 에서 데이터를 받는 핸들러 설정
     webviewView.webview.onDidReceiveMessage(async (message) => {
-      // send request to OpenAI
       switch (message.command) {
-        case "process":
+        case "initialRequest":
           // 사용자 코드 추가
-          let textDoc: vscode.TextDocument | null = null;
+          let textDoc: vscode.TextDocument | undefined;
 
-          while (textDoc === null) {
-            textDoc = await pickOpenedDocument(this.context);
-            if (!textDoc) {
-              vscode.window.showErrorMessage("No document selected. Please select a document.");
-              return;
-            }
-          }
+          textDoc = vscode.window.activeTextEditor?.document;
+          console.log(textDoc?.getText());
+
           // 문제정의+단계+전체 코드
-          const messageTosend = message + "User's Code: " + textDoc.getText();
+          const messageToSend = message.value + "User's Code: " + (textDoc?.getText() || "");
 
           //GPT API 호출
-          const gptResponse = await this.callGptApi(messageTosend);
+          const gptResponse = await this.callGptApi(messageToSend);
           //웹뷰로 결과 전달
           webviewView.webview.postMessage({
-            command: "setData",
+            command: "setGptResponse",
             data: gptResponse,
           });
-
-          // save it's answer to the conversationLog
-          const gptData = [
-            {
-              role: "system",
-              content: gptResponse,
-            },
-          ];
-          saveLogToGlobalState(this.context, gptData);
-
           break;
-        case "button1":
+
+        case "button":
           try {
             // 사용자가 버튼 클릭 시 전달한 데이터 (기존 GPT 응답)
             const previousResponse = message.data;
-            const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the first guiding question. Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the first one:`;
+            const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the guiding question. 
+            Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the question.`;
 
             // GPT 요청에 사용할 조합된 프롬프트
             const combinedPrompt = `${userPrompt}\n\nPrevious Response:\n${previousResponse}`;
@@ -100,66 +69,64 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
             // 결과를 웹뷰로 전송
             webviewView.webview.postMessage({
-              command: "setData",
+              command: "setGptResponse",
               data: gptResponse,
             });
-
-            // 로그 저장 (선택적)
-            const gptData = [{ role: "system", content: gptResponse }];
-            saveLogToGlobalState(this.context, gptData);
           } catch (error) {
-            console.error("Error processing button1 click:", error);
-            vscode.window.showErrorMessage("Failed to process button1 click.");
+            console.error(`Error processing button:`, error);
+            vscode.window.showErrorMessage(`Failed to process button`);
           }
           break;
 
-        case "button2":
-          try {
-            const previousResponse = message.data;
-            const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the second guiding question. Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the second one:`;
+        case "saveMessageLog":
+          saveLogToGlobalState(this.context, message.data);
+          break;
 
-            const combinedPrompt = `${userPrompt}\n\nPrevious Response:\n${previousResponse}`;
-
-            const gptResponse = await this.callGptApi(combinedPrompt);
-
+        case "history":
+          console.log("1");
+          const selectedLog = await pickConversationLog(this.context);
+          console.log(selectedLog);
+          if (selectedLog) {
             webviewView.webview.postMessage({
-              command: "setData",
-              data: gptResponse,
+              command: "setSelectedLog",
+              data: selectedLog,
             });
-
-            const gptData = [{ role: "system", content: gptResponse }];
-            saveLogToGlobalState(this.context, gptData);
-          } catch (error) {
-            console.error("Error processing button2 click:", error);
-            vscode.window.showErrorMessage("Failed to process button2 click.");
           }
           break;
 
-        case "button3":
-          try {
-            const previousResponse = message.data;
-            const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the third guiding question. Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the third one:`;
-
-            const combinedPrompt = `${userPrompt}\n\nPrevious Response:\n${previousResponse}`;
-
-            const gptResponse = await this.callGptApi(combinedPrompt);
-
-            webviewView.webview.postMessage({
-              command: "setData",
-              data: gptResponse,
-            });
-
-            const gptData = [{ role: "system", content: gptResponse }];
-            saveLogToGlobalState(this.context, gptData);
-          } catch (error) {
-            console.error("Error processing button3 click:", error);
-            vscode.window.showErrorMessage("Failed to process button3 click.");
-          }
-          break;
         case "debug":
           console.log(message.data);
       }
     });
+  }
+
+  public postMessage(message: unknown) {
+    if (this.webview) {
+      this.webview.postMessage(message);
+    }
+  }
+
+  private _getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri) {
+    const stylesUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.css"]);
+    const scriptUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.js"]);
+    const nonce = getNonce();
+
+    return /*HTML*/ `
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
+          <link rel="stylesheet" type="text/css" href="${stylesUri}">
+          <title>VSCode React</title>
+        </head>
+        <body>
+          <div id="root"></div>
+          <script type="module" nonce="${nonce}" src="${scriptUri}"></script>
+        </body>
+      </html>
+    `;
   }
 
   // GPT API 호출 함수
@@ -176,20 +143,44 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
       const initPrompt: OpenAI.Chat.Completions.ChatCompletionMessageParam = {
         role: "system",
-        content: `You are a program designed to enhance coding skills by helping users identify and address issues in their approach to solving programming problems.
-          If user's input language is NOT an English(cf. Korean), CHANGE GPT's output language into user's one. 
-           From now on, I will provide you with three inputs: 
+        content: `You are to enhance coding skills by helping users identify and address issues in their approach to solving programming problems.
+           The user will provide you with three inputs: 
             1. A problem definition.
             2. Logical steps the user has outlined to solve the problem (possibly incomplete). 
-            3.The user's attempt at solving the problem in code. 
-           Based on these inputs, you must analyze the provided information and respond with only the following two elements
-           : 1. An explanation of any inconsistencies between the problem definition, the logical steps, and the code provided. Highlight potential issues or misalignments.
-             2. Exactly three guiding questions that encourage users to reflect on their approach, understand the problem more deeply, and work to solve it INDEPENDENTLY. 
-             Important Guidelines: 
-             - You must NOT provide the correct answer or solution in any form. 
-             - Responses should strictly avoid a conversational tone and include only the specified two elements. 
-             - If user's input language is not an English, change output language into user's one.,
-             - Provide a two-sentence summary instead of the first results of gpt. `,
+            3. The user's attempt at solving the problem in code. 
+           Based on these inputs, you must analyze the provided information and respond with only the following element:
+              - Exactly three guiding questions that encourage users to reflect on their approach, understand the problem more deeply, and work to solve it INDEPENDENTLY.
+            Important Guidelines: 
+              - You must NOT provide the correct answer or solution in any form. 
+              - Responses should strictly avoid a conversational tone and include only the specified element. 
+            Example Response:
+              - Here is an example of an input and a response
+            
+            USER INPUT
+            Definition: Given the head of a singly linked list, return true if it is a palindrome or false otherwise.
+            Steps:
+             1. Traverse the linked list and save the values.
+             2. Compare from each end of the values and check whether they are the same; till the end pointers meet in the middle.
+             3. if all same, true; if a different value is found, false.
+            Code:
+             class Solution:
+              def isPalindrome(self, head: Optional[ListNode]) -> bool:
+                list_vals = []
+                while head:
+                    list_vals.append(head.val)
+                    head = head.next
+        
+                left, right = 0, len(list_vals)
+                while left <= right and list_vals[left] == list_vals[right]:
+                    right -= 1
+                    left += 1
+                return left > right
+             
+            GPT RESPONSE
+            Response:
+             1. How does initializing right as len(list_vals) instead of len(list_vals) - 1 affect the range of indices being compared?
+             2. What happens when left and right are updated inside the loop—does the comparison sequence proceed as expected?
+             3. Under what condition should the function return True? Does the current return statement correctly reflect the stopping condition?`,
       };
 
       const userMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
@@ -206,10 +197,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
       if (completion.choices[0]?.message?.content === null) {
         return "No response from GPT.";
       }
-
-      // save user's question to the conversationLog
-      saveLogToGlobalState(this.context, userMessages);
-
       return completion.choices[0]?.message?.content.trim();
     } catch (error: any) {
       console.error("GPT API Error:", error); // 콘솔에 상세 에러 출력
@@ -237,5 +224,9 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
     //OpenAI 객체 생성
     this.setOpenaiWithApiKey(this.apiKey);
+  }
+
+  public getWebview() {
+    return this.webview;
   }
 }

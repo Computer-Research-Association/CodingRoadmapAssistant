@@ -1,0 +1,41 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 30px;
+  position: relative; /* Required for positioning hover effects correctly */
+  margin: 2%;
+}
+
+.icon {
+  display: flex;
+  gap: 10px;
+}
+
+.icon-clear,
+.icon-history {
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  position: relative; /* Ensures ::before is positioned relative to the icon */
+}
+
+.icon-clear:hover::before,
+.icon-history:hover::before {
+  content: ""; /* 렌더링 위해 필수.  */
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 20%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.icon-clear:hover::before,
+.icon-history:hover::before {
+  opacity: 1; /* Visible on hover */
+}

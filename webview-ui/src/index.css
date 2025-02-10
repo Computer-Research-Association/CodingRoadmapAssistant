@@ -1,0 +1,65 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  padding: 0;
+  box-sizing: border-box;
+  color: var(--vscode-foreground);
+  font-size: var(--vscode-font-size);
+  font-weight: var(--vscode-font-weight);
+  font-family: var(--vscode-font-family);
+  width: 100%;
+}
+
+.button {
+  background-color: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+  width: 100%;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+#chat {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  justify-content: space-between;
+}
+
+#chat-container {
+  display: flex;
+  flex-direction: column;
+  background-color: inherit;
+  /* align-items: center; */
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.learnCRA {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
