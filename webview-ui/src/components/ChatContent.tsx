@@ -149,7 +149,7 @@ function MessageBox({
         <div className="message-text">
           <div className="message-type">
             {messageType}
-            {message.type === "step " && <span>{countStep}</span>}
+            {message.type === "Step" && <span>{countStep}</span>}
           </div>
           <div
             className="message-content"
