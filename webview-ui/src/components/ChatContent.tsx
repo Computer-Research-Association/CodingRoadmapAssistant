@@ -141,7 +141,7 @@ function MessageBox({
       </div>
     );
   };
-  const { stepCount } = useMessagesStore();
+  const countStep = 1;
 
   return (
     <div className="message">
@@ -149,7 +149,7 @@ function MessageBox({
         <div className="message-text">
           <div className="message-type">
             {messageType}
-            {message.type === "step " && <span>{stepCount}</span>}
+            {message.type === "step " && <span>{countStep}</span>}
           </div>
           <div
             className="message-content"
