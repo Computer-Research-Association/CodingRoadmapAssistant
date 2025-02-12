@@ -142,22 +142,15 @@ function MessageBox({
     );
   };
   const { stepCount } = useMessagesStore();
-  console.log(stepCount);
-  const messageTypeCheck =
-    message.type === "additional"
-      ? "additional"
-      : message.type === "definition"
-        ? message.type
-        : message.type === "step"
-          ? `${message.type} ${stepCount}`
-          : message.type;
-  console.log(message.type);
 
   return (
     <div className="message">
       <div className="message-box">
         <div className="message-text">
-          <div className="message-type">{messageTypeCheck}</div>
+          <div className="message-type">
+            {messageType}
+            {message.type === "step " && <span>{stepCount}</span>}
+          </div>
           <div
             className="message-content"
             contentEditable={message.editable}
