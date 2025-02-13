@@ -13,6 +13,8 @@ function ChatContent() {
   const { messages, updateMessage, addMessage, loadMessages, setTimestamp } = useMessagesStore();
   const [loading, setLoading] = useState(false);
 
+  const stepMessages = messages.filter((msg) => msg.type === "Step");
+
   useEffect(() => {
     const handleGetGPTResponse = (e: MessageEvent) => {
       const { command, data } = e.data;
@@ -53,7 +55,13 @@ function ChatContent() {
       {messages && messages.length > 0 ? (
         <div className="messages-container flex" onClick={(e) => e.stopPropagation()}>
           {messages.map((message, index) => (
-            <MessageBox key={message.type + index} message={message} index={index} handleBlur={handleBlur} />
+            <MessageBox
+              key={message.type + index}
+              message={message}
+              index={index}
+              handleBlur={handleBlur}
+              stepNumber={stepMessages.indexOf(message) + 1}
+            />
           ))}
         </div>
       ) : (
@@ -103,10 +111,12 @@ function MessageBox({
   handleBlur,
   index,
   message,
+  stepNumber,
 }: {
   handleBlur: (e: React.ChangeEvent<HTMLDivElement>, index: number) => void;
   index: number;
   message: Message;
+  stepNumber: number;
 }) {
   const { deleteMessage, clearMessages } = useMessagesStore();
   const [additionalContent, setAdditionalContent] = useState<React.ReactNode | null>(null);
@@ -141,7 +151,6 @@ function MessageBox({
       </div>
     );
   };
-  const countStep = 1;
 
   return (
     <div className="message">
@@ -149,7 +158,7 @@ function MessageBox({
         <div className="message-text">
           <div className="message-type">
             {messageType}
-            {message.type === "Step" && <span>{countStep}</span>}
+            {message.type === "Step" && <span>{stepNumber}</span>}
           </div>
           <div
             className="message-content"
