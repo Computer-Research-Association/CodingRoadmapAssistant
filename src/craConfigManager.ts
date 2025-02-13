@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import { GPTTokens, supportModelType } from "gpt-tokens";
 
 export async function setAPIKey(context: vscode.ExtensionContext) {
   const inputBoxOptions: vscode.InputBoxOptions = {
@@ -86,43 +85,6 @@ export function getAllOpenedDocuments(): readonly vscode.TextDocument[] {
   return vscode.workspace.textDocuments;
 }
 
-/**
- * 열려있는 document 중 인식할 코드 창 하나를 고르는 것.
- * @param context vscode 전체 state 식별.
- * @returns FileSelectionQuickPickItem.document
- */
-export async function pickOpenedDocument(context: vscode.ExtensionContext): Promise<vscode.TextDocument | null> {
-  const openedDocs = getAllOpenedDocuments();
-
-  if (!openedDocs) {
-    return handleError(context, "There is no opened document");
-  }
-
-  const quickPickItems = openedDocs.map((doc) => {
-    return new FileSelectionQuickPickItem(doc.fileName.split("/").pop() || doc.fileName, doc.uri.toString(), doc);
-  });
-
-  const quickPickOptions: vscode.QuickPickOptions = {
-    placeHolder: "Select a document.",
-    matchOnDescription: true,
-    ignoreFocusOut: true,
-  };
-
-  const selectedItem = await vscode.window.showQuickPick(quickPickItems, quickPickOptions);
-
-  if (!selectedItem) {
-    return handleError(context, "No Document Selected");
-  }
-
-  if (checkGPTTokens(selectedItem.document) > 5000) {
-    return handleError(context, "The number of tokens in the selected document exceeds 5000.");
-  }
-
-  context.globalState.update("selectedTextDocument", selectedItem.document);
-
-  return selectedItem.document;
-}
-
 export async function pickConversationLog(context: vscode.ExtensionContext): Promise<any | null> {
   const conversationLogs = context.globalState.get<any[]>("conversationLogs") || [];
 
@@ -183,39 +145,6 @@ function handleError(context: vscode.ExtensionContext, message: string): null {
   vscode.window.showErrorMessage(message);
   context.globalState.update("selectedTextDocument", null);
   return null;
-}
-
-function checkGPTTokens(document: vscode.TextDocument): number {
-  const model = vscode.workspace.getConfiguration().get<string>("openAI.modelSelected");
-
-  const selectedModel = GPTTokens.supportModels.includes(model as supportModelType)
-    ? (model as supportModelType)
-    : "gpt-4o-mini";
-
-  const tokenUsageInfo = new GPTTokens({
-    model: selectedModel,
-    messages: [{ role: "user", content: document.getText() }],
-  });
-
-  console.log(tokenUsageInfo.usedTokens);
-  return tokenUsageInfo.usedTokens;
-}
-
-/**
- * @member label: filename
- * @member description: for uri string
- * @member document: selected TextDocument itself
- */
-class FileSelectionQuickPickItem implements vscode.QuickPickItem {
-  label: string;
-  description: string | undefined;
-  document: vscode.TextDocument;
-
-  constructor(label: string, description: string | undefined, document: vscode.TextDocument) {
-    this.label = label;
-    this.description = description;
-    this.document = document;
-  }
 }
 
 /**

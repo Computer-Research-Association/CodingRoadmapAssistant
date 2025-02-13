@@ -18,7 +18,7 @@ function ChatInput() {
     if (messages.length === 0) {
       setInputType("Definition");
     } else {
-      if (messages[messages.length - 1].type === "Additional" || messages[messages.length - 1].type === "result") {
+      if (messages[messages.length - 1].type === "Additional" || messages[messages.length - 1].type === "Result") {
         setInputType("Additional");
       }
       if (messages[messages.length - 1].type === "Step") {
@@ -49,7 +49,12 @@ function ChatInput() {
       } else if (isLogMessagesShortcut) {
         e.preventDefault();
         updateMessagesEditableState(false);
-        openai.sendInitMessage(combineMessages(messages, stepCount));
+
+        if (messages[messages.length - 1].type === "Step") {
+          openai.sendInitMessage(combineMessages(messages, stepCount));
+        } else {
+          openai.sendAdditionalMessage(combineMessages(messages, stepCount));
+        }
         window.postMessage({ command: "setLoading", data: true });
         setInputType("additional");
       }

@@ -4,6 +4,9 @@ import { VscTrash } from "react-icons/vsc";
 import React, { useEffect, useRef, useState } from "react";
 import { Message } from "../types/messageStoreTypes";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { RiChatNewLine } from "react-icons/ri";
+import { GrHistory } from "react-icons/gr";
+
 // import { combineMessages, openai } from "../utilities/openai";
 
 function ChatContent() {
@@ -16,7 +19,7 @@ function ChatContent() {
       if (command === "setGptResponse") {
         const gptResponseMessage: Message = {
           // 메시지 전달받기
-          type: "result",
+          type: "Result",
           content: data,
           editable: false,
         };
@@ -54,7 +57,37 @@ function ChatContent() {
           ))}
         </div>
       ) : (
-        <div className="learnCRA">LEARN CRA!!!</div>
+        <div className="description">
+          <p className="intro">
+            Welcome to <strong>Coding Roadmap Assistant</strong>, the best way to help your programming solving skills.
+          </p>
+          <p className="how-to-start-title">
+            <strong>How to Start</strong>
+          </p>
+          <ol className="steps">
+            <li>1. First, open the source code file you are working on.</li>
+            <li>2. Enter the problem definition you want to solve.</li>
+            <li>3. Enter the process of solving the problem step by step.</li>
+            <li>
+              4. Press <kbd>ctrl + ⏎</kbd> or <kbd>⌘ + ⏎</kbd> to run.
+            </li>
+            <li>5. After the guiding questions are generated, ask additional questions if needed</li>
+            <li>
+              6. Press <kbd>ctrl + ⏎</kbd> or <kbd>⌘ + ⏎</kbd> again to run.
+            </li>
+          </ol>
+          <p className="additional-info">
+            <strong className="spacing1">
+              <RiChatNewLine />
+            </strong>{" "}
+            <span className="spacing1">New Chat</span>
+            <br />
+            <strong className="spacing2">
+              <GrHistory />
+            </strong>{" "}
+            <span className="spacing2">Chat History</span>
+          </p>
+        </div>
       )}
       {loading ? (
         <div className="loading">
@@ -79,7 +112,11 @@ function MessageBox({
   const [additionalContent, setAdditionalContent] = useState<React.ReactNode | null>(null);
 
   const messageType =
-    message.type === "result" ? "result" : message.type.startsWith("Step") ? `${message.type} ${index}` : message.type;
+    message.type === "Result"
+      ? "Result"
+      : message.type.startsWith("Result")
+        ? `${message.type} ${index}`
+        : message.type;
   const messageEndRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -128,7 +165,7 @@ function MessageBox({
         </div>
       </div>
       <div className="additional">
-        {messageType === "result" && (
+        {messageType === "Result" && (
           <div>
             <div className="additional-question">
               <button className="additional-question-button" onClick={clickQuestionBtn}>
