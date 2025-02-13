@@ -6,6 +6,7 @@ import { VscFile } from "react-icons/vsc";
 import getOs from "../utilities/getOs";
 import { openai, combineMessages } from "../utilities/openai";
 import { vscode } from "../utilities/vscode";
+import { FaChevronCircleUp } from "react-icons/fa";
 
 function ChatInput() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -131,6 +132,12 @@ export default ChatInput;
 
 function ChatInputInfo() {
   const [activatedDocument, setActivatedDocument] = useState<string>("");
+  const [gotoDefStepTrigger, setGotoDefStepTrigger] = useState<boolean>(false);
+  const gotoDefStepRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    gotoDefStepRef.current?.scrollIntoView({ behavior: "smooth" });
+    setGotoDefStepTrigger(false);
+  }, [gotoDefStepTrigger]);
 
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
@@ -151,6 +158,9 @@ function ChatInputInfo() {
       <div className="input-document-indicator">
         <VscFile />
         {activatedDocument ? activatedDocument.split("/").pop() : "No file selected"}
+      </div>
+      <div className="goto-defStep-btn" onClick={() => setGotoDefStepTrigger(true)}>
+        <FaChevronCircleUp />
       </div>
     </div>
   );

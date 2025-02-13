@@ -119,7 +119,7 @@ function MessageBox({
         : message.type;
   const messageEndRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    messageEndRef.current?.scrollIntoView({ behavior: "smooth" }); // 자신이 호출된 요소가 사용자에게 표시되도록 상위 컨테이너를 스크롤
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [additionalContent]);
 
   const clickQuestionBtn = () => {
@@ -129,7 +129,7 @@ function MessageBox({
   const clickNewQuestionBtn = () => {
     setAdditionalContent(
       <div>
-        Are you sure you want to ask another question? (conversations will be saved in the logs)
+        Are you sure you want to make another question? (conversations will be saved in the logs)
         <div>
           <button className="clickNewQuestionBtn-selectYes" onClick={clearMessages}>
             Yes
