@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import OpenAI from "openai";
 
 export async function setAPIKey(context: vscode.ExtensionContext) {
   const inputBoxOptions: vscode.InputBoxOptions = {
@@ -11,7 +12,15 @@ export async function setAPIKey(context: vscode.ExtensionContext) {
   const apiKey = await vscode.window.showInputBox(inputBoxOptions);
 
   if (!apiKey) {
-    vscode.window.showWarningMessage("No API key entered.");
+    vscode.window.showWarningMessage("No API key entered. Please try again");
+    return "";
+  }
+
+  try {
+    await verifyAPIKey(apiKey);
+  } catch (err) {
+    vscode.window.showErrorMessage("Invalid API Key entered. Please try again");
+    console.error(err);
     return "";
   }
 
@@ -19,12 +28,23 @@ export async function setAPIKey(context: vscode.ExtensionContext) {
   // context에서 제공하는 secretStorage를 사용하여 api key 를 저장하는 방법
 
   await vscode.workspace.getConfiguration().update("openAI.apiKey", apiKey, vscode.ConfigurationTarget.Global);
-  vscode.window.showInformationMessage("Open AI API key saved successfully.");
+  vscode.window.showInformationMessage("Open AI API key saved successfully. Welcome");
 
   // refresh webview to apply openai api key
   vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction");
 
   return apiKey;
+}
+
+async function verifyAPIKey(APIKey: string) {
+  const openai = new OpenAI({ apiKey: APIKey });
+  const completion = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo", // 최신 모델로 변경
+    messages: [{ role: "user", content: "Say this is a test" }],
+    max_tokens: 32,
+  });
+
+  console.log(completion.choices[0]?.message?.content);
 }
 
 export async function showModelSelectionQuickPick() {
