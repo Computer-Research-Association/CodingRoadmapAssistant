@@ -6,6 +6,7 @@ import { Message } from "../types/messageStoreTypes";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { RiChatNewLine } from "react-icons/ri";
 import { GrHistory } from "react-icons/gr";
+import getOs from "../utilities/getOs";
 
 // import { combineMessages, openai } from "../utilities/openai";
 
@@ -48,6 +49,8 @@ function ChatContent() {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" }); // 자신이 호출된 요소가 사용자에게 표시되도록 상위 컨테이너를 스크롤
   }, [messages]);
 
+  const os = getOs();
+
   return (
     <main id="chat-container">
       {messages && messages.length > 0 ? (
@@ -58,23 +61,32 @@ function ChatContent() {
         </div>
       ) : (
         <div className="description">
-          <p className="intro">
-            Welcome to <strong>Coding Roadmap Assistant</strong>, the best way to help your programming solving skills.
-          </p>
           <p className="how-to-start-title">
             <strong>How to Start</strong>
           </p>
           <ol className="steps">
-            <li>1. First, open the source code file you are working on.</li>
+            <li>1. Open the source code file you are working on.</li>
             <li>2. Enter the problem definition you want to solve.</li>
             <li>3. Enter the process of solving the problem step by step.</li>
-            <li>
-              4. Press <kbd>ctrl + ⏎</kbd> or <kbd>⌘ + ⏎</kbd> to run.
-            </li>
+            {os === "windows" ? (
+              <li>
+                4. Press <kbd>ctrl + ⏎</kbd> to run.
+              </li>
+            ) : (
+              <li>
+                4. Press <kbd>⌘ + ⏎</kbd> to run.
+              </li>
+            )}
             <li>5. After the guiding questions are generated, ask additional questions if needed</li>
-            <li>
-              6. Press <kbd>ctrl + ⏎</kbd> or <kbd>⌘ + ⏎</kbd> again to run.
-            </li>
+            {os === "windows" ? (
+              <li>
+                6. Press <kbd>ctrl + ⏎</kbd> again to run.
+              </li>
+            ) : (
+              <li>
+                6. Press <kbd>⌘ + ⏎</kbd> again to run.
+              </li>
+            )}
           </ol>
           <p className="additional-info">
             <strong className="spacing1">
