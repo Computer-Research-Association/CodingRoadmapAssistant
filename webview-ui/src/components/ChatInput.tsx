@@ -6,7 +6,6 @@ import { VscFile } from "react-icons/vsc";
 import getOs from "../utilities/getOs";
 import { openai, combineMessages } from "../utilities/openai";
 import { vscode } from "../utilities/vscode";
-import { FaChevronCircleUp } from "react-icons/fa";
 
 function ChatInput() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -158,9 +157,6 @@ function ChatInputInfo() {
       <div className="input-document-indicator">
         <VscFile />
         {activatedDocument ? activatedDocument.split("/").pop() : "No file selected"}
-      </div>
-      <div className="goto-defStep-btn" onClick={() => setGotoDefStepTrigger(true)}>
-        <FaChevronCircleUp />
       </div>
     </div>
   );
