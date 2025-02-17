@@ -254,6 +254,7 @@
 }
 
 .description .additional-info {
+  min-width: 200px;
   max-width: 210px;
   margin-top: 12px;
   padding: 8px;
@@ -291,4 +292,7 @@
 .description {
   margin-top: 0px;
   margin-bottom: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
