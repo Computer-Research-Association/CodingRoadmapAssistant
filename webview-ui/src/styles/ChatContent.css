@@ -229,6 +229,7 @@
 }
 
 .description .steps {
+  max-width: 210px;
   background: var(--vscode-list-inactiveSelectionBackground);
   color: var(--vscode-input-foreground);
   padding: 12px;
@@ -253,6 +254,7 @@
 }
 
 .description .additional-info {
+  max-width: 210px;
   margin-top: 12px;
   padding: 8px;
   background-color: var(--vscode-editor-background);
