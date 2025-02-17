@@ -4,6 +4,14 @@ All notable changes to the "coding-roadmap-assistant" extension will be document
 
 ## [Unreleased]
 
+## [2.0.1] - 2025-02-17
+
+### Fixed
+
+- Added'how to start' window
+- Fixed Step Number indexing error
+- Textbox resizing
+
 ## ⭐️[2.0.0]⭐️ - 2025-02-07
 
 ### Added
