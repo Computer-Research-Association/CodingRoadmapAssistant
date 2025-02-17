@@ -66,9 +66,6 @@ function ChatContent() {
         </div>
       ) : (
         <div className="description">
-          <p className="intro">
-            Welcome to <strong>Coding Roadmap Assistant</strong>, the best way to help your programming solving skills.
-          </p>
           <p className="how-to-start-title">
             <strong>How to Start</strong>
           </p>
