@@ -58,8 +58,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           try {
             // 사용자가 버튼 클릭 시 전달한 데이터 (기존 GPT 응답)
             const previousResponse = message.data;
-            const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the guiding question. 
-            Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the question.`;
+            const userPrompt = `Answer the user's additional questions based on the existing gpt response. When answering, do not give the correct answer or code as in the existing response. Do not answer part or all of the correct answer or code.`;
 
             // GPT 요청에 사용할 조합된 프롬프트
             const combinedPrompt = `${userPrompt}\n\nPrevious Response:\n${previousResponse}`;
