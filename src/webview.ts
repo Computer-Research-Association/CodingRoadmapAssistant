@@ -40,11 +40,9 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           let textDoc: vscode.TextDocument | undefined;
 
           textDoc = vscode.window.activeTextEditor?.document;
-          //console.log(textDoc?.getText());
 
           // 문제정의+단계+전체 코드
-          const messageToSend = message.value + `\n` + `User's Code: ` + (textDoc?.getText() || "");
-          console.log("messageToSend: " + messageToSend);
+          const messageToSend = message.value + `\n` + `User's Code: ` + `\n` + (textDoc?.getText() || "");
 
           //GPT API 호출
           const gptResponse = await this.callGptApi(messageToSend, "initialRequest");
@@ -58,15 +56,14 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
         case "additional":
           try {
             // 사용자가 버튼 클릭 시 전달한 데이터 (기존 GPT 응답)
-            const previousResponse = message.data;
+            const previousResponse = message.value;
             if (!previousResponse) console.log("there's no message.data inside");
 
             const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the guiding question. 
             Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the question.`;
 
             // GPT 요청에 사용할 조합된 프롬프트
-            const combinedPrompt = `${userPrompt} Previous Response: ${previousResponse}`;
-            console.log("combinedPrompt: " + combinedPrompt);
+            const combinedPrompt = `${userPrompt} ` + `\n` + `Previous Response: ${previousResponse}`;
 
             // GPT API 호출
             const gptResponse = await this.callGptApi(combinedPrompt, "additional");

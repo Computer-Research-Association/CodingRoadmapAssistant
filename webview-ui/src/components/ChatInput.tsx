@@ -9,7 +9,7 @@ import { vscode } from "../utilities/vscode";
 
 function ChatInput() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { messages, addMessage, stepCount, timestamp, setTimestamp, updateMessagesEditableState } = useMessagesStore();
+  const { messages, addMessage, timestamp, setTimestamp, updateMessagesEditableState } = useMessagesStore();
   const [inputType, setInputType] = useState(messages.length > 0 ? "Step" : "Definition");
   const [isComposing, setIsComposing] = useState(false);
 
@@ -49,17 +49,10 @@ function ChatInput() {
         e.preventDefault();
         updateMessagesEditableState(false);
 
-        console.log("i will send message to gpt!");
         if (messages[messages.length - 1].type === "Step") {
-          console.log("message was sent to sendInitMessage");
-          openai.sendInitMessage(combineMessages(messages, stepCount));
+          openai.sendInitMessage(combineMessages(messages));
         } else {
-          openai.sendAdditionalMessage(combineMessages(messages, stepCount));
-          console.log(
-            "additional message was sent to webview.ts! combineMessages(messages, stepCount): " +
-              combineMessages(messages, stepCount) +
-              `\n`
-          );
+          openai.sendAdditionalMessage(combineMessages(messages));
         }
         window.postMessage({ command: "setLoading", data: true });
         setInputType("additional");
