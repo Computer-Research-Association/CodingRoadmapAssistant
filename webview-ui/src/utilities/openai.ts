@@ -2,11 +2,13 @@ import { vscode } from "./vscode";
 import { Message } from "../types/messageStoreTypes";
 
 export const combineMessages = (messages: Message[], stepCount: number): string => {
+  console.log("messages: " + messages + `\n` + "stepCount: " + stepCount);
   return messages
-    .map(
-      (message, i) =>
-        `${i === 0 ? "Definition" : i <= stepCount + 1 ? "Step " + i : "Response between GPT and User"} ${message.content}`
-    )
+    .map((message, i) => {
+      let prefix = `${message.type}: `;
+      if (message.type === "Step") prefix = `Step: ${i}`;
+      return `${prefix}${message.content}`;
+    })
     .join("\n");
 };
 

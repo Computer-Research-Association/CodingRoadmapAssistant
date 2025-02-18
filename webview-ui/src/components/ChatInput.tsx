@@ -49,10 +49,17 @@ function ChatInput() {
         e.preventDefault();
         updateMessagesEditableState(false);
 
+        console.log("i will send message to gpt!");
         if (messages[messages.length - 1].type === "Step") {
+          console.log("message was sent to sendInitMessage");
           openai.sendInitMessage(combineMessages(messages, stepCount));
         } else {
           openai.sendAdditionalMessage(combineMessages(messages, stepCount));
+          console.log(
+            "additional message was sent to webview.ts! combineMessages(messages, stepCount): " +
+              combineMessages(messages, stepCount) +
+              `\n`
+          );
         }
         window.postMessage({ command: "setLoading", data: true });
         setInputType("additional");
