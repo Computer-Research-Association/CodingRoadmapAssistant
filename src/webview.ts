@@ -59,11 +59,8 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             const previousResponse = message.value;
             if (!previousResponse) console.log("there's no message.data inside");
 
-            const userPrompt = `Read the response you gave, find out what the three guiding questions were, and explain in detail the guiding question. 
-            Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the question.`;
-
             // GPT 요청에 사용할 조합된 프롬프트
-            const combinedPrompt = `${userPrompt} ` + `\n` + `Previous Response: ${previousResponse}`;
+            const combinedPrompt = `Previous Response: ${previousResponse}`;
 
             // GPT API 호출
             const gptResponse = await this.callGptApi(combinedPrompt, "additional");
@@ -225,7 +222,13 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           break;
 
         case "additional":
-          userMessages = [{ role: "user", content: prompt }];
+          const userPrompt: OpenAI.Chat.Completions.ChatCompletionMessageParam = {
+            role: "system",
+            content: `Read the response you gave, find out what the three guiding questions were, and explain in detail the guiding question. 
+            Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the question.`,
+          };
+
+          userMessages = [userPrompt, { role: "user", content: prompt }];
           break;
 
         default:
