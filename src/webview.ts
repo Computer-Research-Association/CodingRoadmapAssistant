@@ -38,7 +38,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
         case "initialRequest":
           // 사용자 코드 추가
           let textDoc: vscode.TextDocument | undefined;
-
           textDoc = vscode.window.activeTextEditor?.document;
 
           // 문제정의+단계+전체 코드
@@ -55,15 +54,15 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
         case "additional":
           try {
-            // 사용자가 버튼 클릭 시 전달한 데이터 (기존 GPT 응답)
-            const previousResponse = message.value;
-            if (!previousResponse) console.log("there's no message.data inside");
+            let textDoc: vscode.TextDocument | undefined;
+            textDoc = vscode.window.activeTextEditor?.document;
 
             // GPT 요청에 사용할 조합된 프롬프트
-            const combinedPrompt = `Previous Response: ${previousResponse}`;
+            const messageToSend =
+              `Previous Response: ${message.value}` + `\n` + `User's Code: ` + `\n` + (textDoc?.getText() || "");
 
             // GPT API 호출
-            const gptResponse = await this.callGptApi(combinedPrompt, "additional");
+            const gptResponse = await this.callGptApi(messageToSend, "additional");
 
             // 결과를 웹뷰로 전송
             webviewView.webview.postMessage({
@@ -144,31 +143,46 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
         case "initialRequest":
           const initPrompt: OpenAI.Chat.Completions.ChatCompletionMessageParam = {
             role: "system",
-            content: `You are a program designed to enhance coding skills by helping users identify and address issues in their approach to solving programming problems.
-          If user's input language is NOT an English(cf. Korean), CHANGE GPT's output language into user's one. 
-           From now on, I will provide you with three inputs: 
+            content: `You are a program to enhance coding skills by helping users identify and address issues in their approach to solving programming problems.
+           The user will provide you with three inputs: 
             1. A problem definition.
             2. Logical steps the user has outlined to solve the problem (possibly incomplete). 
             3. The user's attempt at solving the problem in code. 
-           Based on these inputs, you must analyze the provided information and respond with only the following two elements
-           : Exactly three guiding questions that encourage users to reflect on their approach, understand the problem more deeply, and work to solve it INDEPENDENTLY. 
-             Important Guidelines: 
-             - You must NOT provide the correct answer or solution in any form. 
-             - Responses should strictly avoid a conversational tone and include only the specified two elements. 
-             - If user's input language is not an English, change output language into user's one.,
-             - Provide a two-sentence summary instead of the first results of gpt. 
-             
+            Based on these inputs, you must analyze the provided information and respond with only the following element:
+            - Exactly three guiding questions that encourage users to reflect on their approach, understand the problem more deeply, and work to solve it INDEPENDENTLY.
+            Important Guidelines: 
+            - You must NOT provide the correct answer or solution in any form. 
+            - Responses should strictly avoid a conversational tone and include only the specified element.
+            - Generate a concise response (within two sentences)
+            - Here is an example of the expected output based on the given prompt and user input. Generate a response accordingly.
+            
+            Example Response 1:
+            USER INPUT 
+            Definition: Given the head of a singly linked list, return true if it is a palindrome or false otherwise.
+            Steps:
+             1. Traverse the linked list and save the values.
+             2. Compare from each end of the values and check whether they are the same; till the end pointers meet in the middle.
+             3. if all same, true; if a different value is found, false.
+            Code:
+             class Solution:
+              def isPalindrome(self, head: Optional[ListNode]) -> bool:
+                list_vals = []
+                while head:
+                    list_vals.append(head.val)
+                    head = head.next
+        
+                left, right = 0, len(list_vals)
+                while left <= right and list_vals[left] == list_vals[right]:
+                    right -= 1
+                    left += 1
+                return left > right
+
             GPT RESPONSE
             Response(When user’s input is written in English):
              1. How does initializing right as len(list_vals) instead of len(list_vals) - 1 affect the range of indices being compared?
              2. What happens when left and right are updated inside the loop—does the comparison sequence proceed as expected?
              3. Under what condition should the function return True? Does the current return statement correctly reflect the stopping condition?
              GPT RESPONSE (When user’s input is Korean)
-
-            Response(When user’s input is written in Korean): 
-              1. 리스트의 오른쪽 끝 인덱스는 len(list_vals)인가요, 아니면 len(list_vals) - 1인가요?
-              2. 왼쪽 포인터와 오른쪽 포인터가 같아지는 순간까지 비교해야 할까요?
-              3. 두 값이 다르면 바로 false 를 반환해야 하지 않나요?
              
             Example Response 2(Korean):
             USER INPUT
@@ -225,7 +239,8 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           const userPrompt: OpenAI.Chat.Completions.ChatCompletionMessageParam = {
             role: "system",
             content: `Read the response you gave, find out what the three guiding questions were, and explain in detail the guiding question. 
-            Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the question.`,
+            Do not include the Explanation of Inconsistencies section. Only find the three from the guiding questions, and explain the question.
+            generate a concise response (within two sentences) answering the user's additional question.`,
           };
 
           userMessages = [userPrompt, { role: "user", content: prompt }];
