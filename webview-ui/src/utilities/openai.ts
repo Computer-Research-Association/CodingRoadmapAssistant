@@ -19,7 +19,7 @@ export const openai = {
   },
   sendAdditionalMessage: (message: string) => {
     vscode.postMessage({
-      command: "button",
+      command: "additional",
       value: message,
     });
   },
