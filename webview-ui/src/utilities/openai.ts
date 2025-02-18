@@ -6,6 +6,7 @@ export const combineMessages = (messages: Message[]): string => {
     .map((message, i) => {
       let prefix = `${message.type}: `;
       if (message.type === "Step") prefix = `Step${i}: `;
+      else if (i === messages.length - 1) prefix = `User's Additional Question: `;
       return `${prefix}${message.content}`;
     })
     .join("\n");
