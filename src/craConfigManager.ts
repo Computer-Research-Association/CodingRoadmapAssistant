@@ -47,13 +47,14 @@ async function verifyAPIKey(APIKey: string) {
   console.log(completion.choices[0]?.message?.content);
 }
 
-export async function showLanguageSelectionQuickPick() {
+export async function showLanguageSelectionQuickPick(context: vscode.ExtensionContext) {
   await vscode.window.showQuickPick(["English", "한국어"], {
     placeHolder: "Select Displayed Language",
     async onDidSelectItem(item) {
       await vscode.workspace
         .getConfiguration()
         .update("openAI.languageSelected", item, vscode.ConfigurationTarget.Global);
+      await context.globalState.update("language", item);
     },
   });
   vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction");
@@ -74,7 +75,7 @@ export async function showModelSelectionQuickPick() {
 export async function onFirstActivation(context: vscode.ExtensionContext) {
   await setAPIKey(context);
   await showModelSelectionQuickPick();
-  await showLanguageSelectionQuickPick();
+  await showLanguageSelectionQuickPick(context);
 }
 
 export async function checkApiKeyValidation(context: vscode.ExtensionContext) {
@@ -118,8 +119,12 @@ export function getAllOpenedDocuments(): readonly vscode.TextDocument[] {
   return vscode.workspace.textDocuments;
 }
 
+export function getGlobalState(context: vscode.ExtensionContext, command: string) {
+  return context.globalState.get<any[]>(command) || [];
+}
+
 export async function pickConversationLog(context: vscode.ExtensionContext): Promise<any | null> {
-  const conversationLogs = context.globalState.get<any[]>("conversationLogs") || [];
+  const conversationLogs = getGlobalState(context, "conversationLogs");
 
   if (!conversationLogs) {
     return handleError(context, "There is no conversation log");

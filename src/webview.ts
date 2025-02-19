@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import OpenAI from "openai";
-import { showApiKeyError, saveLogToGlobalState } from "./craConfigManager";
+import { showApiKeyError, saveLogToGlobalState, getGlobalState } from "./craConfigManager";
 import { getUri, getNonce } from "./utilities";
 import { pickConversationLog } from "./craConfigManager";
 
@@ -88,6 +88,18 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           if (selectedLog) {
             webviewView.webview.postMessage({
               command: "setSelectedLog",
+              data: selectedLog,
+            });
+          }
+          break;
+
+        case "language":
+          const getLanguage = getGlobalState(this.context, "language");
+
+          console.log(getLanguage);
+          if (getLanguage) {
+            webviewView.webview.postMessage({
+              command: "getLanguage",
               data: selectedLog,
             });
           }
@@ -250,7 +262,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
         case "translate":
           const language = vscode.workspace.getConfiguration().get<string>("openAI.languageSelected");
-          console.log("language: " + language);
           const translatePrompt: OpenAI.Chat.Completions.ChatCompletionMessageParam = {
             role: "system",
             content: `Translate the following answers into ${language}. 
@@ -258,7 +269,6 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             If the content you are trying to translate is already in ${language}, do not translate it and return it as is.`,
           };
           userMessages = [translatePrompt, { role: "user", content: userContent }];
-          console.log("userMessages: " + userMessages);
           break;
 
         default:
