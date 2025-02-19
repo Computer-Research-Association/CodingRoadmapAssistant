@@ -9,7 +9,7 @@ import { vscode } from "../utilities/vscode";
 
 function ChatInput() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { messages, addMessage, stepCount, timestamp, setTimestamp, updateMessagesEditableState } = useMessagesStore();
+  const { messages, addMessage, timestamp, setTimestamp, updateMessagesEditableState } = useMessagesStore();
   const [inputType, setInputType] = useState(messages.length > 0 ? "Step" : "Definition");
   const [isComposing, setIsComposing] = useState(false);
 
@@ -50,9 +50,9 @@ function ChatInput() {
         updateMessagesEditableState(false);
 
         if (messages[messages.length - 1].type === "Step") {
-          openai.sendInitMessage(combineMessages(messages, stepCount));
+          openai.sendInitMessage(combineMessages(messages));
         } else {
-          openai.sendAdditionalMessage(combineMessages(messages, stepCount));
+          openai.sendAdditionalMessage(combineMessages(messages));
         }
         window.postMessage({ command: "setLoading", data: true });
         setInputType("additional");
