@@ -71,6 +71,11 @@
         "title": "Set OpenAI GPT Model"
       },
       {
+        "command": "openAI.setLanguage",
+        "category": "Coding Roadmap Assistant",
+        "title": "Set displayed language"
+      },
+      {
         "command": "document.selectDocument",
         "category": "Coding Roadmap Assistant",
         "title": "Select Document"
@@ -93,6 +98,13 @@
             ],
             "default": "gpt-4o-mini",
             "description": "Open AI GPT Model Selected"
+          },
+          "openAI.languageSelected": {
+            "type": [
+              "string"
+            ],
+            "default": "English",
+            "description": "Program Language Setting"
           }
         }
       }

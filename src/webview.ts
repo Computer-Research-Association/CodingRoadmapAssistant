@@ -45,10 +45,12 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
           //GPT API 호출
           const gptResponse = await this.callGptApi(messageToSend, "initialRequest");
+          const finalResult = await this.callGptApi(gptResponse, "translate");
+
           //웹뷰로 결과 전달
           webviewView.webview.postMessage({
             command: "setGptResponse",
-            data: gptResponse,
+            data: finalResult,
           });
           break;
 
@@ -63,11 +65,12 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
             // GPT API 호출
             const gptResponse = await this.callGptApi(messageToSend, "additional");
+            const finalResult = await this.callGptApi(gptResponse, "translate");
 
             // 결과를 웹뷰로 전송
             webviewView.webview.postMessage({
               command: "setGptResponse",
-              data: gptResponse,
+              data: finalResult,
             });
           } catch (error) {
             console.error(`Error processing button:`, error);
@@ -85,6 +88,18 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           if (selectedLog) {
             webviewView.webview.postMessage({
               command: "setSelectedLog",
+              data: selectedLog,
+            });
+          }
+          break;
+
+        case "language":
+          const getLanguage = vscode.workspace.getConfiguration().get<string>("openAI.languageSelected"); //configuration에 저장되있는 model 정보.
+          console.log("getLanguage: " + getLanguage);
+
+          if (getLanguage) {
+            webviewView.webview.postMessage({
+              command: "getLanguage",
               data: selectedLog,
             });
           }
@@ -125,8 +140,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
     `;
   }
 
-  // GPT API 호출 함수
-  private async callGptApi(prompt: string, command: string) {
+  private async callGptApi(userContent: string, command: string) {
     const model = vscode.workspace.getConfiguration().get<string>("openAI.modelSelected"); //configuration에 저장되있는 model 정보.
     if (!model) {
       return "No model selected. Please configure the OpenAI model.";
@@ -153,7 +167,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             Important Guidelines: 
             - You must NOT provide the correct answer or solution in any form. 
             - Responses should strictly avoid a conversational tone and include only the specified element.
-            - Generate a concise response (within two sentences)
+            - Generate a concise response within TWO sentences
             - Here is an example of the expected output based on the given prompt and user input. Generate a response accordingly.
             
             Example Response 1:
@@ -234,7 +248,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             3. If the file names are all the same, how can I print the originals without printing the '?'?        
              `,
           };
-          userMessages = [initPrompt, { role: "user", content: prompt }];
+          userMessages = [initPrompt, { role: "user", content: userContent }];
           break;
 
         case "additional":
@@ -248,7 +262,18 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             Do not include the Explanation of Inconsistencies section. `,
           };
 
-          userMessages = [userPrompt, { role: "user", content: prompt }];
+          userMessages = [userPrompt, { role: "user", content: userContent }];
+          break;
+
+        case "translate":
+          const language = vscode.workspace.getConfiguration().get<string>("openAI.languageSelected");
+          const translatePrompt: OpenAI.Chat.Completions.ChatCompletionMessageParam = {
+            role: "system",
+            content: `Translate the following answers into ${language}. 
+            Do NOT change the content of the given message under any circumstances; translate it exactly as it is.
+            If the content you are trying to translate is already in ${language}, do not translate it and return it as is.`,
+          };
+          userMessages = [translatePrompt, { role: "user", content: userContent }];
           break;
 
         default:
@@ -260,7 +285,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
       const completion = await this.openai.chat.completions.create({
         model, // 최신 모델로 변경
         messages: userMessages,
-        max_tokens: 512,
+        max_tokens: 1024,
         temperature: 0.7,
       });
 
