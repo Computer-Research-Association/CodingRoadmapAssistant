@@ -184,15 +184,15 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
              3. Under what condition should the function return True? Does the current return statement correctly reflect the stopping condition?
              GPT RESPONSE (When user’s input is Korean)
              
-            Example Response 2(Korean):
+            Example Response 2:
             USER INPUT
             Definition: Calculate nth fibonacci number
             Steps:
-            1. 계산할 횟수의 n 을 입력
-            2. 피보나치 수를 계산하는 함수를 만든다
-            3. 함수의 argument로 들어온 수가 0이면 0을 반환, 1이면 1을 반환 (base case)
+            1. Enter n, the number of times to be calculated
+            2. Create a function that calculates Fibonacci numbers
+            3. If the number entered as the function argument is 0, it returns 0; if it is 1, it returns 1 (base case).
             4. Else, return fibo(n-1) + fibo(n-2)
-            5. 구하고 싶은 n번째 피보나치 수를 step2 에서 만든 함수를 호출한다.
+            5. Call the function created in step 2 to find the nth Fibonacci number.
             Code:
             #include <stdio.h> using namespace std;
             int main() { int number = 0; cin << number;
@@ -201,14 +201,16 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             int fibo(int n) { if (n == 0) return 0; else if (n == 1) return 1; else return fibo(n - 1) + fibo(n - 2); }
             GPT RESPONSE (When user’s input is Korean)
             Response:
-            1. cin << number와 cout >> result >> endl이 제대로 동작할까요? ( >>와 << 연산자의 올바른 사용법)
-            2. 현재 코드에서 fibo 함수 선언이 main 아래에 있는데, 이럴 경우 문제가 발생할까요?
-            3. 재귀 호출로 인해 같은 피보나치 값을 여러 번 계산할 가능성이 있을까요? (메모이제이션)
+            1. Will cin << number and cout >> result >> endl work properly? (Correct usage of >> and << operators)
+            2. In my current code, the fibo function declaration is under main. Will this cause a problem?
+            3. Is it possible to compute the same Fibonacci value multiple times due to recursive calls? (Memoization)
+            
+            Example Response 3:
             USER INPUT
             Step:
-            step 1. 문자를 입력 받아 저장한다.
-            step 2. 문자를 비교하여 같은 문자인 부분을 체크한다
-            step 3. 같은 부분은 기존 문자를, 다른 부분은 ?로 대체하여 출력한다.
+            step 1. Enter text and save it.
+            step 2. Compare characters to check which characters are the same
+            step 3. The same part is printed as is, and the other part is replaced with the ? character.
             Code:
             #include <stdio.h>
             #include <stdlib.h>
@@ -227,9 +229,9 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
             }
             GPT RESPONSE (When user’s input is Korean)
             Response:
-            1. 문자열을 비교할 때, 각 파일의 문자별로 비교하려면 어떻게 구현할 수 있을까요?
-            2. 같은 부분을 그대로 출력하고 다른 부분을 ?로 바꿀 때, ?의 개수를 최소화하려면 어떤 전략이 필요할까요?
-            3. 만약 파일 이름이 모두 동일하다면, 어떻게 ?를 출력하지 않고 원본 그대로 출력할 수 있을까요?           
+            1. When comparing strings, how can I implement a character-by-character comparison of each word?
+            2. When printing the same part as it is and changing other parts to ?, what strategy is needed to minimize the number of '?'?
+            3. If the file names are all the same, how can I print the originals without printing the '?'?        
              `,
           };
           userMessages = [initPrompt, { role: "user", content: prompt }];
