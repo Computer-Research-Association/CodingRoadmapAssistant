@@ -8,8 +8,6 @@ import { RiChatNewLine } from "react-icons/ri";
 import { GrHistory } from "react-icons/gr";
 import getOs from "../utilities/getOs";
 
-// import { combineMessages, openai } from "../utilities/openai";
-
 function ChatContent() {
   const { messages, updateMessage, addMessage, loadMessages, setTimestamp } = useMessagesStore();
   const [loading, setLoading] = useState(false);

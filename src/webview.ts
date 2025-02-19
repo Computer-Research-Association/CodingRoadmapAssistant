@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import OpenAI from "openai";
-import { showApiKeyError, saveLogToGlobalState, getGlobalState } from "./craConfigManager";
+import { showApiKeyError, saveLogToGlobalState } from "./craConfigManager";
 import { getUri, getNonce } from "./utilities";
 import { pickConversationLog } from "./craConfigManager";
 
@@ -45,9 +45,7 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
 
           //GPT API 호출
           const gptResponse = await this.callGptApi(messageToSend, "initialRequest");
-          console.log("GPTResponse: " + gptResponse);
           const finalResult = await this.callGptApi(gptResponse, "translate");
-          console.log("finalResult: " + finalResult);
 
           //웹뷰로 결과 전달
           webviewView.webview.postMessage({
@@ -96,9 +94,9 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           break;
 
         case "language":
-          const getLanguage = getGlobalState(this.context, "language");
+          const getLanguage = vscode.workspace.getConfiguration().get<string>("openAI.languageSelected"); //configuration에 저장되있는 model 정보.
+          console.log("getLanguage: " + getLanguage);
 
-          console.log(getLanguage);
           if (getLanguage) {
             webviewView.webview.postMessage({
               command: "getLanguage",

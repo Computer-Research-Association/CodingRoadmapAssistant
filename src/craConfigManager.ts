@@ -54,7 +54,6 @@ export async function showLanguageSelectionQuickPick(context: vscode.ExtensionCo
       await vscode.workspace
         .getConfiguration()
         .update("openAI.languageSelected", item, vscode.ConfigurationTarget.Global);
-      await context.globalState.update("language", item);
     },
   });
   vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction");
@@ -119,13 +118,8 @@ export function getAllOpenedDocuments(): readonly vscode.TextDocument[] {
   return vscode.workspace.textDocuments;
 }
 
-export function getGlobalState(context: vscode.ExtensionContext, command: string) {
-  return context.globalState.get<any[]>(command) || [];
-}
-
 export async function pickConversationLog(context: vscode.ExtensionContext): Promise<any | null> {
-  const conversationLogs = getGlobalState(context, "conversationLogs");
-
+  const conversationLogs = context.globalState.get<any[]>("conversationLogs") || [];
   if (!conversationLogs) {
     return handleError(context, "There is no conversation log");
   }
