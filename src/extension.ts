@@ -9,6 +9,9 @@ import {
 
 export async function activate(context: vscode.ExtensionContext) {
   const isInitialized = context.globalState.get<boolean>("isInitialized");
+  const languageSelected = vscode.workspace.getConfiguration().get("openAI.languageSelected"); //configuration에 저장되있는 language 정보 가져오기
+
+  if (!languageSelected) await showLanguageSelectionQuickPick();
   if (!isInitialized) {
     await onFirstActivation(context);
     context.globalState.update("isInitialized", true);
