@@ -71,6 +71,11 @@
         "title": "Set OpenAI GPT Model"
       },
       {
+        "command": "openAI.setLanguage",
+        "category": "Coding Roadmap Assistant",
+        "title": "Set displayed language"
+      },
+      {
         "command": "document.selectDocument",
         "category": "Coding Roadmap Assistant",
         "title": "Select Document"

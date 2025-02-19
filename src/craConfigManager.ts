@@ -47,6 +47,18 @@ async function verifyAPIKey(APIKey: string) {
   console.log(completion.choices[0]?.message?.content);
 }
 
+export async function showLanguageSelectionQuickPick() {
+  await vscode.window.showQuickPick(["English", "한국어"], {
+    placeHolder: "Select Displayed Language",
+    async onDidSelectItem(item) {
+      await vscode.workspace
+        .getConfiguration()
+        .update("openAI.languageSelected", item, vscode.ConfigurationTarget.Global);
+    },
+  });
+  vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction");
+}
+
 export async function showModelSelectionQuickPick() {
   await vscode.window.showQuickPick(["gpt-4o", "gpt-4o-mini", "o1", "gpt-3.5-turbo"], {
     placeHolder: "Select GPT Model",
@@ -62,6 +74,7 @@ export async function showModelSelectionQuickPick() {
 export async function onFirstActivation(context: vscode.ExtensionContext) {
   await setAPIKey(context);
   await showModelSelectionQuickPick();
+  await showLanguageSelectionQuickPick();
 }
 
 export async function checkApiKeyValidation(context: vscode.ExtensionContext) {
