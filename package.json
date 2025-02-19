@@ -98,6 +98,13 @@
             ],
             "default": "gpt-4o-mini",
             "description": "Open AI GPT Model Selected"
+          },
+          "openAI.languageSelected": {
+            "type": [
+              "string"
+            ],
+            "default": "English",
+            "description": "Program Language Setting"
           }
         }
       }
