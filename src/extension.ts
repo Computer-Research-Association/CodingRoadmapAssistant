@@ -9,6 +9,7 @@ import {
 
 export async function activate(context: vscode.ExtensionContext) {
   const isInitialized = context.globalState.get<boolean>("isInitialized");
+
   if (!isInitialized) {
     await onFirstActivation(context);
     context.globalState.update("isInitialized", true);
@@ -18,7 +19,6 @@ export async function activate(context: vscode.ExtensionContext) {
   }
 
   const CRAViewProvider = new CRAWebviewViewProvider(context);
-
   context.subscriptions.push(
     vscode.commands.registerCommand("openAI.setAPIKey", async () => {
       await setAPIKey(context);

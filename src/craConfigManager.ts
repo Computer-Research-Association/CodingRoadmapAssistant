@@ -47,7 +47,7 @@ async function verifyAPIKey(APIKey: string) {
   console.log(completion.choices[0]?.message?.content);
 }
 
-export async function showLanguageSelectionQuickPick(context: vscode.ExtensionContext) {
+export async function showLanguageSelectionQuickPick() {
   await vscode.window.showQuickPick(["English", "한국어"], {
     placeHolder: "Select Displayed Language",
     async onDidSelectItem(item) {
@@ -74,7 +74,7 @@ export async function showModelSelectionQuickPick() {
 export async function onFirstActivation(context: vscode.ExtensionContext) {
   await setAPIKey(context);
   await showModelSelectionQuickPick();
-  await showLanguageSelectionQuickPick(context);
+  await showLanguageSelectionQuickPick();
 }
 
 export async function checkApiKeyValidation(context: vscode.ExtensionContext) {

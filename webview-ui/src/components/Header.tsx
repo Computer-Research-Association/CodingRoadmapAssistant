@@ -2,7 +2,7 @@ import "../styles/Header.css";
 import useMessagesStore from "../stores/messagesStore";
 import { GrHistory } from "react-icons/gr";
 import { RiChatNewLine } from "react-icons/ri";
-
+import { RiGlobalLine } from "react-icons/ri";
 import { vscode } from "../utilities/vscode";
 
 function Header() {
@@ -18,6 +18,9 @@ function Header() {
       <div className="header flex">
         <div className="title">Chat with CRA</div>
         <div className="icon flex">
+          <div className="icon-language" onClick={() => console.log("clicked!")}>
+            <RiGlobalLine />
+          </div>
           <div className="icon-clear" onClick={clearMessages}>
             <RiChatNewLine />
           </div>
