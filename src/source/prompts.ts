@@ -1,5 +1,3 @@
-import { error } from "console";
-
 export const initialPrompt = `You are a program to enhance coding skills by helping users identify and address issues in their approach to solving programming problems.
     The user will provide you with three inputs: 
         1. A problem definition.
