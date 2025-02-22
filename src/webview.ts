@@ -107,6 +107,21 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           }
           break;
 
+        case "getInitialOptions":
+          const language = vscode.workspace.getConfiguration().get<string>("openAI.languageSelected");
+          const model = vscode.workspace.getConfiguration().get<string>("openAI.modelSelected");
+          const apiKey = await this.context.secrets.get("OPENAI_API_KEY");
+
+          this.postMessage({
+            command: "setInitialOptions",
+            data: {
+              language,
+              gptModel: model,
+              apiKey: apiKey,
+            },
+          });
+          break;
+
         case "debug":
           console.log(message.data);
       }
