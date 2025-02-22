@@ -1,4 +1,11 @@
+label {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .setting-overlay {
+  color: var(--vscode-editor-foreground);
   position: fixed;
   top: 0;
   left: 0;
@@ -17,6 +24,7 @@
   padding: 3rem;
   width: 100%;
   height: 100%;
+  -webkit-user-drag: false;
 }
 
 .close-container {
@@ -27,4 +35,36 @@
   .close-icon {
     cursor: pointer;
   }
+}
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: var(--vscode-input-background);
+  border: 2px solid var(--vscode-input-border);
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+
+.input-wrapper:focus-within {
+  border: 2px solid var(--vscode-button-background);
+}
+
+.input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: var(--vscode-input-foreground);
+}
+
+.input:focus {
+  border: none;
+  outline: none;
 }
