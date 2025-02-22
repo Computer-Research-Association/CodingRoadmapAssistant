@@ -34,7 +34,10 @@ function SettingWindow({ onClose, isOpened }: { onClose: () => void; isOpened: b
               id="language"
               value={language}
               className={commonStyles.select}
-              onChange={(e) => setLanguage(e.target.value)}>
+              onChange={(e) => {
+                setLanguage(e.target.value);
+                vscode.postMessage({ command: "setLanguage", value: e.target.value });
+              }}>
               <option value="en">English</option>
               <option value="kr">Korean</option>
               <option value="jp">Japanese</option>
@@ -50,7 +53,10 @@ function SettingWindow({ onClose, isOpened }: { onClose: () => void; isOpened: b
               id="model"
               value={gptModel}
               className={commonStyles.select}
-              onChange={(e) => setGptModel(e.target.value)}>
+              onChange={(e) => {
+                setGptModel(e.target.value);
+                vscode.postMessage({ command: "setGPTModel", value: e.target.value });
+              }}>
               <option value="gpt-4o-mini">gpt-4o-mini</option>
               <option value="gpt-4o">gpt-4o</option>
               <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
@@ -63,7 +69,10 @@ function SettingWindow({ onClose, isOpened }: { onClose: () => void; isOpened: b
               <input
                 type={apiKeyShow ? "text" : "password"}
                 value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
+                onChange={(e) => {
+                  setApiKey(e.target.value);
+                  vscode.postMessage({ command: "setAPIKey", value: e.target.value });
+                }}
                 name="apiKey"
                 id="apiKey"
                 className="input"
@@ -73,10 +82,6 @@ function SettingWindow({ onClose, isOpened }: { onClose: () => void; isOpened: b
               </div>
             </div>
           </label>
-
-          <button onClick={() => vscode.postMessage({ command: "save-settings" })} className={commonStyles.button}>
-            Save
-          </button>
         </div>
       </div>
     </div>
