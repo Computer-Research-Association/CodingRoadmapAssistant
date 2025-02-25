@@ -22,3 +22,40 @@
 .icon:hover::before {
   opacity: 1; /* Visible on hover */
 }
+
+.select {
+  background-color: var(--vscode-editor-background);
+  color: var(--vscode-editor-foreground);
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.input {
+  background-color: var(--vscode-input-background);
+  color: var(--vscode-input-foreground);
+  border: 2px solid var(--vscode-input-border);
+  border-radius: 4px;
+  padding: 3px 4px;
+}
+
+.input:focus {
+  border: 2px solid var(--vscode-inputOption-activeBorder);
+}
+
+.label {
+  color: var(--vscode-editor-foreground);
+}
+
+.button {
+  width: 100px;
+  padding: 4px;
+  background-color: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+  border: var(--vscode-button-border);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--vscode-button-hoverBackground);
+}
