@@ -3,11 +3,13 @@ import { RiChatNewLine } from "react-icons/ri";
 import { GrHistory } from "react-icons/gr";
 import "../../styles/WelcomeView.css";
 import welcomePrompt from "./welcomePrompt";
+import useSettingStore from "../../stores/settingStore";
 
 function WelcomeView() {
+  console.log(1);
+  const { language } = useSettingStore();
   const os = getOs();
-  const language = "ko";
-  const languagePrompt = welcomePrompt[language];
+  const languagePrompt = welcomePrompt[language as keyof typeof welcomePrompt];
 
   return (
     <div className="description">
