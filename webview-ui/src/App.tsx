@@ -32,8 +32,6 @@ function App() {
     };
   }, [initializeSettings]);
 
-  console.log(11);
-
   return (
     <div id="chat">
       <Header onSettingClick={() => setIsSettingWindowOpened(true)} />

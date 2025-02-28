@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { SettingState } from "../types/settingStoreTypes";
 
 const useSettingStore = create<SettingState>((set) => ({
-  language: "English",
+  language: "en",
   apiKey: "",
   gptModel: "gpt-4o-mini",
 
@@ -27,7 +27,7 @@ const useSettingStore = create<SettingState>((set) => ({
   resetSettings: () =>
     set(() => {
       return {
-        language: "English",
+        language: "en",
         apiKey: "",
         gptModel: "gpt-4o-mini",
       };

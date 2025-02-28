@@ -6,9 +6,9 @@ import welcomePrompt from "./welcomePrompt";
 import useSettingStore from "../../stores/settingStore";
 
 function WelcomeView() {
-  console.log(1);
-  const { language } = useSettingStore();
   const os = getOs();
+
+  const { language } = useSettingStore();
   const languagePrompt = welcomePrompt[language as keyof typeof welcomePrompt];
 
   return (
@@ -19,6 +19,8 @@ function WelcomeView() {
       <ol className="steps">
         {languagePrompt.steps.map((step, index) => (
           <li key={index}>
+            {index + 1}
+            {". "}
             {index === 3 || index === 5 ? step.replace("{key}", os === "windows" ? "Ctrl + ⏎" : "⌘ + ⏎") : step}
           </li>
         ))}

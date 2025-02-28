@@ -25,6 +25,45 @@ const welcomePrompt = {
     newChat: "새 채팅",
     chatHistory: "채팅 기록",
   },
+  jp: {
+    howToStart: "始め方",
+    steps: [
+      "作業中のソースコードファイルを開きます。",
+      "解決したい問題の定義を入力します。",
+      "問題を解決する手順を順番に入力します。",
+      "{key} を押して実行します。",
+      "ガイド付きの質問が生成された後、必要に応じて追加の質問を行います。",
+      "{key} をもう一度押して実行します。",
+    ],
+    newChat: "新しいチャット",
+    chatHistory: "チャット履歴",
+  },
+  es: {
+    howToStart: "Cómo empezar",
+    steps: [
+      "Abre el archivo de código fuente en el que estás trabajando.",
+      "Introduce la definición del problema que quieres resolver.",
+      "Escribe el proceso de solución paso a paso.",
+      "Presiona {key} para ejecutar.",
+      "Después de que se generen las preguntas de guía, haz preguntas adicionales si es necesario.",
+      "Presiona {key} nuevamente para ejecutar.",
+    ],
+    newChat: "Nuevo chat",
+    chatHistory: "Historial de chat",
+  },
+  cn: {
+    howToStart: "如何开始",
+    steps: [
+      "打开你正在处理的源代码文件。",
+      "输入你想要解决的问题定义。",
+      "按步骤输入解决问题的过程。",
+      "按 {key} 运行。",
+      "生成引导性问题后，如有需要可以提出额外问题。",
+      "再次按 {key} 运行。",
+    ],
+    newChat: "新聊天",
+    chatHistory: "聊天记录",
+  },
 };
 
 export default welcomePrompt;

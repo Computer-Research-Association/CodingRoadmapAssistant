@@ -40,7 +40,7 @@ function SettingWindow({ onClose, isOpened }: { onClose: () => void; isOpened: b
                 vscode.postMessage({ command: "setLanguage", value: e.target.value });
               }}>
               <option value="en">English</option>
-              <option value="kr">Korean</option>
+              <option value="ko">Korean</option>
               <option value="jp">Japanese</option>
               <option value="es">Spanish</option>
               <option value="cn">Chinese</option>
