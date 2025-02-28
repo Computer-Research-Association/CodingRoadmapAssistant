@@ -96,12 +96,14 @@ export default class CRAWebviewViewProvider implements vscode.WebviewViewProvide
           break;
 
         case "language":
+          //현재정보, 가져와서
           const getLanguage = vscode.workspace.getConfiguration().get<string>("openAI.languageSelected"); //configuration에 저장되있는 model 정보.
-          console.log("getLanguage: " + getLanguage);
+          console.log("get Language from config: " + getLanguage);
 
           if (getLanguage) {
+            //보낸다
             webviewView.webview.postMessage({
-              command: "getLanguage",
+              command: "setLanguage",
               data: selectedLog,
             });
           }

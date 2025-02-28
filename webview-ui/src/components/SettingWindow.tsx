@@ -12,7 +12,7 @@ function SettingWindow({ onClose, isOpened }: { onClose: () => void; isOpened: b
     setApiKeyShow(!apiKeyShow);
   };
 
-  const { language, apiKey, gptModel, setApiKey, setLanguage, setGptModel } = useSettingStore();
+  const { promptLanguage: language, apiKey, gptModel, setApiKey, setLanguage, setGptModel } = useSettingStore();
 
   if (!isOpened) return null;
 
@@ -35,11 +35,12 @@ function SettingWindow({ onClose, isOpened }: { onClose: () => void; isOpened: b
               value={language}
               className={commonStyles.select}
               onChange={(e) => {
+                console.log("setLanguage as : " + e.target.value);
                 setLanguage(e.target.value);
                 vscode.postMessage({ command: "setLanguage", value: e.target.value });
               }}>
               <option value="en">English</option>
-              <option value="kr">Korean</option>
+              <option value="ko">Korean</option>
               <option value="jp">Japanese</option>
               <option value="es">Spanish</option>
               <option value="cn">Chinese</option>

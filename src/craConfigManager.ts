@@ -48,7 +48,7 @@ async function verifyAPIKey(APIKey: string) {
 }
 
 export async function showLanguageSelectionQuickPick() {
-  await vscode.window.showQuickPick(["English", "한국어"], {
+  await vscode.window.showQuickPick(["en", "ko", "jp", "es", "cn"], {
     placeHolder: "Select Displayed Language",
     async onDidSelectItem(item) {
       await vscode.workspace
