@@ -1,5 +1,12 @@
+const promptLanguage = {
+  en,
+  ko,
+  jp,
+  es,
+  cn,
+};
 export interface SettingState {
-  language: string;
+  promptLanguage: string;
   apiKey: string;
   gptModel: string;
 

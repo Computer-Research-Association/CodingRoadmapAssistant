@@ -12,7 +12,7 @@ function SettingWindow({ onClose, isOpened }: { onClose: () => void; isOpened: b
     setApiKeyShow(!apiKeyShow);
   };
 
-  const { language, apiKey, gptModel, setApiKey, setLanguage, setGptModel } = useSettingStore();
+  const { promptLanguage: language, apiKey, gptModel, setApiKey, setLanguage, setGptModel } = useSettingStore();
 
   if (!isOpened) return null;
 

@@ -1,6 +1,6 @@
 const welcomePrompt = {
   en: {
-    howToStart: "How To Start",
+    howToStart: "Let's Get Started!",
     steps: [
       "Open the source code file you are working on.",
       "Enter the problem definition you want to solve.",

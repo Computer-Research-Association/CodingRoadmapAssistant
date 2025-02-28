@@ -8,7 +8,8 @@ import useSettingStore from "../../stores/settingStore";
 function WelcomeView() {
   const os = getOs();
 
-  const { language } = useSettingStore();
+  const { promptLanguage: language } = useSettingStore();
+  console.log("language: " + language);
   const languagePrompt = welcomePrompt[language as keyof typeof welcomePrompt];
 
   return (

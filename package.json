@@ -103,7 +103,7 @@
             "type": [
               "string"
             ],
-            "default": "English",
+            "default": "en",
             "description": "Program Language Setting"
           }
         }
