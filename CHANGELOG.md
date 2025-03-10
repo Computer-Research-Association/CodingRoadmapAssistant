@@ -4,11 +4,22 @@ All notable changes to the "coding-roadmap-assistant" extension will be document
 
 ## [Unreleased]
 
+## [2.1.0] - 2025-03-10
+
+### Added
+
+- Added language selection function
+- Added 'setting' button to change language, gpt model, API key at the modal window
+
+### Fixed
+
+- Fixed prompt
+
 ## [2.0.1] - 2025-02-17
 
 ### Fixed
 
-- Added'how to start' window
+- Added 'how to start' window
 - Fixed Step Number indexing error
 - Textbox resizing
 
