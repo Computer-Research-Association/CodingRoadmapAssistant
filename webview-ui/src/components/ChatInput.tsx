@@ -152,11 +152,17 @@ function ChatInputInfo() {
     };
   }, []);
 
+  const fileName = !activatedDocument
+    ? "No file selected"
+    : getOs() === "mac"
+      ? activatedDocument.split("/").pop()
+      : activatedDocument.split("\\").pop();
+
   return (
     <div className="chat-input-info">
       <div className="input-document-indicator">
         <VscFile />
-        {activatedDocument ? activatedDocument.split("/").pop() : "No file selected"}
+        {fileName}
       </div>
     </div>
   );
